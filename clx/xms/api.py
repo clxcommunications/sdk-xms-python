@@ -27,39 +27,40 @@ class MtBatchSms(object):
 
     .. attribute:: recipients
 
-    type: *list(str)*
+      One or more MSISDNs indicating the batch recipients.
 
-    One or more MSISDNs indicating the batch recipients.
+      type: *list(str)*
 
     .. attribute:: sender
 
-    type: *str*
+      The batch sender, typically a short code or long number.
 
-    The batch sender, typically a short code or long number.
+      type: *str*
 
     .. attribute:: delivery_report
 
-    type: *str*
+      The type of delivery report to use for this batch.
 
-    The type of delivery report to use for this batch.
+      type: *str*
 
     .. attribute:: send_at
 
-    type: *datetime*
+      The time at which this batch should be sent.
 
-    The time at which this batch should be sent.
+      type: *datetime*
 
     .. attribute:: expire_at
 
-    type: *datetime*
+      The time at which this batch should expire.
 
-    The time at which this batch should expire.
+      type: *datetime*
 
     .. attribute:: callback_url
 
-    type: *str*
+      The URL to which callbacks should be sent.
 
-    The URL to which callbacks should be sent.
+      type: *str*
+
     """
 
     def __init__(self):
@@ -80,9 +81,10 @@ class MtBatchSmsCreate(MtBatchSms):
 
     .. attribute:: tags
 
-    type: *list[str]*
+      The initial set of tags to give the batch.
 
-    The initial set of tags to give the batch.
+      type: *list[str]*
+
     """
 
     def __init__(self):
@@ -95,38 +97,39 @@ class MtBatchTextSmsCreate(MtBatchSmsCreate):
 
     .. attribute:: body
 
-    type: *str*
+      The message body or template.
 
-    The message body or template.
+      type: *str*
 
     .. attribute:: parameters
 
-    type: *dict[str, dict[str, str]]*
+      The template parameters.
 
-    The template parameters.
+      This property is only relevant is the :py:attr:`body` property
+      is a template. This is expected to be an associative array
+      mapping parameter keys to associative arrays themselves mapping
+      recipient numbers to substitution strings.
 
-    This property is only relevant is the :py:attr:`body` property is
-    a template. This is expected to be an associative array mapping
-    parameter keys to associative arrays themselves mapping recipient
-    numbers to substitution strings.
+      More concretely we may have for the parameterized message
+      "Hello, ${name}!" have::
 
-    More concretely we may have for the parameterized message "Hello,
-    ${name}!" have::
+        batch.parameters = {
+            'name': {
+                '123456789': 'Mary',
+                '987654321': 'Joe',
+                'default': 'valued customer'
+            }
+        }
 
-      batch.parameters = {
-          'name': {
-              '123456789': 'Mary',
-              '987654321': 'Joe',
-              'default': 'valued customer'
-          }
-      }
+      And the recipient with MSISDN "123456789" would then receive the
+      message "Hello, Mary!".
 
-    And the recipient with MSISDN "123456789" would then receive the
-    message "Hello, Mary!".
+      Note the use of "default" to indicate the substitution for
+      recipients not explicitly given. For example, the recipient
+      "555555555" would receive the message "Hello, valued customer!".
 
-    Note the use of "default" to indicate the substitution for
-    recipients not explicitly given. For example, the recipient
-    "555555555" would receive the message "Hello, valued customer!".
+      type: *dict[str, dict[str, str]]*
+
     """
 
     def __init__(self):
@@ -143,15 +146,16 @@ class MtBatchBinarySmsCreate(MtBatchSmsCreate):
 
     .. attribute:: body
 
-    type: *str*
+      The body of this binary message.
 
-    The body of this binary message.
+      type: *str*
 
     .. attribute:: udh
 
-    type: *str*
+      The User Data Header of this binary message.
 
-    The User Data Header of this binary message.
+      type: *str*
+
     """
 
     def __init__(self):
@@ -165,27 +169,28 @@ class MtBatchSmsResult(MtBatchSms):
 
     .. attribute:: batch_id
 
-    type: *str*
+      The unique batch identifier.
 
-    The unique batch identifier.
+      type: *str*
 
     .. attribute:: created_at
 
-    type: *datetime*
+      Time when this batch was created.
 
-    Time when this batch was created.
+      type: *datetime*
 
     .. attribute:: modified_at
 
-    type: *datetime*
+      Time when this batch was last modified.
 
-    Time when this batch was last modified.
+      type: *datetime*
 
     .. attribute:: canceled
 
-    type: *bool*
+      Whether this batch has been canceled.
 
-    Whether this batch has been canceled.
+      type: *bool*
+
     """
 
     def __init__(self):
@@ -204,16 +209,16 @@ class MtBatchTextSmsResult(MtBatchSmsResult):
 
     .. attribute:: body
 
-    type: *str*
+      The message body or template. See
+      :py:attr:`MtBatchTextSmsCreate.parameters`.
 
-    The message body or template. See
-    :py:attr:`MtBatchTextSmsCreate.parameters`.
+      type: *str*
 
     .. attribute:: parameters
 
-    type *dict[str, dict[str, str]]*
+      The template parameters.
 
-    The template parameters.
+      type *dict[str, dict[str, str]]*
 
     """
 
@@ -228,15 +233,16 @@ class MtBatchBinarySmsResult(MtBatchSmsResult):
 
     .. attribute:: body
 
-    type: *str*
+      The body of this binary message.
 
-    The body of this binary message.
+      type: *str*
 
     .. attribute:: udh
 
-    type: *str*
+      The User Data Header of this binary message.
 
-    The User Data Header of this binary message.
+      type: *str*
+
     """
 
     def __init__(self):
@@ -255,23 +261,24 @@ class BatchDeliveryReport(object):
 
     .. attribute:: batch_id
 
-    type: *str*
+      Identifier of the batch that this report covers.
 
-    Identifier of the batch that this report covers.
+      type: *str*
 
     .. attribute:: total_message_count
 
-    type: *int*
+      The total number of messages sent as part of this batch.
 
-    The total number of messages sent as part of this batch.
+      type: *int*
 
     .. attribute:: statuses
 
-    type: *list[BatchDeliveryReportStatus]*
+      The batch status buckets. This array describes the aggregated
+      status for the batch where each array element contains
+      information about messages having a certain delivery status and
+      delivery code.
 
-    The batch status buckets. This array describes the aggregated
-    status for the batch where each array element contains information
-    about messages having a certain delivery status and delivery code.
+      type: *list[BatchDeliveryReportStatus]*
 
     """
 
@@ -289,28 +296,30 @@ class BatchDeliveryReportStatus(object):
 
     .. attribute:: code
 
-    type: *int*
+      The delivery status code for this recipient bucket.
 
-    The delivery status code for this recipient bucket.
+      type: *int*
 
     .. attribute:: status
 
-    type: *str*
+      The delivery status for this recipient bucket.
 
-    The delivery status for this recipient bucket.
+      type: *str*
 
     .. attribute:: count
 
-    type: *int*
+      The number of recipients belonging to this bucket.
 
-    The number of recipients belonging to this bucket.
+      type: *int*
 
     .. attribute:: recipients
 
-    The recipients having this status.
+      The recipients having this status.
 
-    Note, this is non-empty only if a `full` delivery report has been
-    requested.
+      Note, this is non-empty only if a `full` delivery report has been
+      requested.
+
+      type: *list[str]*
 
     """
 
@@ -327,53 +336,54 @@ class BatchRecipientDeliveryReport(object):
 
     .. attribute:: batch_id
 
-    type: *string*
+      The batch identifier.
 
-    The batch identifier.
+      type: *string*
 
     .. attribute:: recipient
 
-    type: *string*
+      The recipient address.
 
-    The recipient address.
+      type: *string*
 
     .. attribute:: code
 
-    type: *int*
+      The delivery code.
 
-    The delivery code.
+      type: *int*
 
     .. attribute:: status
 
-    type: *int*
+      The delivery status.
 
-    The delivery status.
+      type: *int*
 
     .. attribute:: status_message
 
-    type: *string* or *None*
+      The delivery status message. The status message is not always
+      available and the attribute is set to *None* in those cases.
 
-    The delivery status message. The status message is not always
-    available and the attribute is set to *None* in those cases.
+      type: *string* or *None*
 
     .. attribute:: operator
 
-    type: *string* or *None*
+      The recipient's mobile operator. If the operator is not known,
+      then this is set to *None*.
 
-    The recipient's mobile operator. If the operator is not known,
-    then this is set to *None*.
+      type: *string* or *None*
 
     .. attribute:: status_at
 
-    type: *datetime*
+      The time at delivery.
 
-    The time at delivery.
+      type: *datetime*
 
     .. attribute:: operator_status_at
 
-    type: *datetime* or *None*
+      The time of delivery as reported by operator.
 
-    The time of delivery as reported by operator.
+      type: *datetime* or *None*
+
     """
 
     def __init__(self):
@@ -396,15 +406,15 @@ class Error(object):
 
     .. attribute:: code
 
-    type: *str*
+      A code that can be used to programmatically recognize the error.
 
-    A code that can be used to programmatically recognize the error.
+      type: *str*
 
     .. attribute: text
 
-    type: *str*
+      Human readable description of the error.
 
-    Human readable description of the error.
+      type: *str*
 
     """
 
