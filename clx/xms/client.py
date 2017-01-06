@@ -124,17 +124,38 @@ class Client(object):
 
         return self._url('/groups/' + egid + sub_path)
 
-    def _get(self, url):
-        resp = self._session.get(url, headers=self._headers())
+    def _check_response(self, resp):
         Client._LOGGER.debug('Request: %s, Response (code %d): %s',
                              resp.request.body, resp.status_code, resp.text)
+
+        # If "200 OK" or "201 Created".
+        if resp.status_code == 200 or resp.status_code == 201:
+            return resp
+        # If "400 Bad Request" or "403 Forbidden".
+        elif resp.status_code == 400 or resp.status_code == 403:
+            error = deserialize.error(resp)
+            raise clx.xms.exceptions.ErrorResponseException(
+                error.text, error.code)
+        # If "404 Not Found".
+        elif resp.status_code == 404:
+            raise clx.xms.exceptions.NotFoundException(resp.request.url)
+        # If "401 Unauthorized"
+        elif resp.status_code == 401:
+            raise clx.xms.exceptions.UnauthorizedException(
+                self._service_plan_id, self._token)
+        else:
+            raise clx.xms.exceptions.UnexpectedResponseException(
+                "Unexpected HTTP status %s" % resp.status_code, resp.text)
+
         return resp
+
+    def _get(self, url):
+        resp = self._session.get(url, headers=self._headers())
+        return self._check_response(resp)
 
     def _post(self, url, fields):
         resp = self._session.post(url, json=fields, headers=self._headers())
-        Client._LOGGER.debug('Request: %s, Response (code %d): %s',
-                             resp.request.body, resp.status_code, resp.text)
-        return resp
+        return self._check_response(resp)
 
     def create_batch(self, batch):
         """Creates the given batch.
