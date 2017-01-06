@@ -137,12 +137,10 @@ def batch_delivery_report(response):
 
     :param response: An XMS response carrying a JSON body
     :vartype response: Response
-
     :return: the parsed batch delivery report
     :rtype: BatchDeliveryReport
-
     :raises UnexpectedResponseException: if the JSON contained an
-    unexpected message type
+        unexpected message type
     """
 
     json = response.text
