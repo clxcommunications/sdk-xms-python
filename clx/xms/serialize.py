@@ -80,3 +80,59 @@ def binary_batch(batch):
     fields['udh'] = binascii.hexlify(batch.udh)
 
     return fields
+
+def _group_auto_update_helper(auto_update):
+    """Helper that prepares the given group auto update for JSON
+    serialization.
+
+    :param auto_update: the auto update to serialize
+    :vartype auto_update: GroupAutoUpdate
+    :return: dictionary suitable for JSON serialization
+
+    """
+
+    fields = {
+        'to': auto_update.recipient
+    }
+
+    if auto_update.add_word_pair[0]:
+        fields['add']['first_word'] = auto_update.add_word_pair[0]
+
+    if auto_update.add_word_pair[1]:
+        fields['add']['second_word'] = auto_update.add_word_pair[1]
+
+    if auto_update.remove_word_pair[0]:
+        fields['remove']['first_word'] = auto_update.remove_word_pair[0]
+
+    if auto_update.remove_word_pair[1]:
+        fields['remove']['second_word'] = auto_update.remove_word_pair[1]
+
+    return fields
+
+def group_create(group):
+    """Serializes the given group create object to JSON.
+
+    :param group: the group to serialize
+    :vartype group: GroupCreate
+    :return: dictionary suitable for JSON serialization
+
+    """
+
+    fields = {}
+
+    if group.name:
+        fields['name'] = group.name
+
+    if group.members:
+        fields['members'] = group.members
+
+    if group.child_groups:
+        fields['child_groups'] = group.child_groups
+
+    if group.auto_update:
+        fields['auto_update'] = _group_auto_update_helper(group.auto_update)
+
+    if group.tags:
+        fields['tags'] = group.tags
+
+    return fields

@@ -210,6 +210,36 @@ class Client(object):
         batch.udh = udh
         return self._create_batch(batch, sender, recipients, kwargs)
 
+    def create_batch_dry_run(self, batch, num_recipients=None):
+        """Simulates sending the given batch.
+
+        The method takes an optional argument for instructing XMS to
+        respond with per-recipient statistics, if non-null then this
+        number of recipients will be returned in the result.
+
+        :param batch: the batch to simulate
+        :vartype batch: MtBatchSmsCreate
+
+        :param num_recipients: number of recipients to show in
+            per-recipient result
+        :vartype num_recipients: int or None
+        :return: result of dry-run
+        :rtype: MtBatchDryRunResult
+        """
+
+        if hasattr(batch, 'udh'):
+            fields = serialize.binary_batch(batch)
+        else:
+            fields = serialize.text_batch(batch)
+
+        path = '/batches/dry_run'
+
+        if num_recipients:
+            path += "?per_recipient=true&number_of_recipients=$numRecipients"
+
+        response = self._post(self._url(path), fields)
+        return deserialize.batch_dry_run_result(response)
+
     def fetch_delivery_report(self, batch_id, kind=None,
                               status=None, code=None):
         """Fetches a delivery report for a batch.
@@ -284,3 +314,17 @@ class Client(object):
         path = '/delivery_report/' + quote_plus(recipient)
         result = self._get(self._batch_url(batch_id, path))
         return deserialize.batch_recipient_delivery_report(result)
+
+    def create_group(self, group):
+        """Creates the given group.
+
+        :param group: group description
+        :vartype group: GroupCreate
+        :return: the created group
+        :rtype: GroupResult
+
+        """
+
+        fields = serialize.group_create(group)
+        response = self._post(self._url('/groups'), fields)
+        return deserialize.group_result(response)

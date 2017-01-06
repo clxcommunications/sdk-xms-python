@@ -132,6 +132,36 @@ def batch_result(response):
     fields = response.json()
     return _batch_response_from_fields(json, fields)
 
+def batch_dry_run_result(response):
+    """Reads a JSON formatted string describing a dry-run result.
+
+    :param response: the response object to interpret
+    :return: the parsed result
+    :rtype: MtBatchDryRunResult
+
+    """
+
+    def recipient(recipient_fields):
+        """Helper used to populate ``per_recipient`` property."""
+
+        recipient = api.DryRunPerRecipient()
+        recipient.recipient = recipient_fields['recipient']
+        recipient.number_of_parts = recipient_fields['number_of_parts']
+        recipient.body = recipient_fields['body']
+        recipient.encoding = recipient_fields['encoding']
+        return recipient
+
+    fields = response.json()
+
+    result = api.MtBatchDryRunResult()
+    result.number_of_recipients = fields['number_of_recipients']
+    result.number_of_messages = fields['number_of_messages']
+
+    if 'per_recipient' in fields:
+        result.per_recipient = [recipient(r) for r in fields['per_recipient']]
+
+    return result
+
 def batch_delivery_report(response):
     """Reads a JSON blob describing a batch delivery report.
 
@@ -221,3 +251,63 @@ def error(response):
 
     fields = response.json()
     return api.Error(fields['code'], fields['text'])
+
+def _auto_update_from_fields(fields):
+    """Helper that creates a group auto update object from the given
+    fields.
+
+    :param fields: the fields representing the JSON blob
+    :return: the created group auto update
+    :rtype: GroupAutoUpdate
+
+    """
+
+    add_map = fields.get('add', {})
+    remove_map = fields.get('remove', {})
+
+    return api.GroupAutoUpdate(
+        fields['to'],
+        add_first_word=add_map.get('first_word', None),
+        add_second_word=add_map.get('second_word', None),
+        remove_first_word=remove_map.get('first_word', None),
+        remove_second_word=remove_map.get('second_word', None))
+
+def _group_result_from_fields(json, fields):
+    """Helper that creates a group response object from the given fields.
+
+    :param json: original JSON string
+    :param fields: the JSON fields
+    :return: the created group response
+    :rtype: GroupResult
+
+    """
+
+    result = api.GroupResult()
+    result.child_groups = fields['child_groups']
+    result.group_id = fields['id']
+    result.size = fields['size']
+    result.created_at = _date_time(json, fields['created_at'])
+    result.modified_at = _date_time(json, fields['modified_at'])
+
+    if 'name' in fields:
+        result.name = fields['name']
+
+    if 'auto_update' in fields:
+        result.auto_update = _auto_update_from_fields(fields['auto_update'])
+
+    return result
+
+def group_result(response):
+    """Parses a group response from the given JSON text.
+
+    :param response: an XMS response
+    :vartype response: Response
+
+    :returns: the deserialized group response
+    :rtype: GroupResult
+
+    """
+
+    json = response.text
+    fields = response.json()
+    return _group_result_from_fields(json, fields)

@@ -19,6 +19,38 @@ class ReportType(object):
     PER_RECIPIENT = 'per_recipient'
 
 
+class DeliveryStatus(object):
+    """A collection of known delivery statuses.
+
+    Note, new statuses may be introduced to the XMS API.
+    """
+
+    QUEUED = "Queued"
+    """Message is queued within REST API system and will be dispatched
+    according to the rate of the account."""
+
+    DISPATCHED = "Dispatched"
+    """Message has been dispatched and accepted for delivery by the SMSC."""
+
+    ABORTED = "Aborted"
+    """Message was aborted before reaching SMSC."""
+
+    REJECTED = "Rejected"
+    """Message was rejected by SMSC."""
+
+    DELIVERED = "Delivered"
+    """Message has been delivered."""
+
+    FAILED = "Failed"
+    """Message failed to be delivered."""
+
+    EXPIRED = "Expired"
+    """Message expired before delivery."""
+
+    UNKNOWN = "Unknown"
+    """It is not known if message was delivered or not."""
+
+
 class MtBatchSms(object):
     """Base class for all SMS batch classes.
 
@@ -421,3 +453,268 @@ class Error(object):
     def __init__(self, code, text):
         self.code = code
         self.text = text
+
+class MtBatchDryRunResult(object):
+    """A batch dry run report.
+
+    .. attribute:: number_of_recipients
+
+      The number of recipients that would receive the batch message.
+
+      type: *int*
+
+    .. attribute:: number_of_message
+
+      The number of messages that will be sent.
+
+      type: *int*
+
+    .. attribute:: per_recipient
+
+      The per-recipient dry-run result.
+
+      type: *list[DryRunPerRecipient]*
+
+    """
+
+    def __init__(self):
+        self.number_of_recipients = None
+        self.number_of_messages = None
+        self.per_recipient = []
+
+class DryRunPerRecipient(object):
+    """Per-recipient dry-run result.
+
+    Object of this class only occur within dry-run results. See
+    :class:`MtBatchDryRunResult`.
+
+    .. attribute:: recipient
+
+      The recipient.
+
+      type: *str*
+
+    .. attribute:: number_of_parts
+
+      Number of message parts needed for the recipient.
+
+      type: *int*
+
+    .. attribute:: body
+
+      Message body sent to this recipient.
+
+      type: *str*
+
+    .. attribute:: encoding
+
+      Indicates the text encoding used for this recipient.
+
+      This is one of "text" or "unicode". See :attr:`ENCODING_TEXT`
+      and :attr:`ENCODING_UNICODE`.
+
+      type: *str*
+
+    """
+
+    ENCODING_TEXT = "text"
+    """Constant indicating non-unicode encoding."""
+
+    ENCODING_UNICODE = "unicode"
+    """Constant indicating unicode encoding."""
+
+    def __init__(self):
+        self.recipient = None
+        self.number_of_parts = None
+        self.body = None
+        self.encoding = None
+
+
+class GroupAutoUpdate(object):
+    """A description of automatic group updates.
+
+    An automatic update is triggered by a mobile originated message to
+    a given number containing special keywords.
+
+    When the given recipient receives a mobile originated SMS
+    containing keywords (first and/or second) matching the given
+    ``add`` arguments then the sender MSISDN is added to the group.
+    Similarly, if the MO is matching the given ``remove`` keyword
+    arguments then the MSISDN is removed from the group.
+
+    For example::
+
+      GroupAutoUpdate(
+        recipient='12345',
+        add_first_word='add',
+        remove_first_word='remove')
+
+    would trigger based solely on the first keyword of the MO message.
+    On the other hand::
+
+      GroupAutoUpdate(
+        recipient='12345',
+        add_first_word='alert',
+        add_second_word='add',
+        remove_first_word='alert',
+        remove_second_word='remove')
+
+    would trigger only when both the first and second keyword are
+    given in the MO message.
+
+    :param recipient: recipient that triggers this rule
+    :vartype recipient: str
+
+    :param add_first_word: first ``add`` keyword, default is `None`.
+    :vartype add_first_word: str or None
+
+    :param add_second_word: second ``add`` keyword, default is `None`.
+    :vartype add_second_word: str or None
+
+    :param remove_first_word: first ``remove`` keyword, default is `None`.
+    :vartype remove_first_word: str or None
+
+    :param remove_second_word: second ``remove`` keywords, default is `None`.
+    :vartype remove_second_word: str or None
+
+    .. attribute:: recipient
+
+      The recipient of the mobile originated message. A short code or
+      long number.
+
+      type: *str*
+
+    .. attribute:: add_word_pair
+
+      A two-element tuple holding the first and second keyword that
+      causes the MO sender to be added to the group.
+
+      type: *tuple[str or None, str or None]*
+
+    .. attribute:: remove_word_pair
+
+      A two-element tuple holding the first and second keyword that
+      causes the MO sender to be removed from the group.
+
+      type: *tuple[str or None, str or None]*
+
+    """
+
+    def __init__(self,
+                 recipient,
+                 add_first_word=None,
+                 add_second_word=None,
+                 remove_first_word=None,
+                 remove_second_word=None):
+        self.recipient = recipient
+        self.add_word_pair = (add_first_word, add_second_word)
+        self.remove_word_pair = (remove_first_word, remove_second_word)
+
+
+class GroupCreate(object):
+    """A description of the fields necessary to create a group.
+
+    .. attribute:: name
+
+      The group name.
+
+      type: *str*
+
+    .. attribute:: members
+
+      A list of MSISDNs that belong to this group.
+
+      type: *list[str]*
+
+    .. attribute:: child_groups
+
+      A list of groups that in turn belong to this group.
+
+      type: *list[str]*
+
+    .. attribute:: auto_update
+
+      Describes how this group should be auto updated.
+
+      If no auto updating should be performed for the group then this
+      value is ``None``.
+
+      type: *GroupAutoUpdate* or *None*
+
+    .. attribute:: tags
+
+      The tags associated to this group.
+
+      type: *list[str]*
+
+    """
+
+    def __init__(self):
+        self.name = None
+        self.members = []
+        self.child_groups = []
+        self.auto_update = None
+        self.tags = []
+
+
+class GroupResult(object):
+    """This class holds the result of a group fetch operation.
+
+    This may be used either standalone or as an element of a paged
+    result.
+
+    .. attribute:: group_id
+
+      The unique group identifier.
+
+      type: *str*
+
+    .. attribute:: name
+
+      The group name.
+
+      type: *str*
+
+    .. attribute:: size
+
+      The number of members of this group.
+
+      type: *int*
+
+    .. attribute:: child_groups
+
+      A list of groups that in turn belong to this group.
+
+      type: *list[str]*
+
+    .. attribute:: auto_update
+
+      Describes how this group should be auto updated.
+
+      If no auto updating should be performed for the group then this
+      value is ``None``.
+
+      type: *GroupAutoUpdate* or *None*
+
+    .. attribute:: created_at
+
+      The time at which this group was created.
+
+      type: *datetime*
+
+    .. attribute:: modified_at
+
+      The time when this group was last modified.
+
+      type: *datetime*
+
+    """
+
+    def __init__(self):
+        self.group_id = None
+        self.name = None
+        self.size = None
+        self.child_groups = []
+        self.auto_update = None
+        self.created_at = None
+        self.modified_at = None
