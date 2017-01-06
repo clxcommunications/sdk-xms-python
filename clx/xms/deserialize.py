@@ -209,3 +209,17 @@ def batch_recipient_delivery_report(response):
             json, fields['operator_status_at'])
 
     return result
+
+def error(response):
+    """Reads a JSON blob containing an error response.
+
+    :param response: an XMS response
+    :vartype response: Response
+
+    :returns: the decoded error
+    :rtype: Error
+
+    """
+
+    fields = response.json()
+    return api.Error(fields['code'], fields['text'])

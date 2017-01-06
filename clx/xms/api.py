@@ -385,3 +385,29 @@ class BatchRecipientDeliveryReport(object):
         self.operator = None
         self.status_at = None
         self.operator_status_at = None
+
+class Error(object):
+    """Describes error responses given by XMS.
+
+    :param code: the error code
+    :vartype code: str
+    :param text: the human readable error text
+    :vartype text: str
+
+    .. attribute:: code
+
+    type: *str*
+
+    A code that can be used to programmatically recognize the error.
+
+    .. attribute: text
+
+    type: *str*
+
+    Human readable description of the error.
+
+    """
+
+    def __init__(self, code, text):
+        self.code = code
+        self.text = text
