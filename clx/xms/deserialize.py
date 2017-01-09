@@ -243,13 +243,13 @@ def batch_recipient_delivery_report(response):
     result.status_at = _date_time(json, fields['at'])
 
     if 'status_message' in fields:
-        result.statusMessage = fields['status_message']
+        result.status_message = fields['status_message']
 
     if 'operator' in fields:
         result.operator = fields['operator']
 
     if 'operator_status_at' in fields:
-        result.operatorStatusAt = _date_time(
+        result.operator_status_at = _date_time(
             json, fields['operator_status_at'])
 
     return result
