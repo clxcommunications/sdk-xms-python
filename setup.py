@@ -28,7 +28,7 @@ setup(
     author='Robert Helgesson',
     author_email='robert@chaitsa.com',
 
-    packages=['sdk-xms'],
+    packages=['clx.xms'],
 
     install_requires=['requests >= 2.4.2', 'iso8601 >= 0.1.9'],
 
