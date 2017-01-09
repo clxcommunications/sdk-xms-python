@@ -327,3 +327,16 @@ def group_result(response):
     json = response.text
     fields = response.json()
     return _group_result_from_fields(json, fields)
+
+def tags(response):
+    """Reads a JSON blob containing a list of tags.
+
+    :param response: an XMS response
+    :vartype response: Response
+    :returns: a list of tags
+    :rtype: list[string]
+
+    """
+
+    _, fields = _check_response(response)
+    return fields['tags']
