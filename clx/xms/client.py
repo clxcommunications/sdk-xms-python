@@ -125,7 +125,7 @@ class Client(object):
         return self._url('/groups/' + egid + sub_path)
 
     def _check_response(self, resp):
-        Client._LOGGER.debug('Request: %s, Response (code %d): %s',
+        Client._LOGGER.debug('Request{%s} Response(code %d){%s}',
                              resp.request.body, resp.status_code, resp.text)
 
         # If "200 OK" or "201 Created".
