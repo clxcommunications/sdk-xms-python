@@ -112,6 +112,21 @@ def _batch_response_from_fields(json, fields):
 
     return result
 
+def _check_response(response):
+    """Reads the JSON object from the given response.
+
+    :returns: The raw JSON string and the parsed JSON dictionary
+    :rtype: tuple[str, dict]
+    :raises UnexpectedResponseException: if response did not contain valid JSON
+
+    """
+
+    json = response.text
+    try:
+        return (json, response.json())
+    except ValueError as ex:
+        raise UnexpectedResponseException(str(ex), json)
+
 def batch_result(response):
     """Reads a request response containing a batch result.
 
@@ -128,8 +143,7 @@ def batch_result(response):
 
     """
 
-    json = response.text
-    fields = response.json()
+    json, fields = _check_response(response)
     return _batch_response_from_fields(json, fields)
 
 def batch_dry_run_result(response):
