@@ -116,8 +116,8 @@ def batch_result(response):
     """Reads a request response containing a batch result.
 
     If the ``type`` field has the value ``mt_text`` then an
-    :py:class:`MtBatchSmsTextCreate` object is returned, if the value
-    is ``mt_binary`` then an :py:class:`MtBatchTextSmsCreate` object is
+    :class:`MtBatchSmsTextCreate` object is returned, if the value is
+    ``mt_binary`` then an :class:`MtBatchTextSmsCreate` object is
     returned, otherwise an exception is thrown.
 
     :param response: the response object to interpret
@@ -171,6 +171,7 @@ def batch_delivery_report(response):
     :rtype: BatchDeliveryReport
     :raises UnexpectedResponseException: if the JSON contained an
         unexpected message type
+
     """
 
     json = response.text
@@ -207,7 +208,8 @@ def batch_recipient_delivery_report(response):
     :rtype: BatchRecipientDeliveryReport
 
     :raises UnexpectedResponseException: if the JSON contained an
-      unexpected message type
+        unexpected message type
+
     """
 
     json = response.text

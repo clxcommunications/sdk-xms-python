@@ -442,7 +442,7 @@ class Error(object):
 
       type: *str*
 
-    .. attribute: text
+    .. attribute:: text
 
       Human readable description of the error.
 
