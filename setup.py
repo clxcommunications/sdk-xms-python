@@ -19,11 +19,11 @@ def readAbout():
 
 setup(
 
-    name = 'sdk-xms',
-    version = readAbout()['__version__'],
-    description = 'Library for CLX Communications HTTP REST Messaging API',
-    long_description = read('README.rst'),
-    url = 'https://github.com/clxcommunications/sdk-xms-python',
+    name='sdk-xms',
+    version=readAbout()['__version__'],
+    description='Library for CLX Communications HTTP REST Messaging API',
+    long_description=read('README.rst'),
+    url='https://github.com/clxcommunications/sdk-xms-python',
 
     author='Robert Helgesson',
     author_email='robert@chaitsa.com',
@@ -32,11 +32,11 @@ setup(
 
     install_requires=['requests >= 2.4.2', 'iso8601 >= 0.1.9'],
 
-    license = 'Apache License, Version 2.0',
+    license='Apache License, Version 2.0',
 
-    keywords = '',
+    keywords='',
 
-    classifiers = [
+    classifiers=[
         'Development Status :: 1 - Planning',
         'Intended Audience :: Developers',
         'Intended Audience :: Telecommunications Industry',
