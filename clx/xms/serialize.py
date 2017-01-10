@@ -96,16 +96,20 @@ def _group_auto_update_helper(auto_update):
     }
 
     if auto_update.add_word_pair[0]:
-        fields['add']['first_word'] = auto_update.add_word_pair[0]
+        fields.setdefault('add', {})['first_word'] = \
+            auto_update.add_word_pair[0]
 
     if auto_update.add_word_pair[1]:
-        fields['add']['second_word'] = auto_update.add_word_pair[1]
+        fields.setdefault('add', {})['second_word'] = \
+            auto_update.add_word_pair[1]
 
     if auto_update.remove_word_pair[0]:
-        fields['remove']['first_word'] = auto_update.remove_word_pair[0]
+        fields.setdefault('remove', {})['first_word'] = \
+            auto_update.remove_word_pair[0]
 
     if auto_update.remove_word_pair[1]:
-        fields['remove']['second_word'] = auto_update.remove_word_pair[1]
+        fields.setdefault('remove', {})['second_word'] = \
+            auto_update.remove_word_pair[1]
 
     return fields
 
