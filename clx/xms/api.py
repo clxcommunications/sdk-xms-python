@@ -51,6 +51,22 @@ class DeliveryStatus(object):
     """It is not known if message was delivered or not."""
 
 
+class Reset(object):
+    """A class whose instances indicate that a value should be reset.
+
+    This is used when updating previously created XMS objects. Note,
+    it is typically not necessary to created new objects of this type,
+    instead use the constant :attr:`clx.xms.api.RESET`.
+
+    """
+
+    def __init__(self):
+        pass
+
+RESET = Reset()
+"""Object used to indicate that a XMS field should be reset to its
+default value."""
+
 class MtBatchSms(object):
     """Base class for all SMS batch classes.
 
@@ -192,6 +208,136 @@ class MtBatchBinarySmsCreate(MtBatchSmsCreate):
 
     def __init__(self):
         MtBatchSmsCreate.__init__(self)
+        self.body = None
+        self.udh = None
+
+
+class MtBatchSmsUpdate(object):
+    """Describes updates that can be performed on text and binary SMS
+    batches.
+
+    .. attribute:: recipient_insertions
+
+      The message destinations to add to the batch. This should have
+      zero or more MSISDNs.
+
+      type: *list[str]*
+
+    .. attribute:: recipient_removals
+
+      The message destinations to remove from the batch. This should
+      have zero or more MSISDNs.
+
+      type: *list[str]*
+
+    .. attribute:: sender
+
+      The message originator as a long number or short code. If
+      ``None`` then the current value is kept, if ``RESET`` then the
+      value is reset to its XMS default, and if set to a string the
+      sender is updated.
+
+      type: *str* or *None* or *Reset*
+
+    .. attribute:: delivery_report
+
+      Description of how to update the batch delivery report value. If
+      ``None`` then the current value is kept, if ``RESET`` then the
+      value is reset to its XMS default, and if set to a string the
+      delivery report value is updated.
+
+      See :class:`ReportType` for valid report types.
+
+      type: *str* or *None* or *Reset*
+
+    .. attribute:: send_at
+
+      Description of how to update the batch send at value. If
+      ``None`` then the current value is kept, if ``RESET`` then the
+      value is reset to its XMS default, and if set to a date time the
+      send at value is updated.
+
+      type: *datetime* or *None* or *Reset*
+
+    .. attribute:: expire_at
+
+      Description of how to update the batch expire at value. If
+      ``None`` then the current value is kept, if ``RESET`` then the
+      value is reset to its XMS default, and if set to a date time the
+      expire at value is updated.
+
+      type: *datetime* or *None* or *Reset*
+
+    .. attribute:: callback_url
+
+      Description of how to update the batch callback URL. If ``None``
+      then the current value is kept, if ``RESET`` then the value is
+      reset to its XMS default, and if set to a string the callback
+      URL value is updated.
+
+      type: *str* or *None* or *Reset*
+
+    """
+
+    def __init__(self):
+        self.recipient_insertions = []
+        self.recipient_removals = []
+        self.sender = None
+        self.delivery_report = None
+        self.send_at = None
+        self.expire_at = None
+        self.callback_url = None
+
+
+class MtBatchTextSmsUpdate(MtBatchSmsUpdate):
+    """Class that the update operations that can be performed on a text
+    batch.
+
+    .. attribute:: body
+
+      The updated batch message body. If ``None`` then the current
+      batch message is kept.
+
+      type: *str* or *None*
+
+    .. attribute:: parameters
+
+      Description of how to update the batch parameters. If ``None``
+      then the current value is kept, if ``RESET`` then the value is
+      reset to its XMS default, and if set to a dictionary the
+      parameters value is updated.
+
+      type: *dict* or *None* or *Reset*
+
+    """
+
+    def __init__(self):
+        MtBatchSmsUpdate.__init__(self)
+        self.body = None
+        self.parameters = None
+
+
+class MtBatchBinarySmsUpdate(MtBatchSmsUpdate):
+    """Describes updates to a binary SMS batch.
+
+    .. attribute:: body
+
+      The updated binary batch body. If ``None`` then the existing
+      body is left as-is.
+
+      type: *str* or *None*
+
+    .. attribute:: udh
+
+      The updated binary User Data Header. If ``None`` then the
+      existing UDH is left as-is.
+
+      type: *str* or *None*
+
+    """
+
+    def __init__(self):
+        MtBatchSmsUpdate.__init__(self)
         self.body = None
         self.udh = None
 
@@ -718,6 +864,81 @@ class GroupResult(object):
         self.auto_update = None
         self.created_at = None
         self.modified_at = None
+
+
+class GroupUpdate(object):
+    """Describes updates that can be performed on a group.
+
+    .. attribute:: name
+
+      Updates the group name.
+
+      If ``None`` then the current value is kept, if ``Reset.reset()``
+      then the value is reset to its XMS default, and if set to a
+      string the name is updated.
+
+      type: *None* or *str* or *Reset*
+
+    .. attribute:: member_insertions
+
+      The MSISDNs that should be added to this group.
+
+      type: *list[str]*
+
+    .. attribute:: member_removals
+
+      The MSISDNs that should be removed from this group.
+
+      type: *list[str]*
+
+    .. attribute:: child_group_insertions
+
+      The child groups that should be added to this group.
+
+      type: *list[str]*
+
+    .. attribute:: child_group_removals
+
+      The child groups that should be removed from this group.
+
+      type: *list[str]*
+
+    .. attribute:: add_from_group
+
+      Identifier of a group whose members should be added to this
+      group.
+
+      type: *str*
+
+    .. attribute:: remove_from_group
+
+      Identifier of a group whose members should be removed from this
+      group.
+
+      type: *str*
+
+    .. attribute:: auto_update
+
+      Describes how this group should be auto updated.
+
+      If ``None`` then the current value is kept, if
+      :attr:`clx.xms.api.RESET` then the value is reset to its XMS
+      default, and if set to a ``GroupAutoUpdate`` object the value is
+      updated.
+
+      type: *None* or *GroupAutoUpdate* or *Reset*
+
+    """
+
+    def __init__(self):
+        self.name = None
+        self.member_insertions = []
+        self.member_removals = []
+        self.child_group_insertions = []
+        self.child_group_removals = []
+        self.add_from_group = None
+        self.remove_from_group = None
+        self.auto_update = None
 
 
 class MoSms(object):
