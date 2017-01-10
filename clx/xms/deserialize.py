@@ -340,3 +340,63 @@ def tags(response):
 
     _, fields = _check_response(response)
     return fields['tags']
+
+def _mo_sms_from_fields(json, fields):
+    """Helper that reads an MO from the given fields.
+
+    :param json: original JSON formatted text
+    :vartype json: str
+
+    :param fields: the JSON fields
+    :vartype fields: dict
+
+    :return: the parsed inbound message
+    :rtype: MoSms
+    :raise UnexpectedResponseException: if the JSON contained an
+        unexpected message type
+    """
+
+    if fields['type'] == 'mo_text':
+        result = api.MoTextSms()
+        result.body = fields['body']
+
+        if 'keyword' in fields:
+            result.keyword = fields['keyword']
+    elif fields['type'] == 'mo_binary':
+        result = api.MoBinarySms()
+        result.udh = binascii.unhexlify(fields['udh'])
+        result.body = binascii.a2b_base64(fields['body'])
+    else:
+        raise UnexpectedResponseException(
+            'Received unexpected inbound type ' + fields['type'],
+            json)
+
+    result.message_id = fields['id']
+    result.sender = fields['from']
+    result.recipient = fields['to']
+
+    if 'operator' in fields:
+        result.operator = fields['operator']
+
+    if 'sent_at' in fields:
+        result.sent_at = _date_time(json, fields['sent_at'])
+
+    if 'received_at' in fields:
+        result.received_at = _date_time(json, fields['received_at'])
+
+    return result
+
+def mo_sms(response):
+    """Reads an XMS response containing an MO message.
+
+    :param response: an XMS response
+    :vartype response: Response
+    :returns: the MO message found in the response
+    :rtype: MoSms
+    :raises UnexpectedResponseException: if the JSON contained an
+        unexpected message type
+
+    """
+
+    json, fields = _check_response(response)
+    return _mo_sms_from_fields(json, fields)

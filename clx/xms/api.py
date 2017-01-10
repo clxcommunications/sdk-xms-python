@@ -718,3 +718,101 @@ class GroupResult(object):
         self.auto_update = None
         self.created_at = None
         self.modified_at = None
+
+
+class MoSms(object):
+    """Base class for SMS mobile originated messages.
+
+    Holds fields that are common to both the textual and binary MO
+    classes.
+
+    .. attribute:: message_id
+
+      The message identifier.
+
+      type: *str*
+
+    .. attribute:: recipient
+
+      The message recipient. This is a short code or long number.
+
+      type: *str*
+
+    .. attribute:: sender
+
+      The message sender. This is an MSISDN.
+
+      type: *str*
+
+    .. attribute:: operator
+
+      The MCCMNC of the originating operator, if available.
+
+      type: *str* or *None*
+
+    .. attribute:: sent_at
+
+      The time when this message was sent, if available.
+
+      type: *datetime* or *None*
+
+    .. attribute:: received_at
+
+      The time when the messaging system received this message.
+
+      type: *datetime*
+
+    """
+
+    def __init__(self):
+        self.message_id = None
+        self.recipient = None
+        self.sender = None
+        self.operator = None
+        self.sent_at = None
+        self.received_at = None
+
+
+class MoTextSms(MoSms):
+    """An SMS mobile originated message with textual content.
+
+    .. attribute:: body
+
+      The message body.
+
+      type: *str*
+
+    .. attribute:: keyword
+
+      The message keyword, if available.
+
+      type: *str* or *None*
+
+    """
+
+    def __init__(self):
+        MoSms.__init__(self)
+        self.body = None
+        self.keyword = None
+
+class MoBinarySms(MoSms):
+    """An SMS mobile originated message with binary content.
+
+    .. attribute:: body
+
+      The binary message body.
+
+      type: *str*
+
+    .. attribute:: udh
+
+      The user data header.
+
+      type: *str*
+
+    """
+
+    def __init__(self):
+        MoSms.__init__(self)
+        self.body = None
+        self.udh = None
