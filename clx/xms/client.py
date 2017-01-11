@@ -409,3 +409,24 @@ class Client(object):
         fields = serialize.group_create(group)
         response = self._post(self._url('/groups'), fields)
         return deserialize.group_result(response)
+
+    def delete_group(self, group_id):
+        """Deletes the group with the given group identifier.
+
+        :param string group_id: the group identifier
+        :returns: Nothing
+
+        """
+
+        self._delete(self._group_url(group_id))
+
+    def fetch_group(self, group_id):
+        """Fetches the group with the given group identifier.
+
+        :param string group_id: group identifier
+        :returns: the corresponding group
+
+        """
+
+        result = self._get(self._group_url(group_id))
+        return deserialize.group_result(result)
