@@ -410,6 +410,35 @@ class Client(object):
         response = self._post(self._url('/groups'), fields)
         return deserialize.group_result(response)
 
+    def replace_group(self, group_id, group):
+        """Replaces the group with the given group identifier.
+
+        :param string group_id: identifier of the group
+        :param GroupCreate group: new group description
+        :returns: the group after replacement
+        :rtype: GroupResult
+
+        """
+
+        fields = serialize.group_create(group)
+        result = self._put(self._group_url(group_id), fields)
+        return deserialize.group_result(result)
+
+    def update_group(self, group_id, group):
+        """Updates the group with the given identifier.
+
+        :param string group_id: identifier of the group
+        :param group: the update description
+        :type group: GroupUpdate
+        :return: the updated batch
+        :rtype: GroupResult
+
+        """
+
+        fields = serialize.group_update(group)
+        result = self._post(self._group_url(group_id), fields)
+        return deserialize.group_result(result)
+
     def delete_group(self, group_id):
         """Deletes the group with the given group identifier.
 
