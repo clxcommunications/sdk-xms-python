@@ -150,6 +150,7 @@ def batch_dry_run_result(response):
     """Reads a JSON formatted string describing a dry-run result.
 
     :param response: the response object to interpret
+    :vartype response: Response
     :return: the parsed result
     :rtype: MtBatchDryRunResult
 

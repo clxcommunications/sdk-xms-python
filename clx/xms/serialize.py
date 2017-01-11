@@ -172,12 +172,14 @@ def binary_batch_update(batch):
     return fields
 
 def _group_auto_update_helper(auto_update):
+
     """Helper that prepares the given group auto update for JSON
     serialization.
 
     :param auto_update: the auto update to serialize
     :vartype auto_update: GroupAutoUpdate
     :return: dictionary suitable for JSON serialization
+    :rtype: dict
 
     """
 
