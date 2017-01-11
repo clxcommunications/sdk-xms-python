@@ -320,6 +320,20 @@ class Client(object):
         result = self._get(self._batch_url(batch_id, '/tags'))
         return deserialize.tags(result)
 
+    def replace_batch_tags(self, batch_id, tags):
+        """Replaces the tags of the given batch.
+
+        :param string batch_id: identifier of the batch
+        :param list[str] tags: the new set of batch tags
+        :returns: the new batch tags
+        :rtype: list[str]
+
+        """
+
+        fields = serialize.tags(tags)
+        result = self._put(self._batch_url(batch_id, '/tags'), fields)
+        return deserialize.tags(result)
+
     def fetch_delivery_report(self, batch_id, kind=None,
                               status=None, code=None):
         """Fetches a delivery report for a batch.
