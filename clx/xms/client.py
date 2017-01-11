@@ -202,6 +202,34 @@ class Client(object):
         response = self._put(self._batch_url(batch_id), fields)
         return deserialize.batch_result(response)
 
+    def update_batch(self, batch_id, batch):
+        """Updates the text batch with the given identifier.
+
+        :param string batch_id: identifier of the batch
+        :param MtBatchTextSmsUpdate batch: the update description
+        :returns: the updated batch
+        :rtype: MtBatchTextSmsResult
+
+        """
+
+        if hasattr(batch, 'udh'):
+            fields = serialize.binary_batch_update(batch)
+        else:
+            fields = serialize.text_batch_update(batch)
+
+        result = self._post(self._batch_url(batch_id), fields)
+        return deserialize.batch_result(result)
+
+    def cancel_batch(self, batch_id):
+        """Cancels the batch with the given batch identifier.
+
+        :param string batch_id: the batch identifier
+        :returns: nothing
+
+        """
+
+        self._delete(self._batch_url(batch_id))
+
     def _create_batch(self, batch, sender, recipients, kwargs):
         batch.sender = sender
         batch.recipients = recipients
@@ -279,6 +307,18 @@ class Client(object):
 
         response = self._post(self._url(path), fields)
         return deserialize.batch_dry_run_result(response)
+
+    def fetch_batch_tags(self, batch_id):
+        """Fetches the tags associated with the given batch.
+
+        :param string batch_id: the batch identifier
+        :returns: a list of tags
+        :rtype: list[str]
+
+        """
+
+        result = self._get(self._batch_url(batch_id, '/tags'))
+        return deserialize.tags(result)
 
     def fetch_delivery_report(self, batch_id, kind=None,
                               status=None, code=None):
