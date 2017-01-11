@@ -324,8 +324,9 @@ class Client(object):
                               status=None, code=None):
         """Fetches a delivery report for a batch.
 
-        The report type can be either "full" or "summary" and when
-        "full" the report includes the individual recipients.
+        The report type can be one of ``None``, "full", or "summary".
+        When "full" the report includes the individual recipients.
+        When ``None`` then the XMS default value is used.
 
         The report can be further limited by status and code. For
         example, to retrieve a summary report limited to messages
