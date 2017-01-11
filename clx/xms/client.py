@@ -157,6 +157,10 @@ class Client(object):
         resp = self._session.post(url, json=fields, headers=self._headers())
         return self._check_response(resp)
 
+    def _put(self, url, fields):
+        resp = self._session.put(url, json=fields, headers=self._headers())
+        return self._check_response(resp)
+
     def create_batch(self, batch):
         """Creates the given batch.
 
