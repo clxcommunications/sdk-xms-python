@@ -14,7 +14,7 @@ def _write_datetime(value):
     """Helper that validates a date time object."""
 
     if value.utcoffset() is None:
-        raise ValueError("expected datetime with time zone")
+        raise ValueError("Expected datetime with time zone")
 
     return value.isoformat()
 

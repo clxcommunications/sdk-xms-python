@@ -25,7 +25,7 @@ def _date_time(json, date_string):
     try:
         return iso8601.parse_date(date_string)
     except iso8601.ParseError as ex:
-        raise UnexpectedResponseException(ex.args + (json,))
+        raise UnexpectedResponseException(str(ex), json)
 
 def _batch_response_helper(json, fields, batch):
     """Helper that populates the given batch result.

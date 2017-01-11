@@ -7,20 +7,44 @@ class ApiException(Exception):
     """Base class for exceptions thrown within the XMS SDK"""
 
 class UnexpectedResponseException(ApiException):
-    """Raised when XMS gave an unexpected response"""
+    """Raised when XMS gave an unexpected response
+
+    :param message: useful message explaining the problem
+    :type message: str
+
+    :param http_body: the unexpected HTTP body
+    :type http_body: str
+
+    .. attribute:: http_body
+
+      The unexpected HTTP body.
+
+      type: *str*
+    """
+
+    def __init__(self, message, http_body):
+        ApiException.__init__(self, message)
+        self.http_body = http_body
 
 class ErrorResponseException(ApiException):
     """Exception used when XMS responded with an error message.
 
     :param message: the human readable error message
-    :vartype message: str
+    :type message: str
 
     :param code: the machine readable error code
-    :vartype code: str
+    :type code: str
+
+    .. attribute:: error_code
+
+      The machine readable error code.
+
+      type: *str*
     """
 
     def __init__(self, message, code):
-        ApiException.__init__(self, message, code)
+        ApiException.__init__(self, message)
+        self.error_code = code
 
 class NotFoundException(ApiException):
     """Exception indicating that a requested resources did not exist in
@@ -30,21 +54,40 @@ class NotFoundException(ApiException):
     a batch with an invalid batch identifier.
 
     :param url: URL to the missing resource.
-    :vartype url: str
+    :type url: str
+
+    .. attribute:: url
+
+      The failing URL.
+
+      type: *str*
 
     """
 
     def __init__(self, url):
         ApiException.__init__(self, 'No resource found at "%s"' % url)
+        self.url = url
 
 class UnauthorizedException(ApiException):
     """Exception indicating that XMS did not accept the service plan ID
     and authentication token.
 
     :param service_plan_id: the service plan identifier
-    :vartype service_plan_id: str
+    :type service_plan_id: str
     :param token: the authentication token
-    :vartype token: str
+    :type token: str
+
+    .. attribute:: service_plan_id
+
+      The service plan identifier that did not pass authentication.
+
+      type: *str*
+
+    .. attribute:: token
+
+      The authentication token that was not accepted.
+
+      type: *str*
 
     """
 
@@ -52,23 +95,5 @@ class UnauthorizedException(ApiException):
         fmt = 'Authentication failed with service plan "%s"'
         ApiException.__init__(self, fmt % service_plan_id)
 
-        self._service_plan_id = service_plan_id
-        self._token = token
-
-    @property
-    def service_plan_id(self):
-        """The service plan identifier that did not pass authentication.
-
-        type: *str*
-
-        """
-        return self._service_plan_id
-
-    @property
-    def token(self):
-        """The authentication token that was not accepted.
-
-        type: *str*
-
-        """
-        return self._token
+        self.service_plan_id = service_plan_id
+        self.token = token
