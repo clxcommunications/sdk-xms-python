@@ -180,6 +180,24 @@ class Client(object):
         response = self._post(self._url('/batches'), fields)
         return deserialize.batch_result(response)
 
+    def replace_batch(self, batch_id, batch):
+        """Replaces the batch with the given ID with the given batch.
+
+        :param str batch_id: identifier of the batch
+        :param MtBatchTextSmsCreate batch: the replacement batch
+        :return: the resulting batch
+        :rtype: MtBatchTextSmsResult
+
+        """
+
+        if hasattr(batch, 'udh'):
+            fields = serialize.binary_batch(batch)
+        else:
+            fields = serialize.text_batch(batch)
+
+        response = self._put(self._batch_url(batch_id), fields)
+        return deserialize.batch_result(response)
+
     def _create_batch(self, batch, sender, recipients, kwargs):
         batch.sender = sender
         batch.recipients = recipients
