@@ -272,3 +272,29 @@ def group_update(obj):
         fields['auto_update'] = _group_auto_update_helper(obj.auto_update)
 
     return fields
+
+def tags(tag_coll):
+    """Serializes the given tags to a JSON string.
+
+    :param ts: a list of tags
+    :vartype ts: list[string]
+    :return: a dictionary suitable for JSON serialization
+    :rtype: dict
+
+    """
+
+    return {'tags': tag_coll}
+
+def tags_update(tags_to_add, tags_to_remove):
+    """Serializes the given tag updates to a JSON string.
+
+    :param tags_to_add: list of tags
+    :vartype tags_to_add: list[str]
+    :param tags_to_remove: list of tags
+    :vartype tags_to_remove: list[str]
+    :return: a dictionary suitable for JSON serialization
+    :rtype: dict
+
+    """
+
+    return {'add': tags_to_add, 'remove': tags_to_remove}
