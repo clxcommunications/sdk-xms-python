@@ -368,7 +368,7 @@ class Client(object):
             params['status'] = ','.join(status)
 
         if code:
-            params['code'] = ','.join(code)
+            params['code'] = ','.join([str(i) for i in code])
 
         path = '/delivery_report'
 
