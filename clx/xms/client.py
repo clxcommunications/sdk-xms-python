@@ -232,6 +232,19 @@ class Client(object):
         batch.udh = udh
         return self._create_batch(batch, sender, recipients, kwargs)
 
+    def fetch_batch(self, batch_id):
+        """Fetches the batch with the given batch identifier.
+
+        :param string $batchId batch identifier
+        :type batch_id: str
+        :returns: the corresponding batch
+        :rtype: MtBatchSmsResult
+
+        """
+
+        result = self._get(self._batch_url(batch_id))
+        return deserialize.batch_result(result)
+
     def create_batch_dry_run(self, batch, num_recipients=None):
         """Simulates sending the given batch.
 
