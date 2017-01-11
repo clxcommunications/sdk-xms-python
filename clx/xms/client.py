@@ -239,7 +239,8 @@ class Client(object):
         path = '/batches/dry_run'
 
         if num_recipients:
-            path += "?per_recipient=true&number_of_recipients=$numRecipients"
+            path += '?per_recipient=true'
+            path += '&number_of_recipients=%d' % num_recipients
 
         response = self._post(self._url(path), fields)
         return deserialize.batch_dry_run_result(response)
