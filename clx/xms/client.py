@@ -149,6 +149,10 @@ class Client(object):
 
         return resp
 
+    def _delete(self, url):
+        resp = self._session.delete(url, headers=self._headers())
+        return self._check_response(resp)
+
     def _get(self, url):
         resp = self._session.get(url, headers=self._headers())
         return self._check_response(resp)
