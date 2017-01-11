@@ -1037,3 +1037,118 @@ class MoBinarySms(MoSms):
         MoSms.__init__(self)
         self.body = None
         self.udh = None
+
+
+class Page(object):
+    """A page of elements.
+
+    The element type depends on the type of page that has been
+    retrieved. Typically it is one of :class:`MtSmsBatchResponse` or
+    :class:`GroupResponse`.
+
+    .. attribute:: page
+
+      The page number, starting from zero.
+
+      type: *int*
+
+    .. attribute:: page
+
+      The number of elements on this page.
+
+      type: *int*
+
+    .. attribute:: total_size
+
+      The total number of elements across all fetched pages.
+
+      type: *int*
+
+    .. attribute:: content
+
+      The page elements.
+
+      type: *list[obj]*
+
+    """
+
+    def __init__(self):
+        self.page = None
+        self.size = None
+        self.total_size = None
+        self.content = None
+
+    def __iter__(self):
+        """Returns an iterator over the content of this page.
+
+        For example, if the page is the result of a batch listing then
+        this iterator will yield batch results.
+
+        :returns: the page iterator
+        :rtype: iterator
+
+        """
+
+        return iter(self.content)
+
+
+class Pages(object):
+    """A paged result.
+
+    It is possible to, for example, fetch individual pages or iterate
+    over all pages.
+
+    :param worker: worker function that fetches pages
+
+    """
+
+    def __init__(self, worker):
+        self._worker = worker
+
+    def get(self, page):
+        """Downloads a specific page.
+
+        :param page: number of the page to fetch
+        :vartype page: int
+        :return: a page
+        :rtype: Page
+
+        """
+
+        return self._worker(page)
+
+    def __iter__(self):
+        """Iterator across all pages."""
+
+        return PagesIterator(self)
+
+
+class PagesIterator(object):
+    """An iterator over a paged result.
+
+    The key is the page number and the value corresponds to the
+    content of the pages.
+
+    :param pages: the pages that we are iterating over
+    :vartype pages: Pages
+
+    """
+
+    def __init__(self, pages):
+        self._pages = pages
+        self._cur_page = None
+        self._position = 0
+
+    def next(self):
+        """Steps this iterator to the next page."""
+
+        if not self._cur_page or self._cur_page.page != self._position:
+            self._cur_page = self._pages.get(self._position)
+
+        self._position += 1
+
+        # If we fetched an empty page then the iteration is over.
+        if self._cur_page.size <= 0:
+            raise StopIteration
+        else:
+            return self._cur_page

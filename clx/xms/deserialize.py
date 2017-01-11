@@ -146,6 +146,30 @@ def batch_result(response):
     json, fields = _check_response(response)
     return _batch_response_from_fields(json, fields)
 
+def batches_page(response):
+    """Reads a JSON blob describing a page of batches.
+
+    :param response: the response object to interpret
+    :vartype response: Response
+    :return: the parsed page
+    :rtype: Page
+    :raises UnexpectedResponseException: if the JSON contained an
+        unexpected message type
+
+    """
+
+    json, fields = _check_response(response)
+
+    result = api.Page()
+    result.page = fields['page']
+    result.size = fields['page_size']
+    result.total_size = fields['count']
+    result.content = [
+        _batch_response_from_fields(json, s) for s in fields['batches']
+    ]
+
+    return result
+
 def batch_dry_run_result(response):
     """Reads a JSON formatted string describing a dry-run result.
 
@@ -329,6 +353,28 @@ def group_result(response):
     fields = response.json()
     return _group_result_from_fields(json, fields)
 
+def groups_page(response):
+    """Parses a page of groups from the given JSON text.
+
+    :param response: an XMS response
+    :vartype response: Response
+    :returns: the created page of groups
+    :rtype: Page
+
+    """
+
+    json, fields = _check_response(response)
+
+    result = api.Page()
+    result.page = fields['page']
+    result.size = fields['page_size']
+    result.total_size = fields['count']
+    result.content = [
+        _group_result_from_fields(json, s) for s in fields['groups']
+    ]
+
+    return result
+
 def tags(response):
     """Reads a JSON blob containing a list of tags.
 
@@ -401,3 +447,25 @@ def mo_sms(response):
 
     json, fields = _check_response(response)
     return _mo_sms_from_fields(json, fields)
+
+def inbounds_page(response):
+    """Reads a JSON blob describing a page of MO messages.
+
+    :param response: an XMS response
+    :vartype response: Response
+    :returns: the parsed page
+    :rtype: Page
+    :raises UnexpectedResponseException: if the JSON contained an
+        unexpected message type
+
+    """
+
+    json, fields = _check_response(response)
+
+    result = api.Page()
+    result.page = fields['page']
+    result.size = fields['page_size']
+    result.total_size = fields['count']
+    result.content = [_mo_sms_from_fields(json, s) for s in fields['inbounds']]
+
+    return result
