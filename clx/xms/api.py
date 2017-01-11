@@ -51,6 +51,26 @@ class DeliveryStatus(object):
     """It is not known if message was delivered or not."""
 
 
+class DeliveryReportType(object):
+    """The types of delivery reports that can be retrieved."""
+
+    SUMMARY = "summary"
+    """Indicates a summary batch delivery report.
+
+    The summary delivery report does not include the per-recipient
+    result but rather aggregated statistics about the deliveries.
+
+    """
+
+    FULL = "full"
+    """Indicates a full batch delivery report.
+
+    This includes per-recipient delivery results. For batches with
+    many destinations such reports may be very large.
+
+    """
+
+
 class Reset(object):
     """A class whose instances indicate that a value should be reset.
 
