@@ -473,3 +473,29 @@ class Client(object):
 
         result = self._get(self._group_url(group_id))
         return deserialize.group_result(result)
+
+    def fetch_group_tags(self, group_id):
+        """Fetches the tags associated with the given group.
+
+        :param string group_id: the group identifier
+        :returns: a list of tags
+        :rtype: list[str]
+
+        """
+
+        result = self._get(self._group_url(group_id, '/tags'))
+        return deserialize.tags(result)
+
+    def replace_group_tags(self, group_id, tags):
+        """Replaces the tags of the given group.
+
+        :param str group_id: identifier of the group
+        :param list[str] tags: the new set of group tags
+        :returns: the new group tags
+        :rtype: list[str]
+
+        """
+
+        fields = serialize.tags(tags)
+        result = self._put(self._group_url(group_id, '/tags'), fields)
+        return deserialize.tags(result)
