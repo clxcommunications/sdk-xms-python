@@ -5,6 +5,8 @@
 """Collection of value classes
 """
 
+from __future__ import absolute_import, division, print_function
+
 class ReportType(object):
     """A collection of known delivery report types.
 

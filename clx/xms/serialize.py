@@ -7,6 +7,8 @@ change in the future
 
 """
 
+from __future__ import absolute_import, division, print_function
+
 import binascii
 from clx.xms.api import RESET
 

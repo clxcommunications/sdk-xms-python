@@ -3,6 +3,8 @@
 """Collection of exceptions raised by the XMS SDK.
 """
 
+from __future__ import absolute_import, division, print_function
+
 class ApiException(Exception):
     """Base class for exceptions thrown within the XMS SDK"""
 
