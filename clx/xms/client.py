@@ -9,8 +9,7 @@ import logging
 from urllib import quote_plus, urlencode
 import requests
 import clx.xms.__about__
-from clx.xms import deserialize
-from clx.xms import serialize
+from clx.xms import deserialize, serialize, api
 
 class Client(object):
     """Client used to communicate with the XMS server.
@@ -276,6 +275,61 @@ class Client(object):
 
         result = self._get(self._batch_url(batch_id))
         return deserialize.batch_result(result)
+
+    def fetch_batches(self,
+                      page_size=None,
+                      senders=None,
+                      tags=None,
+                      start_date=None,
+                      end_date=None):
+        """Fetch the batches matching the given filter.
+
+        Note, calling this method does not actually cause any network
+        traffic. Listing batches in XMS may return the result over
+        multiple pages and this call therefore returns an object of
+        the type :class:`clx.xms.api.Pages`, which will fetch result
+        pages as needed.
+
+        :param page_size: Maximum number of batches to retrieve per page.
+        :type page_size: int
+        :param senders: Fetch only batches having one of these senders.
+        :type senders: list[str] or None
+        :param tags: Fetch only batches having one or more of these tags.
+        :type tags: list[str] or None
+        :param start_date: Fetch only batches sent at or after this date.
+        :type start_date: date or None
+        :param end_date: Fetch only batches sent before this date.
+        :type end_date: date or None
+        :return the result pages
+        :rtype: Pages
+
+        """
+
+        def fetcher(page):
+            """Helper"""
+
+            params = {'page': page}
+
+            if page_size:
+                params['page_size'] = page_size
+
+            if senders:
+                params['from'] = ','.join(senders)
+
+            if tags:
+                params['tags'] = ','.join(tags)
+
+            if start_date:
+                params['start_date'] = start_date.isoformat()
+
+            if end_date:
+                params['end_date'] = end_date.isoformat()
+
+            query = urlencode(params)
+            result = self._get(self._url('/batches?' + query))
+            return deserialize.batches_page(result)
+
+        return api.Pages(fetcher)
 
     def create_batch_dry_run(self, batch, num_recipients=None):
         """Simulates sending the given batch.
