@@ -543,6 +543,41 @@ class Client(object):
         result = self._get(self._group_url(group_id))
         return deserialize.group_result(result)
 
+    def fetch_groups(self, page_size=None, tags=None):
+        """Fetch the groups matching the given filter.
+
+        Note, calling this method does not actually cause any network
+        traffic. Listing groups in XMS may return the result over
+        multiple pages and this call therefore returns an object of
+        the type :class:`clx.xms.api.Pages`, which will fetch result
+        pages as needed.
+
+        :param page_size: Maximum number of groups to retrieve per page.
+        :type page_size: int or None
+        :param tags: Fetch only groups having or or more of these tags.
+        :type tags: list[str] or None
+        :return: the result pages
+        :rtype: Pages
+
+        """
+
+        def fetcher(page):
+            """Helper"""
+
+            params = {'page': page}
+
+            if page_size:
+                params['page_size'] = page_size
+
+            if tags:
+                params['tags'] = ','.join(tags)
+
+            query = urlencode(params)
+            result = self._get(self._url('/groups?' + query))
+            return deserialize.groups_page(result)
+
+        return api.Pages(fetcher)
+
     def fetch_group_tags(self, group_id):
         """Fetches the tags associated with the given group.
 
@@ -605,3 +640,52 @@ class Client(object):
 
         result = self._get(self._url("/inbounds/" + eiid))
         return deserialize.mo_sms(result)
+
+    def fetch_inbounds(self,
+                       page_size=None,
+                       recipients=None,
+                       start_date=None,
+                       end_date=None):
+        """Fetch inbound messages matching the given filter.
+
+        Note, calling this method does not actually cause any network
+        traffic. Listing inbound messages in XMS may return the result
+        over multiple pages and this call therefore returns an object
+        of the type :class:`clx.xms.api.Pages`, which will fetch
+        result pages as needed.
+
+        :param page_size: The maximum number of messages to retrieve per page.
+        :type page_size: int or None
+        :param recipients: Fetch only messages having one of these recipients.
+        :type recipients: list[str] or None
+        :param start_date: Fetch only messages received at or after this date.
+        :type start_date: date or None
+        :param end_date: Fetch only messages received before this date.
+        :type end_date: date or None
+        :returns: the result pages
+        :rtype: Pages
+
+        """
+
+        def fetcher(page):
+            """Helper"""
+
+            params = {'page': page}
+
+            if page_size:
+                params['page_size'] = page_size
+
+            if recipients:
+                params['to'] = ','.join(recipients)
+
+            if start_date:
+                params['start_date'] = start_date.isoformat()
+
+            if end_date:
+                params['end_date'] = end_date.isoformat()
+
+            query = urlencode(params)
+            result = self._get(self._url('/inbounds?' + query))
+            return deserialize.inbounds_page(result)
+
+        return api.Pages(fetcher)
