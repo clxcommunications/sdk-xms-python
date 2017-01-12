@@ -599,7 +599,7 @@ class ClientTest(TestCase):
 
         tags = self._client.fetch_batch_tags('BATCHID')
 
-        assert_equal(['tag1', 'tag2'], tags)
+        assert_equal({'tag1', 'tag2'}, tags)
 
     def test_replace_batch_tags(self, m):
         m.put(
@@ -610,7 +610,7 @@ class ClientTest(TestCase):
 
         tags = self._client.replace_batch_tags('batchid', ['tag'])
 
-        assert_equal(['tag'], tags)
+        assert_equal({'tag'}, tags)
 
     def test_fetch_delivery_report(self, m):
         response_body = {
@@ -940,7 +940,7 @@ class ClientTest(TestCase):
 
         tags = self._client.fetch_group_tags('groupid')
 
-        assert_equal(['tag1', 'tag2'], tags)
+        assert_equal({'tag1', 'tag2'}, tags)
 
     def test_replace_group_tags(self, m):
         m.put(
@@ -951,7 +951,7 @@ class ClientTest(TestCase):
 
         tags = self._client.replace_group_tags('GroupId', [])
 
-        assert_equal([], tags)
+        assert_equal(set(), tags)
         assert_equal({"tags":[]}, m.request_history[0].json())
 
     def test_update_batch_tags(self, m):
@@ -963,7 +963,7 @@ class ClientTest(TestCase):
 
         tags = self._client.update_batch_tags('batchid', ['at'], ['rt'])
 
-        assert_equal(['tag'], tags)
+        assert_equal({'tag'}, tags)
 
         assert_equal(
             {"add":["at"], "remove":["rt"]},
@@ -978,7 +978,7 @@ class ClientTest(TestCase):
 
         tags = self._client.update_group_tags('GroupId', [], ['foo'])
 
-        assert_equal(['a', 'b'], tags)
+        assert_equal({'a', 'b'}, tags)
         assert_equal(
             {"add": [], "remove": ["foo"]},
             m.request_history[0].json())

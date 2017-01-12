@@ -80,7 +80,7 @@ def test_read_batch_response_text():
         'https://example.com/callbacker', result.callback_url
     )
     assert_equal(
-        ['987654321', '555555555'], result.recipients
+        {'987654321', '555555555'}, result.recipients
     )
     assert_equal(
         {
@@ -223,8 +223,8 @@ def test_read_delivery_report_summary():
     assert_equal(2, result.statuses[0].count)
     assert_equal(1, result.statuses[1].count)
 
-    assert_is_none(result.statuses[0].recipients)
-    assert_is_none(result.statuses[1].recipients)
+    assert_equal(set(), result.statuses[0].recipients)
+    assert_equal(set(), result.statuses[1].recipients)
 
 def test_read_delivery_report_full():
     response = MockResponse(
@@ -260,8 +260,8 @@ def test_read_delivery_report_full():
     assert_equal(1, result.statuses[0].count)
     assert_equal(1, result.statuses[1].count)
 
-    assert_equal(['555555555'], result.statuses[0].recipients)
-    assert_equal(['987654321'], result.statuses[1].recipients)
+    assert_equal({'555555555'}, result.statuses[0].recipients)
+    assert_equal({'987654321'}, result.statuses[1].recipients)
 
 @raises(exceptions.UnexpectedResponseException)
 def test_read_delivery_report_unknown_type():
@@ -366,7 +366,7 @@ def test_read_tags():
 
     result = deserialize.tags(response)
 
-    assert_equal(["tag1", u'таг2'], result)
+    assert_equal({'tag1', u'таг2'}, result)
 
 def test_read_error():
     response = MockResponse(

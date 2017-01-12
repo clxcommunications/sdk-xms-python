@@ -99,7 +99,7 @@ class MtBatchSms(object):
 
       One or more MSISDNs indicating the batch recipients.
 
-      type: *list(str)*
+      type: *set[str]*
 
     .. attribute:: sender
 
@@ -153,7 +153,7 @@ class MtBatchSmsCreate(MtBatchSms):
 
       The initial set of tags to give the batch.
 
-      type: *list[str]*
+      type: *set[str]*
 
     """
 
@@ -243,14 +243,14 @@ class MtBatchSmsUpdate(object):
       The message destinations to add to the batch. This should have
       zero or more MSISDNs.
 
-      type: *list[str]*
+      type: *set[str]*
 
     .. attribute:: recipient_removals
 
       The message destinations to remove from the batch. This should
       have zero or more MSISDNs.
 
-      type: *list[str]*
+      type: *set[str]*
 
     .. attribute:: sender
 
@@ -302,8 +302,8 @@ class MtBatchSmsUpdate(object):
     """
 
     def __init__(self):
-        self.recipient_insertions = []
-        self.recipient_removals = []
+        self.recipient_insertions = set()
+        self.recipient_removals = set()
         self.sender = None
         self.delivery_report = None
         self.send_at = None
@@ -519,7 +519,7 @@ class BatchDeliveryReportStatus(object):
       Note, this is non-empty only if a `full` delivery report has been
       requested.
 
-      type: *list[str]*
+      type: *set[str]*
 
     """
 
@@ -527,7 +527,7 @@ class BatchDeliveryReportStatus(object):
         self.code = None
         self.status = None
         self.count = None
-        self.recipients = None
+        self.recipients = set()
 
 
 class BatchRecipientDeliveryReport(object):
@@ -790,15 +790,15 @@ class GroupCreate(object):
 
     .. attribute:: members
 
-      A list of MSISDNs that belong to this group.
+      A set of MSISDNs that belong to this group.
 
-      type: *list[str]*
+      type: *set[str]*
 
     .. attribute:: child_groups
 
-      A list of groups that in turn belong to this group.
+      A set of groups that in turn belong to this group.
 
-      type: *list[str]*
+      type: *set[str]*
 
     .. attribute:: auto_update
 
@@ -813,16 +813,16 @@ class GroupCreate(object):
 
       The tags associated to this group.
 
-      type: *list[str]*
+      type: *set[str]*
 
     """
 
     def __init__(self):
         self.name = None
-        self.members = []
-        self.child_groups = []
+        self.members = set()
+        self.child_groups = set()
         self.auto_update = None
-        self.tags = []
+        self.tags = set()
 
 
 class GroupResult(object):
@@ -851,9 +851,9 @@ class GroupResult(object):
 
     .. attribute:: child_groups
 
-      A list of groups that in turn belong to this group.
+      A set of groups that in turn belong to this group.
 
-      type: *list[str]*
+      type: *set[str]*
 
     .. attribute:: auto_update
 
@@ -882,7 +882,7 @@ class GroupResult(object):
         self.group_id = None
         self.name = None
         self.size = None
-        self.child_groups = []
+        self.child_groups = set()
         self.auto_update = None
         self.created_at = None
         self.modified_at = None
@@ -905,25 +905,25 @@ class GroupUpdate(object):
 
       The MSISDNs that should be added to this group.
 
-      type: *list[str]*
+      type: *set[str]*
 
     .. attribute:: member_removals
 
       The MSISDNs that should be removed from this group.
 
-      type: *list[str]*
+      type: *set[str]*
 
     .. attribute:: child_group_insertions
 
       The child groups that should be added to this group.
 
-      type: *list[str]*
+      type: *set[str]*
 
     .. attribute:: child_group_removals
 
       The child groups that should be removed from this group.
 
-      type: *list[str]*
+      type: *set[str]*
 
     .. attribute:: add_from_group
 
@@ -954,10 +954,10 @@ class GroupUpdate(object):
 
     def __init__(self):
         self.name = None
-        self.member_insertions = []
-        self.member_removals = []
-        self.child_group_insertions = []
-        self.child_group_removals = []
+        self.member_insertions = set()
+        self.member_removals = set()
+        self.child_group_insertions = set()
+        self.child_group_removals = set()
         self.add_from_group = None
         self.remove_from_group = None
         self.auto_update = None

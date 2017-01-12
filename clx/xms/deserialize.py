@@ -43,7 +43,7 @@ def _batch_response_helper(json, fields, batch):
     """
 
     batch.batch_id = fields['id']
-    batch.recipients = fields['to']
+    batch.recipients = set(fields['to'])
     batch.sender = fields['from']
     batch.canceled = fields['canceled']
 
@@ -229,7 +229,7 @@ def batch_delivery_report(response):
         result.status = status['status']
         result.count = status['count']
         if 'recipients' in status:
-            result.recipients = status['recipients']
+            result.recipients = set(status['recipients'])
         return result
 
     result = api.BatchDeliveryReport()
@@ -326,7 +326,7 @@ def _group_result_from_fields(json, fields):
     """
 
     result = api.GroupResult()
-    result.child_groups = fields['child_groups']
+    result.child_groups = set(fields['child_groups'])
     result.group_id = fields['id']
     result.size = fields['size']
     result.created_at = _date_time(json, fields['created_at'])
@@ -382,13 +382,13 @@ def tags(response):
 
     :param response: an XMS response
     :vartype response: Response
-    :returns: a list of tags
-    :rtype: list[string]
+    :returns: a set of tags
+    :rtype: set[string]
 
     """
 
     _, fields = _check_response(response)
-    return fields['tags']
+    return set(fields['tags'])
 
 def _mo_sms_from_fields(json, fields):
     """Helper that reads an MO from the given fields.
