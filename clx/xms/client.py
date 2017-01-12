@@ -4,8 +4,12 @@
 XMS Client module
 """
 
+try:
+    from urllib.parse import quote_plus, urlencode
+except ImportError:
+    from urllib import quote_plus, urlencode
+
 import logging
-from urllib import quote_plus, urlencode
 import requests
 import clx.xms.__about__
 from clx.xms import deserialize, serialize, api
