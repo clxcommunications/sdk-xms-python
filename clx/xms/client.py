@@ -334,6 +334,21 @@ class Client(object):
         result = self._put(self._batch_url(batch_id, '/tags'), fields)
         return deserialize.tags(result)
 
+    def update_batch_tags(self, batch_id, tags_to_add, tags_to_remove):
+        """Updates the tags of the given batch.
+
+        :param string batch_id: batch identifier
+        :param list[str] tags_to_add: tags to add to batch
+        :param list[str] tags_to_remove: tags to remove from batch
+        :returns: the updated batch tags
+        :rtype: list[str]
+
+        """
+
+        fields = serialize.tags_update(tags_to_add, tags_to_remove)
+        result = self._post(self._batch_url(batch_id, '/tags'), fields)
+        return deserialize.tags(result)
+
     def fetch_delivery_report(self, batch_id, kind=None,
                               status=None, code=None):
         """Fetches a delivery report for a batch.
@@ -498,4 +513,20 @@ class Client(object):
 
         fields = serialize.tags(tags)
         result = self._put(self._group_url(group_id, '/tags'), fields)
+        return deserialize.tags(result)
+
+
+    def update_group_tags(self, group_id, tags_to_add, tags_to_remove):
+        """Updates the tags of the given group.
+
+        :param string group_id: group identifier
+        :param list[str] tags_to_add: tags to add to group
+        :param list[str] tags_to_remove: tags to remove from group
+        :return: the updated group tags
+        :rtype: list[str]
+
+        """
+
+        fields = serialize.tags_update(tags_to_add, tags_to_remove)
+        result = self._post(self._group_url(group_id, '/tags'), fields)
         return deserialize.tags(result)
