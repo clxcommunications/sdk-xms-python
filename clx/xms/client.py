@@ -53,8 +53,7 @@ class Client(object):
 
     """
 
-    # DEFAULT_ENDPOINT = "https://api.clxcommunications.com/xms"
-    DEFAULT_ENDPOINT = "http://localhost:8000/xms"
+    DEFAULT_ENDPOINT = "https://api.clxcommunications.com/xms"
     """The default XMS endpoint URL. This is the endpoint that will be
     used unless a custom one is specified in the :class:`Client`
     constructor.
