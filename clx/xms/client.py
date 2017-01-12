@@ -55,14 +55,19 @@ class Client(object):
 
     # DEFAULT_ENDPOINT = "https://api.clxcommunications.com/xms"
     DEFAULT_ENDPOINT = "http://localhost:8000/xms"
+    """The default XMS endpoint URL. This is the endpoint that will be
+    used unless a custom one is specified in the :class:`Client`
+    constructor.
+
+    """
 
     _LOGGER = logging.getLogger('clx.xms.client')
 
     def __init__(self, service_plan_id, token, endpoint=DEFAULT_ENDPOINT):
         """
-        :param service_plan_id: service plan identifier.
-        :param token: authentication token
-        :param endpoint: URL to XMS endpoint
+        :param str service_plan_id: service plan identifier.
+        :param str token: authentication token
+        :param str endpoint: URL to XMS endpoint
         """
 
         self._session = requests.Session()
@@ -80,9 +85,10 @@ class Client(object):
     def _url(self, sub_path):
         """Builds an endpoint URL for the given sub-path.
 
-        :param sub_path: the sub-path
+        :param str sub_path: the sub-path
         :return: an URL
         :rtype: str
+
         """
 
         return self._endpoint + '/v1/' + self._service_plan_id + sub_path
@@ -90,11 +96,12 @@ class Client(object):
     def _batch_url(self, batch_id, sub_path=''):
         """Builds an endpoint URL for the given batch and sub-path.
 
-        :param batch_id: a batch identifier
-        :param sub_path: additional sub-path
+        :param str batch_id: a batch identifier
+        :param str sub_path: additional sub-path
         :returns: a complete URL
         :rtype: str
         :raises ValueError: if given an invalid batch ID
+
         """
 
         ebid = quote_plus(batch_id)
@@ -107,8 +114,8 @@ class Client(object):
     def _group_url(self, group_id, sub_path=''):
         """Builds an endpoint URL for the given group and sub-path.
 
-        :param group_id: a group identifier
-        :param sub_path: additional sub-path
+        :param str group_id: a group identifier
+        :param str sub_path: additional sub-path
         :returns: a complete URL
         :rtype: str
         :raises ValueError: if given an invalid group ID
@@ -123,6 +130,16 @@ class Client(object):
         return self._url('/groups/' + egid + sub_path)
 
     def _check_response(self, resp):
+        """Checks the given HTTP response and returns it if OK.
+
+        If any problem is found then a suitable exception is raised.
+        This method also logs the request and response at the debug
+        level.
+
+        :param Response resp: HTTP response to check
+
+        """
+
         Client._LOGGER.debug('Request{%s} Response(code %d){%s}',
                              resp.request.body, resp.status_code, resp.text)
 
@@ -167,11 +184,10 @@ class Client(object):
         """Creates the given batch.
 
         :param batch: the text or binary batch to create
-        :vartype batch: clx.xms.api.MtBatchTextSmsCreate or
-            clx.xms.api.MtBatchBinarySmsCreate
+        :type batch: MtBatchTextSmsCreate or MtBatchBinarySmsCreate
         :returns: the batch result
-        :rtype: clx.xms.api.MtBatchTextSmsResult or
-            clx.xms.api.MtBatchBinarySmsResult
+        :rtype: MtBatchTextSmsResult or MtBatchBinarySmsResult
+
         """
 
         if hasattr(batch, 'udh'):
@@ -186,7 +202,8 @@ class Client(object):
         """Replaces the batch with the given ID with the given batch.
 
         :param str batch_id: identifier of the batch
-        :param MtBatchTextSmsCreate batch: the replacement batch
+        :param batch: the replacement batch
+        :type batch: MtBatchTextSmsCreate or MtBatchBinarySmsCreate
         :return: the resulting batch
         :rtype: MtBatchTextSmsResult
 
@@ -203,8 +220,9 @@ class Client(object):
     def update_batch(self, batch_id, batch):
         """Updates the text batch with the given identifier.
 
-        :param string batch_id: identifier of the batch
-        :param MtBatchTextSmsUpdate batch: the update description
+        :param str batch_id: identifier of the batch
+        :param batch: the update description
+        :type batch: MtBatchTextSmsUpdate or MtBatchBinarySmsUpdate
         :returns: the updated batch
         :rtype: MtBatchTextSmsResult
 
@@ -221,7 +239,7 @@ class Client(object):
     def cancel_batch(self, batch_id):
         """Cancels the batch with the given batch identifier.
 
-        :param string batch_id: the batch identifier
+        :param str batch_id: the batch identifier
         :returns: nothing
 
         """
@@ -265,8 +283,7 @@ class Client(object):
     def fetch_batch(self, batch_id):
         """Fetches the batch with the given batch identifier.
 
-        :param string $batchId batch identifier
-        :type batch_id: str
+        :param str batch_id: batch identifier
         :returns: the corresponding batch
         :rtype: MtBatchSmsResult
 
@@ -289,8 +306,7 @@ class Client(object):
         the type :class:`clx.xms.api.Pages`, which will fetch result
         pages as needed.
 
-        :param page_size: Maximum number of batches to retrieve per page.
-        :type page_size: int
+        :param int page_size: Maximum number of batches to retrieve per page.
         :param senders: Fetch only batches having one of these senders.
         :type senders: list[str] or None
         :param tags: Fetch only batches having one or more of these tags.
@@ -337,14 +353,13 @@ class Client(object):
         respond with per-recipient statistics, if non-null then this
         number of recipients will be returned in the result.
 
-        :param batch: the batch to simulate
-        :vartype batch: MtBatchSmsCreate
-
-        :param num_recipients: number of recipients to show in
-            per-recipient result
-        :vartype num_recipients: int or None
-        :return: result of dry-run
+        :param MtBatchSmsCreate batch: the batch to simulate
+        :param num_recipients:
+            number of recipients to show in per-recipient result
+        :type num_recipients: int or None
+        :returns: result of dry-run
         :rtype: MtBatchDryRunResult
+
         """
 
         if hasattr(batch, 'udh'):
@@ -364,7 +379,7 @@ class Client(object):
     def fetch_batch_tags(self, batch_id):
         """Fetches the tags associated with the given batch.
 
-        :param string batch_id: the batch identifier
+        :param str batch_id: the batch identifier
         :returns: a list of tags
         :rtype: list[str]
 
@@ -376,7 +391,7 @@ class Client(object):
     def replace_batch_tags(self, batch_id, tags):
         """Replaces the tags of the given batch.
 
-        :param string batch_id: identifier of the batch
+        :param str batch_id: identifier of the batch
         :param list[str] tags: the new set of batch tags
         :returns: the new batch tags
         :rtype: list[str]
@@ -390,7 +405,7 @@ class Client(object):
     def update_batch_tags(self, batch_id, tags_to_add, tags_to_remove):
         """Updates the tags of the given batch.
 
-        :param string batch_id: batch identifier
+        :param str batch_id: batch identifier
         :param list[str] tags_to_add: tags to add to batch
         :param list[str] tags_to_remove: tags to remove from batch
         :returns: the updated batch tags
@@ -425,18 +440,11 @@ class Client(object):
         XMS defaults are used. In particular, all statuses and codes
         are included in the report.
 
-        :param batch_id: identifier of the batch
-        :vartype batch_id: str
-
+        :param str batch_id: identifier of the batch
         :param kind: delivery report type
-        :vartype kind: str or None
-
-        :param status: statuses to fetch
-        :vartype status: set[str]
-
-        :param code: codes to fetch
-        :vartype code: set[int]
-
+        :type kind: str or None
+        :param set[str] status: statuses to fetch
+        :param set[int] code: codes to fetch
         :returns: the batch delivery report
         :rtype: BatchDeliveryReport
 
@@ -464,12 +472,8 @@ class Client(object):
     def fetch_recipient_delivery_report(self, batch_id, recipient):
         """Fetches a delivery report for a specific batch recipient.
 
-        :param batch_id: the batch identifier
-        :vartype batch_id: str
-
-        :param recipient: the batch recipient
-        :vartype recipient: str
-
+        :param str batch_id: the batch identifier
+        :param str recipient: the batch recipient
         :returns: the delivery report
         :rtype: BatchRecipientDeliveryReport
         """
@@ -481,9 +485,8 @@ class Client(object):
     def create_group(self, group):
         """Creates the given group.
 
-        :param group: group description
-        :vartype group: GroupCreate
-        :return: the created group
+        :param GroupCreate group: group description
+        :returns: the created group
         :rtype: GroupResult
 
         """
@@ -495,7 +498,7 @@ class Client(object):
     def replace_group(self, group_id, group):
         """Replaces the group with the given group identifier.
 
-        :param string group_id: identifier of the group
+        :param str group_id: identifier of the group
         :param GroupCreate group: new group description
         :returns: the group after replacement
         :rtype: GroupResult
@@ -509,10 +512,9 @@ class Client(object):
     def update_group(self, group_id, group):
         """Updates the group with the given identifier.
 
-        :param string group_id: identifier of the group
-        :param group: the update description
-        :type group: GroupUpdate
-        :return: the updated batch
+        :param str group_id: identifier of the group
+        :param GroupUpdate group: the update description
+        :returns: the updated batch
         :rtype: GroupResult
 
         """
@@ -524,7 +526,7 @@ class Client(object):
     def delete_group(self, group_id):
         """Deletes the group with the given group identifier.
 
-        :param string group_id: the group identifier
+        :param str group_id: the group identifier
         :returns: Nothing
 
         """
@@ -534,7 +536,7 @@ class Client(object):
     def fetch_group(self, group_id):
         """Fetches the group with the given group identifier.
 
-        :param string group_id: group identifier
+        :param str group_id: group identifier
         :returns: the corresponding group
 
         """
@@ -555,7 +557,7 @@ class Client(object):
         :type page_size: int or None
         :param tags: Fetch only groups having or or more of these tags.
         :type tags: list[str] or None
-        :return: the result pages
+        :returns: the result pages
         :rtype: Pages
 
         """
@@ -580,7 +582,7 @@ class Client(object):
     def fetch_group_tags(self, group_id):
         """Fetches the tags associated with the given group.
 
-        :param string group_id: the group identifier
+        :param str group_id: the group identifier
         :returns: a list of tags
         :rtype: list[str]
 
@@ -607,10 +609,10 @@ class Client(object):
     def update_group_tags(self, group_id, tags_to_add, tags_to_remove):
         """Updates the tags of the given group.
 
-        :param string group_id: group identifier
+        :param str group_id: group identifier
         :param list[str] tags_to_add: tags to add to group
         :param list[str] tags_to_remove: tags to remove from group
-        :return: the updated group tags
+        :returns: the updated group tags
         :rtype: list[str]
 
         """
@@ -626,9 +628,9 @@ class Client(object):
         The returned message is either :class:`clx.xms.api.MoTextSms`
          or :class:`clx.xms.api.MoBinarySms`.
 
-        :param string inbound_id: message identifier
-        :return: the fetched message
-        :rtype: MoSms
+        :param str inbound_id: message identifier
+        :returns: the fetched message
+        :rtype: :class:`.MoTextSms` or :class:`.MoBinarySms`
 
         """
 
