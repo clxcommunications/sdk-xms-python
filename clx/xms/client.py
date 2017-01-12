@@ -530,3 +530,24 @@ class Client(object):
         fields = serialize.tags_update(tags_to_add, tags_to_remove)
         result = self._post(self._group_url(group_id, '/tags'), fields)
         return deserialize.tags(result)
+
+
+    def fetch_inbound(self, inbound_id):
+        """Fetches the inbound message with the given identifier.
+
+        The returned message is either :class:`clx.xms.api.MoTextSms`
+         or :class:`clx.xms.api.MoBinarySms`.
+
+        :param string inbound_id: message identifier
+        :return: the fetched message
+        :rtype: MoSms
+
+        """
+
+        eiid = quote_plus(inbound_id)
+
+        if not eiid:
+            raise ValueError("Empty inbound ID given")
+
+        result = self._get(self._url("/inbounds/" + eiid))
+        return deserialize.mo_sms(result)
