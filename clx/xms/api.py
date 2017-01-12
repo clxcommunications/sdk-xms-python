@@ -216,13 +216,13 @@ class MtBatchBinarySmsCreate(MtBatchSmsCreate):
 
       The body of this binary message.
 
-      type: *str*
+      type: *bytes*
 
     .. attribute:: udh
 
       The User Data Header of this binary message.
 
-      type: *str*
+      type: *bytes*
 
     """
 
@@ -345,14 +345,14 @@ class MtBatchBinarySmsUpdate(MtBatchSmsUpdate):
       The updated binary batch body. If ``None`` then the existing
       body is left as-is.
 
-      type: *str* or *None*
+      type: *bytes* or *None*
 
     .. attribute:: udh
 
       The updated binary User Data Header. If ``None`` then the
       existing UDH is left as-is.
 
-      type: *str* or *None*
+      type: *bytes* or *None*
 
     """
 
@@ -433,13 +433,13 @@ class MtBatchBinarySmsResult(MtBatchSmsResult):
 
       The body of this binary message.
 
-      type: *str*
+      type: *bytes*
 
     .. attribute:: udh
 
       The User Data Header of this binary message.
 
-      type: *str*
+      type: *bytes*
 
     """
 
@@ -1043,13 +1043,13 @@ class MoBinarySms(MoSms):
 
       The binary message body.
 
-      type: *str*
+      type: *bytes*
 
     .. attribute:: udh
 
       The user data header.
 
-      type: *str*
+      type: *bytes*
 
     """
 

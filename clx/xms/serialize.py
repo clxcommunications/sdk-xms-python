@@ -18,6 +18,12 @@ def _write_datetime(value):
 
     return value.isoformat()
 
+def _write_base64(value):
+    return binascii.b2a_base64(value).decode('ascii')
+
+def _write_hex(value):
+    return binascii.hexlify(value).decode('ascii')
+
 def _create_batch_helper(batch):
     """Helper that prepares the fields of a batch for JSON serialization.
 
@@ -77,8 +83,8 @@ def binary_batch(batch):
     fields = _create_batch_helper(batch)
 
     fields['type'] = 'mt_binary'
-    fields['body'] = binascii.b2a_base64(batch.body)
-    fields['udh'] = binascii.hexlify(batch.udh)
+    fields['body'] = _write_base64(batch.body)
+    fields['udh'] = _write_hex(batch.udh)
 
     return fields
 
@@ -164,10 +170,10 @@ def binary_batch_update(batch):
     fields['type'] = 'mt_binary'
 
     if batch.body:
-        fields['body'] = binascii.b2a_base64(batch.body)
+        fields['body'] = _write_base64(batch.body)
 
     if batch.udh:
-        fields['udh'] = binascii.hexlify(batch.udh)
+        fields['udh'] = _write_hex(batch.udh)
 
     return fields
 
