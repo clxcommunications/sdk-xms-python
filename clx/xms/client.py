@@ -162,8 +162,6 @@ class Client(object):
             raise clx.xms.exceptions.UnexpectedResponseException(
                 "Unexpected HTTP status %s" % resp.status_code, resp.text)
 
-        return resp
-
     def _delete(self, url):
         resp = self._session.delete(url, headers=self._headers())
         return self._check_response(resp)
