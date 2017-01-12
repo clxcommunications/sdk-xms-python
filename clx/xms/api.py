@@ -1162,6 +1162,9 @@ class PagesIterator(object):
         self._position = 0
 
     def next(self):
+        return self.__next__()
+
+    def __next__(self):
         """Steps this iterator to the next page."""
 
         if not self._cur_page or self._cur_page.page != self._position:
