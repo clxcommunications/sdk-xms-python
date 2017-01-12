@@ -5,7 +5,6 @@ XMS Client module
 """
 
 import logging
-# from datetime import datetime
 from urllib import quote_plus, urlencode
 import requests
 import clx.xms.__about__
