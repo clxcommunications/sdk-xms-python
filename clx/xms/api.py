@@ -895,9 +895,9 @@ class GroupUpdate(object):
 
       Updates the group name.
 
-      If ``None`` then the current value is kept, if ``Reset.reset()``
-      then the value is reset to its XMS default, and if set to a
-      string the name is updated.
+      If ``None`` then the current value is kept, if
+      :attr:`clx.xms.api.RESET` then the value is reset to its XMS
+      default, and if set to a string the name is updated.
 
       type: *None* or *str* or *Reset*
 

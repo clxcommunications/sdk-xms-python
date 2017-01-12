@@ -306,8 +306,8 @@ class Client(object):
         Note, calling this method does not actually cause any network
         traffic. Listing batches in XMS may return the result over
         multiple pages and this call therefore returns an object of
-        the type :class:`clx.xms.api.Pages`, which will fetch result
-        pages as needed.
+        the type :class:`.Pages`, which will fetch result pages as
+        needed.
 
         :param int page_size: Maximum number of batches to retrieve per page.
         :param senders: Fetch only batches having one of these senders.
@@ -553,8 +553,8 @@ class Client(object):
         Note, calling this method does not actually cause any network
         traffic. Listing groups in XMS may return the result over
         multiple pages and this call therefore returns an object of
-        the type :class:`clx.xms.api.Pages`, which will fetch result
-        pages as needed.
+        the type :class:`.Pages`, which will fetch result pages as
+        needed.
 
         :param page_size: Maximum number of groups to retrieve per page.
         :type page_size: int or None
@@ -608,7 +608,6 @@ class Client(object):
         result = self._put(self._group_url(group_id, '/tags'), fields)
         return deserialize.tags(result)
 
-
     def update_group_tags(self, group_id, tags_to_add, tags_to_remove):
         """Updates the tags of the given group.
 
@@ -624,12 +623,10 @@ class Client(object):
         result = self._post(self._group_url(group_id, '/tags'), fields)
         return deserialize.tags(result)
 
-
     def fetch_inbound(self, inbound_id):
         """Fetches the inbound message with the given identifier.
 
-        The returned message is either :class:`clx.xms.api.MoTextSms`
-         or :class:`clx.xms.api.MoBinarySms`.
+        The returned message is either textual or binary.
 
         :param str inbound_id: message identifier
         :returns: the fetched message
@@ -655,8 +652,8 @@ class Client(object):
         Note, calling this method does not actually cause any network
         traffic. Listing inbound messages in XMS may return the result
         over multiple pages and this call therefore returns an object
-        of the type :class:`clx.xms.api.Pages`, which will fetch
-        result pages as needed.
+        of the type :class:`.Pages`, which will fetch result pages as
+        needed.
 
         :param page_size: The maximum number of messages to retrieve per page.
         :type page_size: int or None
