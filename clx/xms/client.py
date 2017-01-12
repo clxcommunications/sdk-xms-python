@@ -300,7 +300,7 @@ class Client(object):
         :type start_date: date or None
         :param end_date: Fetch only batches sent before this date.
         :type end_date: date or None
-        :return the result pages
+        :returns: the result pages
         :rtype: Pages
 
         """
