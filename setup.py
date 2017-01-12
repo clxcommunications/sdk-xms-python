@@ -30,7 +30,10 @@ setup(
 
     packages=['clx.xms'],
 
-    install_requires=['requests >= 2.4.2', 'iso8601 >= 0.1.9'],
+    install_requires=['iso8601 >= 0.1.9', 'requests >= 2.4.2'],
+
+    tests_require=['nose', 'requests-mock >= 0.6.0'],
+    test_suite='nose.collector',
 
     license='Apache License, Version 2.0',
 
