@@ -29,9 +29,9 @@ def _write_hex(value):
 def _create_batch_helper(batch):
     """Helper that prepares the fields of a batch for JSON serialization.
 
-    :param batch: the batch to serialize
-    :vartype batch: MtBatchSmsCreate
+    :param MtBatchSmsCreate batch: the batch to serialize
     :return: dictionary for JSON serialization
+
     """
 
     fields = {
@@ -59,9 +59,9 @@ def _create_batch_helper(batch):
 def text_batch(batch):
     """Serializes the given text batch into JSON.
 
-    :param batch: the batch to serialize
-    :vartype batch: MtBatchTextSmsCreate
+    :param MtBatchTextSmsCreate batch: the batch to serialize
     :return: dictionary suitable for JSON serialization
+
     """
 
     fields = _create_batch_helper(batch)
@@ -77,9 +77,9 @@ def text_batch(batch):
 def binary_batch(batch):
     """Serializes the given binary batch into JSON.
 
-    :param batch: the batch to serialize
-    :vartype batch: MtBatchBinarySmsCreate
+    :param MtBatchBinarySmsCreate batch: the batch to serialize
     :return: dictionary suitable for JSON serialization
+
     """
 
     fields = _create_batch_helper(batch)
@@ -93,8 +93,7 @@ def binary_batch(batch):
 def _batch_update_helper(batch):
     """Helper that prepares the given batch for serialization.
 
-    :param batch: the batch to serialize
-    :vartype batch: MtBatchSmsUpdate
+    :param MtBatchSmsUpdate batch: the batch to serialize
     :return: dictionary suitable for JSON serialization
     :rtype: dict
 
@@ -136,8 +135,7 @@ def _batch_update_helper(batch):
 def text_batch_update(batch):
     """Serializes the given text batch update into JSON.
 
-    :param batch: the batch update to serialize
-    :vartype batch: MtBatchTextSmsUpdate
+    :param MtBatchTextSmsUpdate batch: the batch update to serialize
     :return: dictionary suitable for JSON serialization
     :rtype: dict
 
@@ -160,8 +158,7 @@ def text_batch_update(batch):
 def binary_batch_update(batch):
     """Serializes the given binary batch update into JSON.
 
-    :param batch: the batch update to serialize
-    :vartype batch: MtBatchBinarySmsUpdate
+    :param MtBatchBinarySmsUpdate batch: the batch update to serialize
     :return: dictionary suitable for JSON serialization
     :rtype: dict
 
@@ -184,8 +181,7 @@ def _group_auto_update_helper(auto_update):
     """Helper that prepares the given group auto update for JSON
     serialization.
 
-    :param auto_update: the auto update to serialize
-    :vartype auto_update: GroupAutoUpdate
+    :param GroupAutoUpdate auto_update: the auto update to serialize
     :return: dictionary suitable for JSON serialization
     :rtype: dict
 
@@ -216,8 +212,7 @@ def _group_auto_update_helper(auto_update):
 def group_create(group):
     """Serializes the given group create object to JSON.
 
-    :param group: the group to serialize
-    :vartype group: GroupCreate
+    :param GroupCreate group: the group to serialize
     :return: dictionary suitable for JSON serialization
 
     """
@@ -244,8 +239,7 @@ def group_create(group):
 def group_update(obj):
     """Serializes the given group update object to JSON.
 
-    :param obj: the group update to serialize
-    :vartype obj: GroupUpdate
+    :param GroupUpdate obj: the group update to serialize
     :return: a dictionary suitable for JSON serialization
     :rtype: dict
 
@@ -286,8 +280,7 @@ def group_update(obj):
 def tags(tag_coll):
     """Serializes the given tags to a JSON string.
 
-    :param ts: a list of tags
-    :vartype ts: list[string]
+    :param set[str] tag_coll: a set of tags
     :return: a dictionary suitable for JSON serialization
     :rtype: dict
 
@@ -298,10 +291,8 @@ def tags(tag_coll):
 def tags_update(tags_to_add, tags_to_remove):
     """Serializes the given tag updates to a JSON string.
 
-    :param tags_to_add: list of tags
-    :vartype tags_to_add: list[str]
-    :param tags_to_remove: list of tags
-    :vartype tags_to_remove: list[str]
+    :param set[str] tags_to_add: list of tags
+    :param str[str] tags_to_remove: list of tags
     :return: a dictionary suitable for JSON serialization
     :rtype: dict
 

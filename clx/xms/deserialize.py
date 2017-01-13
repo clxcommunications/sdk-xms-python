@@ -152,8 +152,7 @@ def batch_result(response):
 def batches_page(response):
     """Reads a JSON blob describing a page of batches.
 
-    :param response: the response object to interpret
-    :vartype response: Response
+    :param Response response: the response object to interpret
     :return: the parsed page
     :rtype: Page
     :raises UnexpectedResponseException: if the JSON contained an
@@ -176,8 +175,7 @@ def batches_page(response):
 def batch_dry_run_result(response):
     """Reads a JSON formatted string describing a dry-run result.
 
-    :param response: the response object to interpret
-    :vartype response: Response
+    :param Response response: the response object to interpret
     :return: the parsed result
     :rtype: MtBatchDryRunResult
 
@@ -207,8 +205,7 @@ def batch_dry_run_result(response):
 def batch_delivery_report(response):
     """Reads a JSON blob describing a batch delivery report.
 
-    :param response: An XMS response carrying a JSON body
-    :vartype response: Response
+    :param Response response: An XMS response carrying a JSON body
     :return: the parsed batch delivery report
     :rtype: BatchDeliveryReport
     :raises UnexpectedResponseException: if the JSON contained an
@@ -243,12 +240,9 @@ def batch_delivery_report(response):
 def batch_recipient_delivery_report(response):
     """Reads a batch recipient delivery report from the given JSON text.
 
-    :param response: an XMS response
-    :vartype response: Response
-
+    :param Response response: an XMS response
     :returns: a delivery report
     :rtype: BatchRecipientDeliveryReport
-
     :raises UnexpectedResponseException: if the JSON contained an
         unexpected message type
 
@@ -285,9 +279,7 @@ def batch_recipient_delivery_report(response):
 def error(response):
     """Reads a JSON blob containing an error response.
 
-    :param response: an XMS response
-    :vartype response: Response
-
+    :param Response response: an XMS response
     :returns: the decoded error
     :rtype: Error
 
@@ -344,9 +336,7 @@ def _group_result_from_fields(json, fields):
 def group_result(response):
     """Parses a group response from the given JSON text.
 
-    :param response: an XMS response
-    :vartype response: Response
-
+    :param Response response: an XMS response
     :returns: the deserialized group response
     :rtype: GroupResult
 
@@ -359,8 +349,7 @@ def group_result(response):
 def groups_page(response):
     """Parses a page of groups from the given JSON text.
 
-    :param response: an XMS response
-    :vartype response: Response
+    :param Response response: an XMS response
     :returns: the created page of groups
     :rtype: Page
 
@@ -381,8 +370,7 @@ def groups_page(response):
 def group_members(response):
     """Reads a JSON blob containing a set of group members.
 
-    :param response: an XMS response
-    :vartype response: Response
+    :param Response response: an XMS response
     :returns: a set of MSISDNs
     :rtype: set[str]
 
@@ -394,8 +382,7 @@ def group_members(response):
 def tags(response):
     """Reads a JSON blob containing a list of tags.
 
-    :param response: an XMS response
-    :vartype response: Response
+    :param Response response: an XMS response
     :returns: a set of tags
     :rtype: set[str]
 
@@ -407,16 +394,13 @@ def tags(response):
 def _mo_sms_from_fields(json, fields):
     """Helper that reads an MO from the given fields.
 
-    :param json: original JSON formatted text
-    :vartype json: str
-
-    :param fields: the JSON fields
-    :vartype fields: dict
-
+    :param str json: original JSON formatted text
+    :param dict fields: the JSON fields
     :return: the parsed inbound message
     :rtype: MoSms
     :raise UnexpectedResponseException: if the JSON contained an
         unexpected message type
+
     """
 
     if fields['type'] == 'mo_text':
@@ -452,8 +436,7 @@ def _mo_sms_from_fields(json, fields):
 def mo_sms(response):
     """Reads an XMS response containing an MO message.
 
-    :param response: an XMS response
-    :vartype response: Response
+    :param Response response: an XMS response
     :returns: the MO message found in the response
     :rtype: MoSms
     :raises UnexpectedResponseException: if the JSON contained an
@@ -467,8 +450,7 @@ def mo_sms(response):
 def inbounds_page(response):
     """Reads a JSON blob describing a page of MO messages.
 
-    :param response: an XMS response
-    :vartype response: Response
+    :param Response response: an XMS response
     :returns: the parsed page
     :rtype: Page
     :raises UnexpectedResponseException: if the JSON contained an

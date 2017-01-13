@@ -312,9 +312,9 @@ class Client(object):
 
         :param int page_size: Maximum number of batches to retrieve per page.
         :param senders: Fetch only batches having one of these senders.
-        :type senders: list[str] or None
+        :type senders: set[str] or None
         :param tags: Fetch only batches having one or more of these tags.
-        :type tags: list[str] or None
+        :type tags: set[str] or None
         :param start_date: Fetch only batches sent at or after this date.
         :type start_date: date or None
         :param end_date: Fetch only batches sent before this date.
@@ -560,7 +560,7 @@ class Client(object):
         :param page_size: Maximum number of groups to retrieve per page.
         :type page_size: int or None
         :param tags: Fetch only groups having or or more of these tags.
-        :type tags: list[str] or None
+        :type tags: set[str] or None
         :returns: the result pages
         :rtype: Pages
 
@@ -671,7 +671,7 @@ class Client(object):
         :param page_size: The maximum number of messages to retrieve per page.
         :type page_size: int or None
         :param recipients: Fetch only messages having one of these recipients.
-        :type recipients: list[str] or None
+        :type recipients: set[str] or None
         :param start_date: Fetch only messages received at or after this date.
         :type start_date: date or None
         :param end_date: Fetch only messages received before this date.

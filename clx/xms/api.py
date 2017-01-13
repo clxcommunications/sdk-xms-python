@@ -80,7 +80,7 @@ class Reset(object):
 
     This is used when updating previously created XMS objects. Note,
     it is typically not necessary to created new objects of this type,
-    instead use the constant :attr:`clx.xms.api.RESET`.
+    instead use the constant :const:`.RESET`.
 
     """
 
@@ -257,18 +257,18 @@ class MtBatchSmsUpdate(object):
     .. attribute:: sender
 
       The message originator as a long number or short code. If
-      ``None`` then the current value is kept, if ``RESET`` then the
-      value is reset to its XMS default, and if set to a string the
-      sender is updated.
+      ``None`` then the current value is kept, if :const:`.RESET` then
+      the value is reset to its XMS default, and if set to a string
+      the sender is updated.
 
       :type: str or None or Reset
 
     .. attribute:: delivery_report
 
       Description of how to update the batch delivery report value. If
-      ``None`` then the current value is kept, if ``RESET`` then the
-      value is reset to its XMS default, and if set to a string the
-      delivery report value is updated.
+      ``None`` then the current value is kept, if :const:`.RESET` then
+      the value is reset to its XMS default, and if set to a string
+      the delivery report value is updated.
 
       See :class:`ReportType` for valid report types.
 
@@ -277,27 +277,27 @@ class MtBatchSmsUpdate(object):
     .. attribute:: send_at
 
       Description of how to update the batch send at value. If
-      ``None`` then the current value is kept, if ``RESET`` then the
-      value is reset to its XMS default, and if set to a date time the
-      send at value is updated.
+      ``None`` then the current value is kept, if :const:`.RESET` then
+      the value is reset to its XMS default, and if set to a date time
+      the send at value is updated.
 
       :type: datetime or None or Reset
 
     .. attribute:: expire_at
 
       Description of how to update the batch expire at value. If
-      ``None`` then the current value is kept, if ``RESET`` then the
-      value is reset to its XMS default, and if set to a date time the
-      expire at value is updated.
+      ``None`` then the current value is kept, if :const:`.RESET` then
+      the value is reset to its XMS default, and if set to a date time
+      the expire at value is updated.
 
       :type: datetime or None or Reset
 
     .. attribute:: callback_url
 
       Description of how to update the batch callback URL. If ``None``
-      then the current value is kept, if ``RESET`` then the value is
-      reset to its XMS default, and if set to a string the callback
-      URL value is updated.
+      then the current value is kept, if :const:`.RESET` then the
+      value is reset to its XMS default, and if set to a string the
+      callback URL value is updated.
 
       :type: str or None or Reset
 
@@ -327,9 +327,9 @@ class MtBatchTextSmsUpdate(MtBatchSmsUpdate):
     .. attribute:: parameters
 
       Description of how to update the batch parameters. If ``None``
-      then the current value is kept, if ``RESET`` then the value is
-      reset to its XMS default, and if set to a dictionary the
-      parameters value is updated.
+      then the current value is kept, if :const:`.RESET` then the
+      value is reset to its XMS default, and if set to a dictionary
+      the parameters value is updated.
 
       :type: dict or None or Reset
 
@@ -601,10 +601,8 @@ class BatchRecipientDeliveryReport(object):
 class Error(object):
     """Describes error responses given by XMS.
 
-    :param code: the error code
-    :vartype code: str
-    :param text: the human readable error text
-    :vartype text: str
+    :param str code: the error code
+    :param str text: the human readable error text
 
     .. attribute:: code
 
@@ -680,8 +678,8 @@ class DryRunPerRecipient(object):
 
       Indicates the text encoding used for this recipient.
 
-      This is one of "text" or "unicode". See :attr:`ENCODING_TEXT`
-      and :attr:`ENCODING_UNICODE`.
+      This is one of "text" or "unicode". See :const:`ENCODING_TEXT`
+      and :const:`ENCODING_UNICODE`.
 
       :type: str
 
@@ -732,20 +730,19 @@ class GroupAutoUpdate(object):
     would trigger only when both the first and second keyword are
     given in the MO message.
 
-    :param recipient: recipient that triggers this rule
-    :vartype recipient: str
+    :param str recipient: recipient that triggers this rule
 
     :param add_first_word: first ``add`` keyword, default is `None`.
-    :vartype add_first_word: str or None
+    :type add_first_word: str or None
 
     :param add_second_word: second ``add`` keyword, default is `None`.
-    :vartype add_second_word: str or None
+    :type add_second_word: str or None
 
     :param remove_first_word: first ``remove`` keyword, default is `None`.
-    :vartype remove_first_word: str or None
+    :type remove_first_word: str or None
 
     :param remove_second_word: second ``remove`` keywords, default is `None`.
-    :vartype remove_second_word: str or None
+    :type remove_second_word: str or None
 
     .. attribute:: recipient
 
@@ -897,9 +894,9 @@ class GroupUpdate(object):
 
       Updates the group name.
 
-      If ``None`` then the current value is kept, if
-      :attr:`clx.xms.api.RESET` then the value is reset to its XMS
-      default, and if set to a string the name is updated.
+      If ``None`` then the current value is kept, if :const:`.RESET`
+      then the value is reset to its XMS default, and if set to a
+      string the name is updated.
 
       :type: None or str or Reset
 
@@ -945,10 +942,9 @@ class GroupUpdate(object):
 
       Describes how this group should be auto updated.
 
-      If ``None`` then the current value is kept, if
-      :attr:`clx.xms.api.RESET` then the value is reset to its XMS
-      default, and if set to a ``GroupAutoUpdate`` object the value is
-      updated.
+      If ``None`` then the current value is kept, if :const:`.RESET`
+      then the value is reset to its XMS default, and if set to a
+      ``GroupAutoUpdate`` object the value is updated.
 
       :type: None or GroupAutoUpdate or Reset
 
@@ -1132,8 +1128,7 @@ class Pages(object):
     def get(self, page):
         """Downloads a specific page.
 
-        :param page: number of the page to fetch
-        :vartype page: int
+        :param int page: number of the page to fetch
         :return: a page
         :rtype: Page
 
@@ -1153,8 +1148,7 @@ class PagesIterator(object):
     The key is the page number and the value corresponds to the
     content of the pages.
 
-    :param pages: the pages that we are iterating over
-    :vartype pages: Pages
+    :param Pages pages: the pages that we are iterating over
 
     """
 
