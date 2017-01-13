@@ -17,10 +17,12 @@ def readAbout():
         exec(f.read(), fields)
     return fields
 
+ABOUT = readAbout()
+
 setup(
 
-    name='sdk-xms',
-    version=readAbout()['__version__'],
+    name=ABOUT['__title__'],
+    version=ABOUT['__version__'],
     description='Library for CLX Communications HTTP REST Messaging API',
     long_description=read('README.rst'),
     url='https://github.com/clxcommunications/sdk-xms-python',
@@ -35,7 +37,7 @@ setup(
     tests_require=['nose', 'requests-mock >= 0.6.0'],
     test_suite='nose.collector',
 
-    license='Apache License, Version 2.0',
+    license=ABOUT['__license__'],
 
     keywords='',
 
