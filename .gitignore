@@ -1,4 +1,5 @@
 *.pyc
 /.coverage
 /.eggs
+/docs/_build
 /sdk_xms.egg-info
