@@ -931,6 +931,18 @@ class ClientTest(TestCase):
         assert_equal(8, page.total_size)
         assert_equal([], page.content)
 
+    def test_fetch_group_members(self, m):
+        expected = ['123456789', '987654321', '555555555']
+
+        m.get(
+            self.BASE_URL + '/v1/foo/groups/123/members',
+            headers={'content-type': 'application/json'},
+            json=expected)
+
+        actual = self._client.fetch_group_members('123')
+
+        assert_equal(set(expected), actual)
+
     def test_fetch_group_tags(self, m):
         m.get(
             self.BASE_URL + '/v1/foo/groups/groupid/tags',

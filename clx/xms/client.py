@@ -583,6 +583,18 @@ class Client(object):
 
         return api.Pages(fetcher)
 
+    def fetch_group_members(self, group_id):
+        """Fetches the that belong to the given group.
+
+        :param str group_id: the group identifier
+        :returns: a set of MSISDNs
+        :rtype: set[str]
+
+        """
+
+        result = self._get(self._group_url(group_id, '/members'))
+        return deserialize.group_members(result)
+
     def fetch_group_tags(self, group_id):
         """Fetches the tags associated with the given group.
 

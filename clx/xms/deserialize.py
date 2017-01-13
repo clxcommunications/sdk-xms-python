@@ -378,6 +378,19 @@ def groups_page(response):
 
     return result
 
+def group_members(response):
+    """Reads a JSON blob containing a set of group members.
+
+    :param response: an XMS response
+    :vartype response: Response
+    :returns: a set of MSISDNs
+    :rtype: set[str]
+
+    """
+
+    _, fields = _check_response(response)
+    return set(fields)
+
 def tags(response):
     """Reads a JSON blob containing a list of tags.
 

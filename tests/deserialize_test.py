@@ -361,6 +361,13 @@ def test_read_groups_page():
     assert_is_instance(result.content[0], api.GroupResult)
     assert_equal('4cldmgEdAcBfcHW3', result.content[0].group_id)
 
+def test_read_group_members():
+    response = MockResponse('["123456789", "987654321"]')
+
+    result = deserialize.group_members(response)
+
+    assert_equal({'123456789', '987654321'}, result)
+
 def test_read_tags():
     response = MockResponse('{ "tags": ["tag1", "таг2"] }')
 
