@@ -25,7 +25,7 @@ class UnexpectedResponseException(ApiException):
 
       The unexpected HTTP body.
 
-      type: *str*
+      :type: str
     """
 
     def __init__(self, message, http_body):
@@ -45,7 +45,7 @@ class ErrorResponseException(ApiException):
 
       The machine readable error code.
 
-      type: *str*
+      :type: str
     """
 
     def __init__(self, message, code):
@@ -66,7 +66,7 @@ class NotFoundException(ApiException):
 
       The failing URL.
 
-      type: *str*
+      :type: str
 
     """
 
@@ -87,13 +87,13 @@ class UnauthorizedException(ApiException):
 
       The service plan identifier that did not pass authentication.
 
-      type: *str*
+      :type: str
 
     .. attribute:: token
 
       The authentication token that was not accepted.
 
-      type: *str*
+      :type: str
 
     """
 

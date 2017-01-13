@@ -101,37 +101,37 @@ class MtBatchSms(object):
 
       One or more MSISDNs indicating the batch recipients.
 
-      type: *set[str]*
+      :type: set[str]
 
     .. attribute:: sender
 
       The batch sender, typically a short code or long number.
 
-      type: *str*
+      :type: str
 
     .. attribute:: delivery_report
 
       The type of delivery report to use for this batch.
 
-      type: *str*
+      :type: str
 
     .. attribute:: send_at
 
       The time at which this batch should be sent.
 
-      type: *datetime*
+      :type: datetime
 
     .. attribute:: expire_at
 
       The time at which this batch should expire.
 
-      type: *datetime*
+      :type: datetime
 
     .. attribute:: callback_url
 
       The URL to which callbacks should be sent.
 
-      type: *str*
+      :type: str
 
     """
 
@@ -155,7 +155,7 @@ class MtBatchSmsCreate(MtBatchSms):
 
       The initial set of tags to give the batch.
 
-      type: *set[str]*
+      :type: set[str]
 
     """
 
@@ -171,7 +171,7 @@ class MtBatchTextSmsCreate(MtBatchSmsCreate):
 
       The message body or template.
 
-      type: *str*
+      :type: str
 
     .. attribute:: parameters
 
@@ -200,7 +200,7 @@ class MtBatchTextSmsCreate(MtBatchSmsCreate):
       recipients not explicitly given. For example, the recipient
       "555555555" would receive the message "Hello, valued customer!".
 
-      type: *dict[str, dict[str, str]]*
+      :type: dict[str, dict[str, str]]
 
     """
 
@@ -220,13 +220,13 @@ class MtBatchBinarySmsCreate(MtBatchSmsCreate):
 
       The body of this binary message.
 
-      type: *bytes*
+      :type: bytes
 
     .. attribute:: udh
 
       The User Data Header of this binary message.
 
-      type: *bytes*
+      :type: bytes
 
     """
 
@@ -245,14 +245,14 @@ class MtBatchSmsUpdate(object):
       The message destinations to add to the batch. This should have
       zero or more MSISDNs.
 
-      type: *set[str]*
+      :type: set[str]
 
     .. attribute:: recipient_removals
 
       The message destinations to remove from the batch. This should
       have zero or more MSISDNs.
 
-      type: *set[str]*
+      :type: set[str]
 
     .. attribute:: sender
 
@@ -261,7 +261,7 @@ class MtBatchSmsUpdate(object):
       value is reset to its XMS default, and if set to a string the
       sender is updated.
 
-      type: *str* or *None* or *Reset*
+      :type: str or None or Reset
 
     .. attribute:: delivery_report
 
@@ -272,7 +272,7 @@ class MtBatchSmsUpdate(object):
 
       See :class:`ReportType` for valid report types.
 
-      type: *str* or *None* or *Reset*
+      :type: str or None or Reset
 
     .. attribute:: send_at
 
@@ -281,7 +281,7 @@ class MtBatchSmsUpdate(object):
       value is reset to its XMS default, and if set to a date time the
       send at value is updated.
 
-      type: *datetime* or *None* or *Reset*
+      :type: datetime or None or Reset
 
     .. attribute:: expire_at
 
@@ -290,7 +290,7 @@ class MtBatchSmsUpdate(object):
       value is reset to its XMS default, and if set to a date time the
       expire at value is updated.
 
-      type: *datetime* or *None* or *Reset*
+      :type: datetime or None or Reset
 
     .. attribute:: callback_url
 
@@ -299,7 +299,7 @@ class MtBatchSmsUpdate(object):
       reset to its XMS default, and if set to a string the callback
       URL value is updated.
 
-      type: *str* or *None* or *Reset*
+      :type: str or None or Reset
 
     """
 
@@ -322,7 +322,7 @@ class MtBatchTextSmsUpdate(MtBatchSmsUpdate):
       The updated batch message body. If ``None`` then the current
       batch message is kept.
 
-      type: *str* or *None*
+      :type: str or None
 
     .. attribute:: parameters
 
@@ -331,7 +331,7 @@ class MtBatchTextSmsUpdate(MtBatchSmsUpdate):
       reset to its XMS default, and if set to a dictionary the
       parameters value is updated.
 
-      type: *dict* or *None* or *Reset*
+      :type: dict or None or Reset
 
     """
 
@@ -349,14 +349,14 @@ class MtBatchBinarySmsUpdate(MtBatchSmsUpdate):
       The updated binary batch body. If ``None`` then the existing
       body is left as-is.
 
-      type: *bytes* or *None*
+      :type: bytes or None
 
     .. attribute:: udh
 
       The updated binary User Data Header. If ``None`` then the
       existing UDH is left as-is.
 
-      type: *bytes* or *None*
+      :type: bytes or None
 
     """
 
@@ -373,25 +373,25 @@ class MtBatchSmsResult(MtBatchSms):
 
       The unique batch identifier.
 
-      type: *str*
+      :type: str
 
     .. attribute:: created_at
 
       Time when this batch was created.
 
-      type: *datetime*
+      :type: datetime
 
     .. attribute:: modified_at
 
       Time when this batch was last modified.
 
-      type: *datetime*
+      :type: datetime
 
     .. attribute:: canceled
 
       Whether this batch has been canceled.
 
-      type: *bool*
+      :type: bool
 
     """
 
@@ -414,7 +414,7 @@ class MtBatchTextSmsResult(MtBatchSmsResult):
       The message body or template. See
       :py:attr:`MtBatchTextSmsCreate.parameters`.
 
-      type: *str*
+      :type: str
 
     .. attribute:: parameters
 
@@ -437,13 +437,13 @@ class MtBatchBinarySmsResult(MtBatchSmsResult):
 
       The body of this binary message.
 
-      type: *bytes*
+      :type: bytes
 
     .. attribute:: udh
 
       The User Data Header of this binary message.
 
-      type: *bytes*
+      :type: bytes
 
     """
 
@@ -465,13 +465,13 @@ class BatchDeliveryReport(object):
 
       Identifier of the batch that this report covers.
 
-      type: *str*
+      :type: str
 
     .. attribute:: total_message_count
 
       The total number of messages sent as part of this batch.
 
-      type: *int*
+      :type: int
 
     .. attribute:: statuses
 
@@ -480,7 +480,7 @@ class BatchDeliveryReport(object):
       information about messages having a certain delivery status and
       delivery code.
 
-      type: *list[BatchDeliveryReportStatus]*
+      :type: list[BatchDeliveryReportStatus]
 
     """
 
@@ -500,19 +500,19 @@ class BatchDeliveryReportStatus(object):
 
       The delivery status code for this recipient bucket.
 
-      type: *int*
+      :type: int
 
     .. attribute:: status
 
       The delivery status for this recipient bucket.
 
-      type: *str*
+      :type: str
 
     .. attribute:: count
 
       The number of recipients belonging to this bucket.
 
-      type: *int*
+      :type: int
 
     .. attribute:: recipients
 
@@ -521,7 +521,7 @@ class BatchDeliveryReportStatus(object):
       Note, this is non-empty only if a `full` delivery report has been
       requested.
 
-      type: *set[str]*
+      :type: set[str]
 
     """
 
@@ -540,51 +540,51 @@ class BatchRecipientDeliveryReport(object):
 
       The batch identifier.
 
-      type: *string*
+      :type: string
 
     .. attribute:: recipient
 
       The recipient address.
 
-      type: *string*
+      :type: string
 
     .. attribute:: code
 
       The delivery code.
 
-      type: *int*
+      :type: int
 
     .. attribute:: status
 
       The delivery status.
 
-      type: *int*
+      :type: int
 
     .. attribute:: status_message
 
       The delivery status message. The status message is not always
       available and the attribute is set to *None* in those cases.
 
-      type: *string* or *None*
+      :type: string or None
 
     .. attribute:: operator
 
       The recipient's mobile operator. If the operator is not known,
       then this is set to *None*.
 
-      type: *string* or *None*
+      :type: string or None
 
     .. attribute:: status_at
 
       The time at delivery.
 
-      type: *datetime*
+      :type: datetime
 
     .. attribute:: operator_status_at
 
       The time of delivery as reported by operator.
 
-      type: *datetime* or *None*
+      :type: datetime or None
 
     """
 
@@ -610,13 +610,13 @@ class Error(object):
 
       A code that can be used to programmatically recognize the error.
 
-      type: *str*
+      :type: str
 
     .. attribute:: text
 
       Human readable description of the error.
 
-      type: *str*
+      :type: str
 
     """
 
@@ -631,19 +631,19 @@ class MtBatchDryRunResult(object):
 
       The number of recipients that would receive the batch message.
 
-      type: *int*
+      :type: int
 
     .. attribute:: number_of_message
 
       The number of messages that will be sent.
 
-      type: *int*
+      :type: int
 
     .. attribute:: per_recipient
 
       The per-recipient dry-run result.
 
-      type: *list[DryRunPerRecipient]*
+      :type: list[DryRunPerRecipient]
 
     """
 
@@ -662,19 +662,19 @@ class DryRunPerRecipient(object):
 
       The recipient.
 
-      type: *str*
+      :type: str
 
     .. attribute:: number_of_parts
 
       Number of message parts needed for the recipient.
 
-      type: *int*
+      :type: int
 
     .. attribute:: body
 
       Message body sent to this recipient.
 
-      type: *str*
+      :type: str
 
     .. attribute:: encoding
 
@@ -683,7 +683,7 @@ class DryRunPerRecipient(object):
       This is one of "text" or "unicode". See :attr:`ENCODING_TEXT`
       and :attr:`ENCODING_UNICODE`.
 
-      type: *str*
+      :type: str
 
     """
 
@@ -752,21 +752,21 @@ class GroupAutoUpdate(object):
       The recipient of the mobile originated message. A short code or
       long number.
 
-      type: *str*
+      :type: str
 
     .. attribute:: add_word_pair
 
       A two-element tuple holding the first and second keyword that
       causes the MO sender to be added to the group.
 
-      type: *tuple[str or None, str or None]*
+      :type: tuple[str or None, str or None]
 
     .. attribute:: remove_word_pair
 
       A two-element tuple holding the first and second keyword that
       causes the MO sender to be removed from the group.
 
-      type: *tuple[str or None, str or None]*
+      :type: tuple[str or None, str or None]
 
     """
 
@@ -788,19 +788,19 @@ class GroupCreate(object):
 
       The group name.
 
-      type: *str*
+      :type: str
 
     .. attribute:: members
 
       A set of MSISDNs that belong to this group.
 
-      type: *set[str]*
+      :type: set[str]
 
     .. attribute:: child_groups
 
       A set of groups that in turn belong to this group.
 
-      type: *set[str]*
+      :type: set[str]
 
     .. attribute:: auto_update
 
@@ -809,13 +809,13 @@ class GroupCreate(object):
       If no auto updating should be performed for the group then this
       value is ``None``.
 
-      type: *GroupAutoUpdate* or *None*
+      :type: GroupAutoUpdate or None
 
     .. attribute:: tags
 
       The tags associated to this group.
 
-      type: *set[str]*
+      :type: set[str]
 
     """
 
@@ -837,25 +837,25 @@ class GroupResult(object):
 
       The unique group identifier.
 
-      type: *str*
+      :type: str
 
     .. attribute:: name
 
       The group name.
 
-      type: *str*
+      :type: str
 
     .. attribute:: size
 
       The number of members of this group.
 
-      type: *int*
+      :type: int
 
     .. attribute:: child_groups
 
       A set of groups that in turn belong to this group.
 
-      type: *set[str]*
+      :type: set[str]
 
     .. attribute:: auto_update
 
@@ -864,19 +864,19 @@ class GroupResult(object):
       If no auto updating should be performed for the group then this
       value is ``None``.
 
-      type: *GroupAutoUpdate* or *None*
+      :type: GroupAutoUpdate or None
 
     .. attribute:: created_at
 
       The time at which this group was created.
 
-      type: *datetime*
+      :type: datetime
 
     .. attribute:: modified_at
 
       The time when this group was last modified.
 
-      type: *datetime*
+      :type: datetime
 
     """
 
@@ -901,45 +901,45 @@ class GroupUpdate(object):
       :attr:`clx.xms.api.RESET` then the value is reset to its XMS
       default, and if set to a string the name is updated.
 
-      type: *None* or *str* or *Reset*
+      :type: None or str or Reset
 
     .. attribute:: member_insertions
 
       The MSISDNs that should be added to this group.
 
-      type: *set[str]*
+      :type: set[str]
 
     .. attribute:: member_removals
 
       The MSISDNs that should be removed from this group.
 
-      type: *set[str]*
+      :type: set[str]
 
     .. attribute:: child_group_insertions
 
       The child groups that should be added to this group.
 
-      type: *set[str]*
+      :type: set[str]
 
     .. attribute:: child_group_removals
 
       The child groups that should be removed from this group.
 
-      type: *set[str]*
+      :type: set[str]
 
     .. attribute:: add_from_group
 
       Identifier of a group whose members should be added to this
       group.
 
-      type: *str*
+      :type: str
 
     .. attribute:: remove_from_group
 
       Identifier of a group whose members should be removed from this
       group.
 
-      type: *str*
+      :type: str
 
     .. attribute:: auto_update
 
@@ -950,7 +950,7 @@ class GroupUpdate(object):
       default, and if set to a ``GroupAutoUpdate`` object the value is
       updated.
 
-      type: *None* or *GroupAutoUpdate* or *Reset*
+      :type: None or GroupAutoUpdate or Reset
 
     """
 
@@ -975,37 +975,37 @@ class MoSms(object):
 
       The message identifier.
 
-      type: *str*
+      :type: str
 
     .. attribute:: recipient
 
       The message recipient. This is a short code or long number.
 
-      type: *str*
+      :type: str
 
     .. attribute:: sender
 
       The message sender. This is an MSISDN.
 
-      type: *str*
+      :type: str
 
     .. attribute:: operator
 
       The MCCMNC of the originating operator, if available.
 
-      type: *str* or *None*
+      :type: str or None
 
     .. attribute:: sent_at
 
       The time when this message was sent, if available.
 
-      type: *datetime* or *None*
+      :type: datetime or None
 
     .. attribute:: received_at
 
       The time when the messaging system received this message.
 
-      type: *datetime*
+      :type: datetime
 
     """
 
@@ -1025,13 +1025,13 @@ class MoTextSms(MoSms):
 
       The message body.
 
-      type: *str*
+      :type: str
 
     .. attribute:: keyword
 
       The message keyword, if available.
 
-      type: *str* or *None*
+      :type: str or None
 
     """
 
@@ -1047,13 +1047,13 @@ class MoBinarySms(MoSms):
 
       The binary message body.
 
-      type: *bytes*
+      :type: bytes
 
     .. attribute:: udh
 
       The user data header.
 
-      type: *bytes*
+      :type: bytes
 
     """
 
@@ -1074,25 +1074,25 @@ class Page(object):
 
       The page number, starting from zero.
 
-      type: *int*
+      :type: int
 
     .. attribute:: page
 
       The number of elements on this page.
 
-      type: *int*
+      :type: int
 
     .. attribute:: total_size
 
       The total number of elements across all fetched pages.
 
-      type: *int*
+      :type: int
 
     .. attribute:: content
 
       The page elements.
 
-      type: *list[obj]*
+      :type: list[obj]
 
     """
 
