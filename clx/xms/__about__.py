@@ -6,6 +6,6 @@
 
 __author__ = 'CLX Communication'
 __copyright__ = u'Copyright © 2017 CLX Communications'
-__license__ = 'Apache 2.0'
+__license__ = 'Apache License, Version 2.0'
 __title__ = 'sdk-xms'
 __version__ = '1.0.dev0'
