@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """Collection of exceptions raised by the XMS SDK.
+
+The exceptions raised by the API all inherit from the base class
+:class:`ApiException`.
+
 """
 
 from __future__ import absolute_import, division, print_function

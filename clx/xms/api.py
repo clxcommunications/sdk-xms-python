@@ -2,7 +2,9 @@
 # pylint: disable=too-few-public-methods
 # pylint: disable=too-many-instance-attributes
 
-"""Collection of value classes
+"""The classes in this module represent objects sent and received from
+the XMS REST API.
+
 """
 
 from __future__ import absolute_import, division, print_function

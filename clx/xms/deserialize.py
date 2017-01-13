@@ -19,10 +19,11 @@ def _date_time(json, date_string):
 
     Assumes the string is in ISO-8601 format.
 
-    @param string $json original JSON message
-    @param string $str  the string holding the date time
-    @return DateTime a date time
-    @throws UnexpectedResponseException if given invalid time string
+    :param str json original: JSON message
+    :param str date_string: the string holding the date time
+    :return: a date time
+    :rtype: datetime
+    :raises UnexpectedResponseException: if given invalid time string
     """
     try:
         return iso8601.parse_date(date_string)
@@ -35,9 +36,9 @@ def _batch_response_helper(json, fields, batch):
     The batch is populated from a dictionary representation of the
     JSON document.
 
-    :param json: original JSON string
-    :param fields: the JSON fields
-    :param batch: the target object
+    :param str json: original JSON string
+    :param dict fields: the JSON fields
+    :param MtBatchSmsResult batch: the target object
     :return: None
 
     """
@@ -85,8 +86,8 @@ def _batch_response_from_fields(json, fields):
     The result is populated from a dictionary representation of the
     JSON document.
 
-    :param json: the JSON formatted string
-    :param fields: the `json_decode` containing the result
+    :param str json: the JSON formatted string
+    :param dict fields: the `json_decode` containing the result
     :return: the parsed result
     :raises UnexpectedResponseException: if the JSON contained an
         unexpected message type
@@ -137,7 +138,7 @@ def batch_result(response):
     ``mt_binary`` then an :class:`MtBatchTextSmsCreate` object is
     returned, otherwise an exception is thrown.
 
-    :param response: the response object to interpret
+    :param Response response: the response object to interpret
     :return: the parsed result
     :rtype: MtBatchTextSmsResult or MtBatchBinarySmsResult
     :raises UnexpectedResponseException: if the JSON contained
@@ -383,7 +384,7 @@ def tags(response):
     :param response: an XMS response
     :vartype response: Response
     :returns: a set of tags
-    :rtype: set[string]
+    :rtype: set[str]
 
     """
 
