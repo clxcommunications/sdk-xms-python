@@ -12,7 +12,7 @@ This library is compatible with Python 2.7 and 3.3 and later.
 Using
 -----
 
-The SDK is packaged using Setuptools_ and is available in the PyPI_
+The SDK is packaged using setuptools_ and is available in the PyPI_
 repository under the name sdk-xms_.
 
 .. _Setuptools: https://pypi.python.org/pypi/setuptools/
