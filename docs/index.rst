@@ -13,6 +13,7 @@ Contents:
 
    tutorial
    modules
+   changelog
 
 
 Indices and tables
