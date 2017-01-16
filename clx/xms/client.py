@@ -268,40 +268,6 @@ class Client(object):
 
         self._delete(self._batch_url(batch_id))
 
-    def _create_batch(self, batch, sender, recipients, kwargs):
-        batch.sender = sender
-        batch.recipients = recipients
-
-        if 'tags' in kwargs:
-            batch.tags = kwargs['tags']
-
-        if 'send_at' in kwargs:
-            batch.send_at = kwargs['send_at']
-
-        if 'expire_at' in kwargs:
-            batch.expire_at = kwargs['expire_at']
-
-        return self.create_batch(batch)
-
-    def create_text_batch(self, sender, recipients, body, **kwargs):
-        """
-        Creates a text batch.
-        """
-
-        batch = clx.xms.api.MtBatchTextSmsCreate()
-        batch.body = body
-        return self._create_batch(batch, sender, recipients, kwargs)
-
-    def create_binary_batch(self, sender, recipients, udh, body, **kwargs):
-        """
-        Creates a binary batch.
-        """
-
-        batch = clx.xms.api.MtBatchBinarySmsCreate()
-        batch.body = body
-        batch.udh = udh
-        return self._create_batch(batch, sender, recipients, kwargs)
-
     def fetch_batch(self, batch_id):
         """Fetches the batch with the given batch identifier.
 
