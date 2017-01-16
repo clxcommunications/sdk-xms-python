@@ -30,7 +30,7 @@ setup(
     author='Robert Helgesson',
     author_email='robert@chaitsa.com',
 
-    packages=['clx.xms'],
+    packages=['clx'],
 
     install_requires=['iso8601 >= 0.1.9', 'requests >= 2.4.2'],
 
