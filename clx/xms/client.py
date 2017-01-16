@@ -62,12 +62,26 @@ class Client(object):
 
     .. _Requests: http://python-requests.org/
 
+    .. attribute:: timeout
+
+      :type: float
+
+      The connection and read timeout, in seconds, used in
+      communication with XMS. The default is specified by the constant
+      :const:`DEFAULT_TIMEOUT`.
+
     """
 
     DEFAULT_ENDPOINT = "https://api.clxcommunications.com/xms"
     """The default XMS endpoint URL. This is the endpoint that will be
     used unless a custom one is specified in the :class:`Client`
     constructor.
+
+    """
+
+    DEFAULT_TIMEOUT = 30.0
+    """The default timeout value in seconds. This is used unless a custom
+    timeout value is specified in :attr:`timeout`.
 
     """
 
@@ -79,6 +93,7 @@ class Client(object):
         self._service_plan_id = service_plan_id
         self._token = token
         self._endpoint = endpoint
+        self.timeout = self.DEFAULT_TIMEOUT
 
     def _headers(self):
         return {
@@ -168,19 +183,23 @@ class Client(object):
                 "Unexpected HTTP status %s" % resp.status_code, resp.text)
 
     def _delete(self, url):
-        resp = self._session.delete(url, headers=self._headers())
+        resp = self._session.delete(
+            url, headers=self._headers(), timeout=self.timeout)
         return self._check_response(resp)
 
     def _get(self, url):
-        resp = self._session.get(url, headers=self._headers())
+        resp = self._session.get(
+            url, headers=self._headers(), timeout=self.timeout)
         return self._check_response(resp)
 
     def _post(self, url, fields):
-        resp = self._session.post(url, json=fields, headers=self._headers())
+        resp = self._session.post(
+            url, json=fields, headers=self._headers(), timeout=self.timeout)
         return self._check_response(resp)
 
     def _put(self, url, fields):
-        resp = self._session.put(url, json=fields, headers=self._headers())
+        resp = self._session.put(
+            url, json=fields, headers=self._headers(), timeout=self.timeout)
         return self._check_response(resp)
 
     def create_batch(self, batch):
