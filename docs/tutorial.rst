@@ -2,8 +2,8 @@ SMS REST API tutorial
 =====================
 
 The purpose of this document is to present the basic concepts of the
-CLX Communications HTTP REST Messaging API and how to use it from PHP
-using the HTTP REST Messaging API SDK.
+CLX Communications HTTP REST Messaging API and how to use it from
+Python using the HTTP REST Messaging API SDK.
 
 HTTP REST Messaging API basics
 ------------------------------
@@ -34,13 +34,13 @@ information about, for example, status and error codes.
 .. _`REST API documentation site`:
   https://www.clxcommunications.com/docs/sms/http-rest.html
 
-Interacting with XMS through PHP
---------------------------------
+Interacting with XMS through Python
+-----------------------------------
 
-Using this PHP SDK, all interaction with XMS happens through an *XMS
-client*, which can be created using the service plan identifier and
-authentication token. Further configuration can be performed on the
-XMS client but in the typical case a service plan identifier and
+Using this Python SDK, all interaction with XMS happens through an
+*XMS client*, which can be created using the service plan identifier
+and authentication token. Further configuration can be performed on
+the XMS client but in the typical case a service plan identifier and
 authentication token is sufficient.
 
 Once an XMS client has been created it is possible to send requests to
@@ -62,12 +62,12 @@ body, expiry times, and so on. For such complex arguments we use
 classes whose methods correspond to the different parameters that are
 relevant for the request.
 
-In general the terms used in XMS carry through to the PHP API with one
-major exception. The REST API uses the terms *to* and *from* to
+In general the terms used in XMS carry through to the Python API with
+one major exception. The REST API uses the terms *to* and *from* to
 indicate a message originator and message destination, respectively.
-In the PHP API these are instead denoted *recipient* and *sender*. The
-cause of this name change is to have less confusing and more idiomatic
-PHP method names.
+In the Python API these are instead denoted *recipient* and *sender*.
+The cause of this name change is to have less confusing and more
+idiomatic Python method names.
 
 Connection management
 ---------------------
