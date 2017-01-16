@@ -23,6 +23,7 @@ class Client(object):
     :param str service_plan_id: service plan identifier.
     :param str token: authentication token
     :param str endpoint: URL to XMS endpoint
+    :param float timeout: Connection and read timeout, in seconds
 
     This class will use the Requests_ library to communicate with XMS.
     It is intended as a long lived object and can handle multiple
@@ -62,14 +63,6 @@ class Client(object):
 
     .. _Requests: http://python-requests.org/
 
-    .. attribute:: timeout
-
-      :type: float
-
-      The connection and read timeout, in seconds, used in
-      communication with XMS. The default is specified by the constant
-      :const:`DEFAULT_TIMEOUT`.
-
     """
 
     DEFAULT_ENDPOINT = "https://api.clxcommunications.com/xms"
@@ -87,13 +80,26 @@ class Client(object):
 
     _LOGGER = logging.getLogger('clx.xms.client')
 
-    def __init__(self, service_plan_id, token, endpoint=DEFAULT_ENDPOINT):
+    def __init__(self, service_plan_id, token,
+                 endpoint=DEFAULT_ENDPOINT, timeout=DEFAULT_TIMEOUT):
 
         self._session = requests.Session()
         self._service_plan_id = service_plan_id
         self._token = token
         self._endpoint = endpoint
-        self.timeout = self.DEFAULT_TIMEOUT
+        self._timeout = timeout
+
+    @property
+    def timeout(self):
+        """The timeout value used for this client. In seconds.
+      The connection and read timeout, in seconds, used in
+      communication with XMS. The default is specified by the constant
+      :const:`DEFAULT_TIMEOUT`.
+
+        :type: float
+
+        """
+        return self._timeout
 
     def _headers(self):
         return {
@@ -184,22 +190,22 @@ class Client(object):
 
     def _delete(self, url):
         resp = self._session.delete(
-            url, headers=self._headers(), timeout=self.timeout)
+            url, headers=self._headers(), timeout=self._timeout)
         return self._check_response(resp)
 
     def _get(self, url):
         resp = self._session.get(
-            url, headers=self._headers(), timeout=self.timeout)
+            url, headers=self._headers(), timeout=self._timeout)
         return self._check_response(resp)
 
     def _post(self, url, fields):
         resp = self._session.post(
-            url, json=fields, headers=self._headers(), timeout=self.timeout)
+            url, json=fields, headers=self._headers(), timeout=self._timeout)
         return self._check_response(resp)
 
     def _put(self, url, fields):
         resp = self._session.put(
-            url, json=fields, headers=self._headers(), timeout=self.timeout)
+            url, json=fields, headers=self._headers(), timeout=self._timeout)
         return self._check_response(resp)
 
     def create_batch(self, batch):
