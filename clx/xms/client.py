@@ -20,7 +20,7 @@ from clx.xms import deserialize, serialize, api
 class Client(object):
     """Client used to communicate with the XMS server.
 
-    :param str service_plan_id: service plan identifier.
+    :param str service_plan_id: service plan identifier
     :param str token: authentication token
     :param str endpoint: URL to XMS endpoint
     :param float timeout: Connection and read timeout, in seconds
