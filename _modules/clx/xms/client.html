@@ -1,0 +1,852 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>clx.xms.client &mdash; REST API SDK for SMS 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="REST API SDK for SMS 1.0.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for clx.xms.client</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">XMS Client module</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">quote_plus</span><span class="p">,</span> <span class="n">urlencode</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">quote_plus</span><span class="p">,</span> <span class="n">urlencode</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">clx.xms.__about__</span>
+<span class="kn">from</span> <span class="nn">clx.xms</span> <span class="kn">import</span> <span class="n">deserialize</span><span class="p">,</span> <span class="n">serialize</span><span class="p">,</span> <span class="n">api</span>
+
+<div class="viewcode-block" id="Client"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client">[docs]</a><span class="k">class</span> <span class="nc">Client</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Client used to communicate with the XMS server.</span>
+
+<span class="sd">    :param str service_plan_id: service plan identifier</span>
+<span class="sd">    :param str token: authentication token</span>
+<span class="sd">    :param str endpoint: URL to XMS endpoint</span>
+<span class="sd">    :param float timeout: Connection and read timeout, in seconds</span>
+
+<span class="sd">    This class will use the Requests_ library to communicate with XMS.</span>
+<span class="sd">    It is intended as a long lived object and can handle multiple</span>
+<span class="sd">    requests.</span>
+
+<span class="sd">    For example, to send a simple parameterized text batch to three</span>
+<span class="sd">    recipients we may use code such as::</span>
+
+<span class="sd">      client = clx.xms.Client(&#39;{my-service-plan-id}&#39;, &#39;{my-token}&#39;)</span>
+
+<span class="sd">      try:</span>
+<span class="sd">          batch_params = clx.xms.api.MtBatchTextSmsCreate()</span>
+<span class="sd">          batch_params.sender = &#39;12345&#39;</span>
+<span class="sd">          batch_params.recipients = [&#39;987654321&#39;, &#39;123456789&#39;, &#39;567894321&#39;]</span>
+<span class="sd">          batch_params.body = &#39;Hello, ${name}!&#39;</span>
+<span class="sd">          batch_params.parameters = {</span>
+<span class="sd">                  &#39;name&#39;: {</span>
+<span class="sd">                      &#39;987654321&#39;: &#39;Mary&#39;,</span>
+<span class="sd">                      &#39;123456789&#39;: &#39;Joe&#39;,</span>
+<span class="sd">                      &#39;default&#39;: &#39;valued customer&#39;</span>
+<span class="sd">                  }</span>
+<span class="sd">              }</span>
+
+<span class="sd">          batch = client.create_text_batch(batch_params)</span>
+<span class="sd">          print(&#39;The batch was given ID %s&#39; % batch.batch_id)</span>
+<span class="sd">      except Exception as ex:</span>
+<span class="sd">          print(&#39;Error creating batch: %s&#39; % str(ex))</span>
+
+<span class="sd">    and to fetch a batch we may use the code (with ``client`` being</span>
+<span class="sd">    the same variable as above)::</span>
+
+<span class="sd">      try:</span>
+<span class="sd">          batch = client.fetch_batch(&#39;{a batch identifier}&#39;)</span>
+<span class="sd">          print(&#39;The batch was sent from %s&#39; % batch.sender())</span>
+<span class="sd">      except Exception as ex:</span>
+<span class="sd">          print(&#39;Error fetching batch: %s&#39; % str(ex))</span>
+
+<span class="sd">    .. _Requests: http://python-requests.org/</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DEFAULT_ENDPOINT</span> <span class="o">=</span> <span class="s2">&quot;https://api.clxcommunications.com/xms&quot;</span>
+    <span class="sd">&quot;&quot;&quot;The default XMS endpoint URL. This is the endpoint that will be</span>
+<span class="sd">    used unless a custom one is specified in the :class:`Client`</span>
+<span class="sd">    constructor.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">DEFAULT_TIMEOUT</span> <span class="o">=</span> <span class="mf">30.0</span>
+    <span class="sd">&quot;&quot;&quot;The default timeout value in seconds. This is used unless a custom</span>
+<span class="sd">    timeout value is specified in :attr:`timeout`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_LOGGER</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s1">&#39;clx.xms.client&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service_plan_id</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span>
+                 <span class="n">endpoint</span><span class="o">=</span><span class="n">DEFAULT_ENDPOINT</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">DEFAULT_TIMEOUT</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_session</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">Session</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_service_plan_id</span> <span class="o">=</span> <span class="n">service_plan_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_token</span> <span class="o">=</span> <span class="n">token</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span> <span class="o">=</span> <span class="n">endpoint</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">service_plan_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The service plan identifier used for this client.</span>
+
+<span class="sd">        :type: str</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_service_plan_id</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">token</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The authentication token used for this client.</span>
+
+<span class="sd">        :type: str</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_token</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">endpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The XMS endpoint used by this client.</span>
+
+<span class="sd">        :type: str</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;The timeout value used for this client. In seconds.</span>
+<span class="sd">      The connection and read timeout, in seconds, used in</span>
+<span class="sd">      communication with XMS. The default is specified by the constant</span>
+<span class="sd">      :const:`DEFAULT_TIMEOUT`.</span>
+
+<span class="sd">        :type: float</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span>
+
+    <span class="k">def</span> <span class="nf">_headers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;application/json&#39;</span><span class="p">,</span>
+            <span class="s1">&#39;Authorization&#39;</span><span class="p">:</span> <span class="s1">&#39;Bearer &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_token</span><span class="p">,</span>
+            <span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s2">&quot;sdk-xms-python/</span><span class="si">%s</span><span class="s2">; </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span>
+                          <span class="p">(</span><span class="n">clx</span><span class="o">.</span><span class="n">xms</span><span class="o">.</span><span class="n">__about__</span><span class="o">.</span><span class="n">__version__</span><span class="p">,</span>
+                           <span class="n">requests</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">default_user_agent</span><span class="p">())</span>
+        <span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sub_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Builds an endpoint URL for the given sub-path.</span>
+
+<span class="sd">        :param str sub_path: the sub-path</span>
+<span class="sd">        :return: an URL</span>
+<span class="sd">        :rtype: str</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span> <span class="o">+</span> <span class="s1">&#39;/v1/&#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_service_plan_id</span> <span class="o">+</span> <span class="n">sub_path</span>
+
+    <span class="k">def</span> <span class="nf">_batch_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_id</span><span class="p">,</span> <span class="n">sub_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Builds an endpoint URL for the given batch and sub-path.</span>
+
+<span class="sd">        :param str batch_id: a batch identifier</span>
+<span class="sd">        :param str sub_path: additional sub-path</span>
+<span class="sd">        :returns: a complete URL</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        :raises ValueError: if given an invalid batch ID</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">ebid</span> <span class="o">=</span> <span class="n">quote_plus</span><span class="p">(</span><span class="n">batch_id</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">ebid</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">raise</span>  <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Empty batch ID given&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">(</span><span class="s1">&#39;/batches/&#39;</span> <span class="o">+</span> <span class="n">ebid</span> <span class="o">+</span> <span class="n">sub_path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_group_url</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_id</span><span class="p">,</span> <span class="n">sub_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Builds an endpoint URL for the given group and sub-path.</span>
+
+<span class="sd">        :param str group_id: a group identifier</span>
+<span class="sd">        :param str sub_path: additional sub-path</span>
+<span class="sd">        :returns: a complete URL</span>
+<span class="sd">        :rtype: str</span>
+<span class="sd">        :raises ValueError: if given an invalid group ID</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">egid</span> <span class="o">=</span> <span class="n">quote_plus</span><span class="p">(</span><span class="n">group_id</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">egid</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Empty group ID given&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">(</span><span class="s1">&#39;/groups/&#39;</span> <span class="o">+</span> <span class="n">egid</span> <span class="o">+</span> <span class="n">sub_path</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Checks the given HTTP response and returns it if OK.</span>
+
+<span class="sd">        If any problem is found then a suitable exception is raised.</span>
+<span class="sd">        This method also logs the request and response at the debug</span>
+<span class="sd">        level.</span>
+
+<span class="sd">        :param Response resp: HTTP response to check</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">Client</span><span class="o">.</span><span class="n">_LOGGER</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;Request{</span><span class="si">%s</span><span class="s1">} Response(code </span><span class="si">%d</span><span class="s1">){</span><span class="si">%s</span><span class="s1">}&#39;</span><span class="p">,</span>
+                             <span class="n">resp</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">body</span><span class="p">,</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="n">resp</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+        <span class="c1"># If &quot;200 OK&quot; or &quot;201 Created&quot;. We&#39;ll here assume any 2XX code is OK.</span>
+        <span class="k">if</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&gt;=</span> <span class="mi">200</span> <span class="ow">and</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">&lt;</span> <span class="mi">300</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">resp</span>
+        <span class="c1"># If &quot;400 Bad Request&quot; or &quot;403 Forbidden&quot;.</span>
+        <span class="k">elif</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">400</span> <span class="ow">or</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">403</span><span class="p">:</span>
+            <span class="n">error</span> <span class="o">=</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="n">clx</span><span class="o">.</span><span class="n">xms</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ErrorResponseException</span><span class="p">(</span>
+                <span class="n">error</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">error</span><span class="o">.</span><span class="n">code</span><span class="p">)</span>
+        <span class="c1"># If &quot;404 Not Found&quot;.</span>
+        <span class="k">elif</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">clx</span><span class="o">.</span><span class="n">xms</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">NotFoundException</span><span class="p">(</span><span class="n">resp</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+        <span class="c1"># If &quot;401 Unauthorized&quot;</span>
+        <span class="k">elif</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">401</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">clx</span><span class="o">.</span><span class="n">xms</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">UnauthorizedException</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_service_plan_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_token</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">clx</span><span class="o">.</span><span class="n">xms</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">UnexpectedResponseException</span><span class="p">(</span>
+                <span class="s2">&quot;Unexpected HTTP status </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">resp</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="n">resp</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_delete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span>
+            <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_headers</span><span class="p">(),</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_response</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_headers</span><span class="p">(),</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_response</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">fields</span><span class="p">):</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">fields</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_headers</span><span class="p">(),</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_response</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_put</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">fields</span><span class="p">):</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_session</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+            <span class="n">url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">fields</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_headers</span><span class="p">(),</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_timeout</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_check_response</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Client.create_text_message"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.create_text_message">[docs]</a>    <span class="k">def</span> <span class="nf">create_text_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sender</span><span class="p">,</span> <span class="n">recipient</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a text message to a single recipient.</span>
+
+<span class="sd">        This is a convenience method that creates a text batch having</span>
+<span class="sd">        a single recipient.</span>
+
+<span class="sd">        :param str sender: the message sender</span>
+<span class="sd">        :param str recipient: the message recipient</span>
+<span class="sd">        :param str body: the message body</span>
+<span class="sd">        :returns: the created batch</span>
+<span class="sd">        :rtype: MtBatchTextSmsResult</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">batch</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">MtBatchTextSmsCreate</span><span class="p">()</span>
+        <span class="n">batch</span><span class="o">.</span><span class="n">sender</span> <span class="o">=</span> <span class="n">sender</span>
+        <span class="n">batch</span><span class="o">.</span><span class="n">recipients</span> <span class="o">=</span> <span class="p">{</span><span class="n">recipient</span><span class="p">}</span>
+        <span class="n">batch</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="n">body</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.create_binary_message"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.create_binary_message">[docs]</a>    <span class="k">def</span> <span class="nf">create_binary_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sender</span><span class="p">,</span> <span class="n">recipient</span><span class="p">,</span> <span class="n">udh</span><span class="p">,</span> <span class="n">body</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates a text message to a single recipient.</span>
+
+<span class="sd">        This is a convenience method that creates a text batch having</span>
+<span class="sd">        a single recipient.</span>
+
+<span class="sd">        :param str sender: the message sender</span>
+<span class="sd">        :param str recipient: the message recipient</span>
+<span class="sd">        :param binary udh: the message User Data Header</span>
+<span class="sd">        :param binary body: the message binary body</span>
+<span class="sd">        :returns: the created batch</span>
+<span class="sd">        :rtype: MtBatchBinarySmsResult</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">batch</span> <span class="o">=</span> <span class="n">api</span><span class="o">.</span><span class="n">MtBatchBinarySmsCreate</span><span class="p">()</span>
+        <span class="n">batch</span><span class="o">.</span><span class="n">sender</span> <span class="o">=</span> <span class="n">sender</span>
+        <span class="n">batch</span><span class="o">.</span><span class="n">recipients</span> <span class="o">=</span> <span class="p">{</span><span class="n">recipient</span><span class="p">}</span>
+        <span class="n">batch</span><span class="o">.</span><span class="n">udh</span> <span class="o">=</span> <span class="n">udh</span>
+        <span class="n">batch</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="n">body</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.create_batch"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.create_batch">[docs]</a>    <span class="k">def</span> <span class="nf">create_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates the given batch.</span>
+
+<span class="sd">        :param batch: the text or binary batch to create</span>
+<span class="sd">        :type batch: MtBatchTextSmsCreate or MtBatchBinarySmsCreate</span>
+<span class="sd">        :returns: the batch result</span>
+<span class="sd">        :rtype: MtBatchTextSmsResult or MtBatchBinarySmsResult</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="s1">&#39;udh&#39;</span><span class="p">):</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">serialize</span><span class="o">.</span><span class="n">binary_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">serialize</span><span class="o">.</span><span class="n">text_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">(</span><span class="s1">&#39;/batches&#39;</span><span class="p">),</span> <span class="n">fields</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">batch_result</span><span class="p">(</span><span class="n">response</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.replace_batch"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.replace_batch">[docs]</a>    <span class="k">def</span> <span class="nf">replace_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_id</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Replaces the batch with the given ID with the given batch.</span>
+
+<span class="sd">        :param str batch_id: identifier of the batch</span>
+<span class="sd">        :param batch: the replacement batch</span>
+<span class="sd">        :type batch: MtBatchTextSmsCreate or MtBatchBinarySmsCreate</span>
+<span class="sd">        :return: the resulting batch</span>
+<span class="sd">        :rtype: MtBatchTextSmsResult</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="s1">&#39;udh&#39;</span><span class="p">):</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">serialize</span><span class="o">.</span><span class="n">binary_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">serialize</span><span class="o">.</span><span class="n">text_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_put</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_batch_url</span><span class="p">(</span><span class="n">batch_id</span><span class="p">),</span> <span class="n">fields</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">batch_result</span><span class="p">(</span><span class="n">response</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.update_batch"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.update_batch">[docs]</a>    <span class="k">def</span> <span class="nf">update_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_id</span><span class="p">,</span> <span class="n">batch</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Updates the text batch with the given identifier.</span>
+
+<span class="sd">        :param str batch_id: identifier of the batch</span>
+<span class="sd">        :param batch: the update description</span>
+<span class="sd">        :type batch: MtBatchTextSmsUpdate or MtBatchBinarySmsUpdate</span>
+<span class="sd">        :returns: the updated batch</span>
+<span class="sd">        :rtype: MtBatchTextSmsResult</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="s1">&#39;udh&#39;</span><span class="p">):</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">serialize</span><span class="o">.</span><span class="n">binary_batch_update</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">serialize</span><span class="o">.</span><span class="n">text_batch_update</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_batch_url</span><span class="p">(</span><span class="n">batch_id</span><span class="p">),</span> <span class="n">fields</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">batch_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.cancel_batch"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.cancel_batch">[docs]</a>    <span class="k">def</span> <span class="nf">cancel_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Cancels the batch with the given batch identifier.</span>
+
+<span class="sd">        :param str batch_id: the batch identifier</span>
+<span class="sd">        :returns: nothing</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_batch_url</span><span class="p">(</span><span class="n">batch_id</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Client.fetch_batch"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.fetch_batch">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fetches the batch with the given batch identifier.</span>
+
+<span class="sd">        :param str batch_id: batch identifier</span>
+<span class="sd">        :returns: the corresponding batch</span>
+<span class="sd">        :rtype: MtBatchSmsResult</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_batch_url</span><span class="p">(</span><span class="n">batch_id</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">batch_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.fetch_batches"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.fetch_batches">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_batches</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                      <span class="n">page_size</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                      <span class="n">senders</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                      <span class="n">tags</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                      <span class="n">start_date</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                      <span class="n">end_date</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fetch the batches matching the given filter.</span>
+
+<span class="sd">        Note, calling this method does not actually cause any network</span>
+<span class="sd">        traffic. Listing batches in XMS may return the result over</span>
+<span class="sd">        multiple pages and this call therefore returns an object of</span>
+<span class="sd">        the type :class:`.Pages`, which will fetch result pages as</span>
+<span class="sd">        needed.</span>
+
+<span class="sd">        :param int page_size: Maximum number of batches to retrieve per page.</span>
+<span class="sd">        :param senders: Fetch only batches having one of these senders.</span>
+<span class="sd">        :type senders: set[str] or None</span>
+<span class="sd">        :param tags: Fetch only batches having one or more of these tags.</span>
+<span class="sd">        :type tags: set[str] or None</span>
+<span class="sd">        :param start_date: Fetch only batches sent at or after this date.</span>
+<span class="sd">        :type start_date: date or None</span>
+<span class="sd">        :param end_date: Fetch only batches sent before this date.</span>
+<span class="sd">        :type end_date: date or None</span>
+<span class="sd">        :returns: the result pages</span>
+<span class="sd">        :rtype: Pages</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">fetcher</span><span class="p">(</span><span class="n">page</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Helper&quot;&quot;&quot;</span>
+
+            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;page&#39;</span><span class="p">:</span> <span class="n">page</span><span class="p">}</span>
+
+            <span class="k">if</span> <span class="n">page_size</span><span class="p">:</span>
+                <span class="n">params</span><span class="p">[</span><span class="s1">&#39;page_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">page_size</span>
+
+            <span class="k">if</span> <span class="n">senders</span><span class="p">:</span>
+                <span class="n">params</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">senders</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">tags</span><span class="p">:</span>
+                <span class="n">params</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">tags</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">start_date</span><span class="p">:</span>
+                <span class="n">params</span><span class="p">[</span><span class="s1">&#39;start_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">end_date</span><span class="p">:</span>
+                <span class="n">params</span><span class="p">[</span><span class="s1">&#39;end_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">end_date</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+            <span class="n">query</span> <span class="o">=</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">(</span><span class="s1">&#39;/batches?&#39;</span> <span class="o">+</span> <span class="n">query</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">batches_page</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">api</span><span class="o">.</span><span class="n">Pages</span><span class="p">(</span><span class="n">fetcher</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.create_batch_dry_run"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.create_batch_dry_run">[docs]</a>    <span class="k">def</span> <span class="nf">create_batch_dry_run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">num_recipients</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Simulates sending the given batch.</span>
+
+<span class="sd">        The method takes an optional argument for instructing XMS to</span>
+<span class="sd">        respond with per-recipient statistics, if non-null then this</span>
+<span class="sd">        number of recipients will be returned in the result.</span>
+
+<span class="sd">        :param MtBatchSmsCreate batch: the batch to simulate</span>
+<span class="sd">        :param num_recipients:</span>
+<span class="sd">            number of recipients to show in per-recipient result</span>
+<span class="sd">        :type num_recipients: int or None</span>
+<span class="sd">        :returns: result of dry-run</span>
+<span class="sd">        :rtype: MtBatchDryRunResult</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="s1">&#39;udh&#39;</span><span class="p">):</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">serialize</span><span class="o">.</span><span class="n">binary_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">serialize</span><span class="o">.</span><span class="n">text_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/batches/dry_run&#39;</span>
+
+        <span class="k">if</span> <span class="n">num_recipients</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">+=</span> <span class="s1">&#39;?per_recipient=true&#39;</span>
+            <span class="n">path</span> <span class="o">+=</span> <span class="s1">&#39;&amp;number_of_recipients=</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">num_recipients</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">(</span><span class="n">path</span><span class="p">),</span> <span class="n">fields</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">batch_dry_run_result</span><span class="p">(</span><span class="n">response</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.fetch_batch_tags"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.fetch_batch_tags">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_batch_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fetches the tags associated with the given batch.</span>
+
+<span class="sd">        :param str batch_id: the batch identifier</span>
+<span class="sd">        :returns: a set of tags</span>
+<span class="sd">        :rtype: set[str]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_batch_url</span><span class="p">(</span><span class="n">batch_id</span><span class="p">,</span> <span class="s1">&#39;/tags&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">tags</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.replace_batch_tags"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.replace_batch_tags">[docs]</a>    <span class="k">def</span> <span class="nf">replace_batch_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_id</span><span class="p">,</span> <span class="n">tags</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Replaces the tags of the given batch.</span>
+
+<span class="sd">        :param str batch_id: identifier of the batch</span>
+<span class="sd">        :param set[str] tags: the new set of batch tags</span>
+<span class="sd">        :returns: the new batch tags</span>
+<span class="sd">        :rtype: set[str]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">serialize</span><span class="o">.</span><span class="n">tags</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_put</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_batch_url</span><span class="p">(</span><span class="n">batch_id</span><span class="p">,</span> <span class="s1">&#39;/tags&#39;</span><span class="p">),</span> <span class="n">fields</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">tags</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.update_batch_tags"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.update_batch_tags">[docs]</a>    <span class="k">def</span> <span class="nf">update_batch_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_id</span><span class="p">,</span> <span class="n">tags_to_add</span><span class="p">,</span> <span class="n">tags_to_remove</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Updates the tags of the given batch.</span>
+
+<span class="sd">        :param str batch_id: batch identifier</span>
+<span class="sd">        :param set[str] tags_to_add: tags to add to batch</span>
+<span class="sd">        :param set[str] tags_to_remove: tags to remove from batch</span>
+<span class="sd">        :returns: the updated batch tags</span>
+<span class="sd">        :rtype: set[str]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">serialize</span><span class="o">.</span><span class="n">tags_update</span><span class="p">(</span><span class="n">tags_to_add</span><span class="p">,</span> <span class="n">tags_to_remove</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_batch_url</span><span class="p">(</span><span class="n">batch_id</span><span class="p">,</span> <span class="s1">&#39;/tags&#39;</span><span class="p">),</span> <span class="n">fields</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">tags</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.fetch_delivery_report"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.fetch_delivery_report">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_delivery_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_id</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                              <span class="n">status</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">code</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fetches a delivery report for a batch.</span>
+
+<span class="sd">        The report type can be one of ``None``, &quot;full&quot;, or &quot;summary&quot;.</span>
+<span class="sd">        When &quot;full&quot; the report includes the individual recipients.</span>
+<span class="sd">        When ``None`` then the XMS default value is used.</span>
+
+<span class="sd">        The report can be further limited by status and code. For</span>
+<span class="sd">        example, to retrieve a summary report limited to messages</span>
+<span class="sd">        having delivery status &quot;Delivered&quot; or &quot;Failed&quot; and codes &quot;0&quot;,</span>
+<span class="sd">        &quot;11&quot;, or &quot;400&quot;, one could call::</span>
+
+<span class="sd">          client.fetch_delivery_report(</span>
+<span class="sd">              &#39;MyBatchId&#39;,</span>
+<span class="sd">              &#39;summary&#39;,</span>
+<span class="sd">              {&#39;Delivered&#39;, &#39;Failed&#39;},</span>
+<span class="sd">              {0, 11, 400});</span>
+
+<span class="sd">        If the non-identifier parameters are left unspecified then the</span>
+<span class="sd">        XMS defaults are used. In particular, all statuses and codes</span>
+<span class="sd">        are included in the report.</span>
+
+<span class="sd">        :param str batch_id: identifier of the batch</span>
+<span class="sd">        :param kind: delivery report type</span>
+<span class="sd">        :type kind: str or None</span>
+<span class="sd">        :param set[str] status: statuses to fetch</span>
+<span class="sd">        :param set[int] code: codes to fetch</span>
+<span class="sd">        :returns: the batch delivery report</span>
+<span class="sd">        :rtype: BatchDeliveryReport</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="k">if</span> <span class="n">kind</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">kind</span>
+
+        <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">status</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">code</span><span class="p">:</span>
+            <span class="n">params</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">code</span><span class="p">)])</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/delivery_report&#39;</span>
+
+        <span class="k">if</span> <span class="n">params</span><span class="p">:</span>
+            <span class="n">path</span> <span class="o">+=</span> <span class="s1">&#39;?&#39;</span> <span class="o">+</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_batch_url</span><span class="p">(</span><span class="n">batch_id</span><span class="p">,</span> <span class="n">path</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">batch_delivery_report</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.fetch_recipient_delivery_report"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.fetch_recipient_delivery_report">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_recipient_delivery_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch_id</span><span class="p">,</span> <span class="n">recipient</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fetches a delivery report for a specific batch recipient.</span>
+
+<span class="sd">        :param str batch_id: the batch identifier</span>
+<span class="sd">        :param str recipient: the batch recipient</span>
+<span class="sd">        :returns: the delivery report</span>
+<span class="sd">        :rtype: BatchRecipientDeliveryReport</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;/delivery_report/&#39;</span> <span class="o">+</span> <span class="n">quote_plus</span><span class="p">(</span><span class="n">recipient</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_batch_url</span><span class="p">(</span><span class="n">batch_id</span><span class="p">,</span> <span class="n">path</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">batch_recipient_delivery_report</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.create_group"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.create_group">[docs]</a>    <span class="k">def</span> <span class="nf">create_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Creates the given group.</span>
+
+<span class="sd">        :param GroupCreate group: group description</span>
+<span class="sd">        :returns: the created group</span>
+<span class="sd">        :rtype: GroupResult</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">serialize</span><span class="o">.</span><span class="n">group_create</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">(</span><span class="s1">&#39;/groups&#39;</span><span class="p">),</span> <span class="n">fields</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">group_result</span><span class="p">(</span><span class="n">response</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.replace_group"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.replace_group">[docs]</a>    <span class="k">def</span> <span class="nf">replace_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_id</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Replaces the group with the given group identifier.</span>
+
+<span class="sd">        :param str group_id: identifier of the group</span>
+<span class="sd">        :param GroupCreate group: new group description</span>
+<span class="sd">        :returns: the group after replacement</span>
+<span class="sd">        :rtype: GroupResult</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">serialize</span><span class="o">.</span><span class="n">group_create</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_put</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_group_url</span><span class="p">(</span><span class="n">group_id</span><span class="p">),</span> <span class="n">fields</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">group_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.update_group"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.update_group">[docs]</a>    <span class="k">def</span> <span class="nf">update_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_id</span><span class="p">,</span> <span class="n">group</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Updates the group with the given identifier.</span>
+
+<span class="sd">        :param str group_id: identifier of the group</span>
+<span class="sd">        :param GroupUpdate group: the update description</span>
+<span class="sd">        :returns: the updated batch</span>
+<span class="sd">        :rtype: GroupResult</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">serialize</span><span class="o">.</span><span class="n">group_update</span><span class="p">(</span><span class="n">group</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_group_url</span><span class="p">(</span><span class="n">group_id</span><span class="p">),</span> <span class="n">fields</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">group_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.delete_group"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.delete_group">[docs]</a>    <span class="k">def</span> <span class="nf">delete_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Deletes the group with the given group identifier.</span>
+
+<span class="sd">        :param str group_id: the group identifier</span>
+<span class="sd">        :returns: Nothing</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_group_url</span><span class="p">(</span><span class="n">group_id</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="Client.fetch_group"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.fetch_group">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fetches the group with the given group identifier.</span>
+
+<span class="sd">        :param str group_id: group identifier</span>
+<span class="sd">        :returns: the corresponding group</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_group_url</span><span class="p">(</span><span class="n">group_id</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">group_result</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.fetch_groups"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.fetch_groups">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page_size</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">tags</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fetch the groups matching the given filter.</span>
+
+<span class="sd">        Note, calling this method does not actually cause any network</span>
+<span class="sd">        traffic. Listing groups in XMS may return the result over</span>
+<span class="sd">        multiple pages and this call therefore returns an object of</span>
+<span class="sd">        the type :class:`.Pages`, which will fetch result pages as</span>
+<span class="sd">        needed.</span>
+
+<span class="sd">        :param page_size: Maximum number of groups to retrieve per page.</span>
+<span class="sd">        :type page_size: int or None</span>
+<span class="sd">        :param tags: Fetch only groups having or or more of these tags.</span>
+<span class="sd">        :type tags: set[str] or None</span>
+<span class="sd">        :returns: the result pages</span>
+<span class="sd">        :rtype: Pages</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">fetcher</span><span class="p">(</span><span class="n">page</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Helper&quot;&quot;&quot;</span>
+
+            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;page&#39;</span><span class="p">:</span> <span class="n">page</span><span class="p">}</span>
+
+            <span class="k">if</span> <span class="n">page_size</span><span class="p">:</span>
+                <span class="n">params</span><span class="p">[</span><span class="s1">&#39;page_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">page_size</span>
+
+            <span class="k">if</span> <span class="n">tags</span><span class="p">:</span>
+                <span class="n">params</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">tags</span><span class="p">))</span>
+
+            <span class="n">query</span> <span class="o">=</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">(</span><span class="s1">&#39;/groups?&#39;</span> <span class="o">+</span> <span class="n">query</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">groups_page</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">api</span><span class="o">.</span><span class="n">Pages</span><span class="p">(</span><span class="n">fetcher</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.fetch_group_members"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.fetch_group_members">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_group_members</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fetches the that belong to the given group.</span>
+
+<span class="sd">        :param str group_id: the group identifier</span>
+<span class="sd">        :returns: a set of MSISDNs</span>
+<span class="sd">        :rtype: set[str]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_group_url</span><span class="p">(</span><span class="n">group_id</span><span class="p">,</span> <span class="s1">&#39;/members&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">group_members</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.fetch_group_tags"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.fetch_group_tags">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_group_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fetches the tags associated with the given group.</span>
+
+<span class="sd">        :param str group_id: the group identifier</span>
+<span class="sd">        :returns: a set of tags</span>
+<span class="sd">        :rtype: set[str]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_group_url</span><span class="p">(</span><span class="n">group_id</span><span class="p">,</span> <span class="s1">&#39;/tags&#39;</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">tags</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.replace_group_tags"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.replace_group_tags">[docs]</a>    <span class="k">def</span> <span class="nf">replace_group_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_id</span><span class="p">,</span> <span class="n">tags</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Replaces the tags of the given group.</span>
+
+<span class="sd">        :param str group_id: identifier of the group</span>
+<span class="sd">        :param set[str] tags: the new set of group tags</span>
+<span class="sd">        :returns: the new group tags</span>
+<span class="sd">        :rtype: set[str]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">serialize</span><span class="o">.</span><span class="n">tags</span><span class="p">(</span><span class="n">tags</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_put</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_group_url</span><span class="p">(</span><span class="n">group_id</span><span class="p">,</span> <span class="s1">&#39;/tags&#39;</span><span class="p">),</span> <span class="n">fields</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">tags</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.update_group_tags"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.update_group_tags">[docs]</a>    <span class="k">def</span> <span class="nf">update_group_tags</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_id</span><span class="p">,</span> <span class="n">tags_to_add</span><span class="p">,</span> <span class="n">tags_to_remove</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Updates the tags of the given group.</span>
+
+<span class="sd">        :param str group_id: group identifier</span>
+<span class="sd">        :param set[str] tags_to_add: tags to add to group</span>
+<span class="sd">        :param set[str] tags_to_remove: tags to remove from group</span>
+<span class="sd">        :returns: the updated group tags</span>
+<span class="sd">        :rtype: set[str]</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">fields</span> <span class="o">=</span> <span class="n">serialize</span><span class="o">.</span><span class="n">tags_update</span><span class="p">(</span><span class="n">tags_to_add</span><span class="p">,</span> <span class="n">tags_to_remove</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_post</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_group_url</span><span class="p">(</span><span class="n">group_id</span><span class="p">,</span> <span class="s1">&#39;/tags&#39;</span><span class="p">),</span> <span class="n">fields</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">tags</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.fetch_inbound"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.fetch_inbound">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_inbound</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">inbound_id</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fetches the inbound message with the given identifier.</span>
+
+<span class="sd">        The returned message is either textual or binary.</span>
+
+<span class="sd">        :param str inbound_id: message identifier</span>
+<span class="sd">        :returns: the fetched message</span>
+<span class="sd">        :rtype: MoTextSms or MoBinarySms</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">eiid</span> <span class="o">=</span> <span class="n">quote_plus</span><span class="p">(</span><span class="n">inbound_id</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">eiid</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Empty inbound ID given&quot;</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">(</span><span class="s2">&quot;/inbounds/&quot;</span> <span class="o">+</span> <span class="n">eiid</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">mo_sms</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Client.fetch_inbounds"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.client.Client.fetch_inbounds">[docs]</a>    <span class="k">def</span> <span class="nf">fetch_inbounds</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                       <span class="n">page_size</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                       <span class="n">recipients</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                       <span class="n">start_date</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                       <span class="n">end_date</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Fetch inbound messages matching the given filter.</span>
+
+<span class="sd">        Note, calling this method does not actually cause any network</span>
+<span class="sd">        traffic. Listing inbound messages in XMS may return the result</span>
+<span class="sd">        over multiple pages and this call therefore returns an object</span>
+<span class="sd">        of the type :class:`.Pages`, which will fetch result pages as</span>
+<span class="sd">        needed.</span>
+
+<span class="sd">        :param page_size: The maximum number of messages to retrieve per page.</span>
+<span class="sd">        :type page_size: int or None</span>
+<span class="sd">        :param recipients: Fetch only messages having one of these recipients.</span>
+<span class="sd">        :type recipients: set[str] or None</span>
+<span class="sd">        :param start_date: Fetch only messages received at or after this date.</span>
+<span class="sd">        :type start_date: date or None</span>
+<span class="sd">        :param end_date: Fetch only messages received before this date.</span>
+<span class="sd">        :type end_date: date or None</span>
+<span class="sd">        :returns: the result pages</span>
+<span class="sd">        :rtype: Pages</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">fetcher</span><span class="p">(</span><span class="n">page</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Helper&quot;&quot;&quot;</span>
+
+            <span class="n">params</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;page&#39;</span><span class="p">:</span> <span class="n">page</span><span class="p">}</span>
+
+            <span class="k">if</span> <span class="n">page_size</span><span class="p">:</span>
+                <span class="n">params</span><span class="p">[</span><span class="s1">&#39;page_size&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">page_size</span>
+
+            <span class="k">if</span> <span class="n">recipients</span><span class="p">:</span>
+                <span class="n">params</span><span class="p">[</span><span class="s1">&#39;to&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;,&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">recipients</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">start_date</span><span class="p">:</span>
+                <span class="n">params</span><span class="p">[</span><span class="s1">&#39;start_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+            <span class="k">if</span> <span class="n">end_date</span><span class="p">:</span>
+                <span class="n">params</span><span class="p">[</span><span class="s1">&#39;end_date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">end_date</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+            <span class="n">query</span> <span class="o">=</span> <span class="n">urlencode</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_url</span><span class="p">(</span><span class="s1">&#39;/inbounds?&#39;</span> <span class="o">+</span> <span class="n">query</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">deserialize</span><span class="o">.</span><span class="n">inbounds_page</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">api</span><span class="o">.</span><span class="n">Pages</span><span class="p">(</span><span class="n">fetcher</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, CLX Communication.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

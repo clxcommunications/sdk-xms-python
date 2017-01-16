@@ -1,0 +1,3207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>clx.xms package &mdash; REST API SDK for SMS 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="REST API SDK for SMS 1.0.0 documentation" href="index.html" />
+    <link rel="up" title="clx package" href="clx.html" />
+    <link rel="next" title="Change Log" href="changelog.html" />
+    <link rel="prev" title="clx package" href="clx.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="clx-xms-package">
+<h1>clx.xms package<a class="headerlink" href="#clx-xms-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-clx.xms.api">
+<span id="clx-xms-api-module"></span><h2>clx.xms.api module<a class="headerlink" href="#module-clx.xms.api" title="Permalink to this headline">¶</a></h2>
+<p>The classes in this module represent objects sent and received from
+the XMS REST API.</p>
+<dl class="class">
+<dt id="clx.xms.api.BatchDeliveryReport">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">BatchDeliveryReport</code><a class="reference internal" href="_modules/clx/xms/api.html#BatchDeliveryReport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.BatchDeliveryReport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Batch delivery report.</p>
+<p>A batch delivery report is divided into a number of <em>buckets</em> and
+each such bucket contain statistics about batch messages having a
+specific delivery status. The <a class="reference internal" href="#clx.xms.api.BatchDeliveryReport.statuses" title="clx.xms.api.BatchDeliveryReport.statuses"><code class="xref py py-attr docutils literal"><span class="pre">statuses</span></code></a> property
+contains the various buckets.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.BatchDeliveryReport.batch_id">
+<code class="descname">batch_id</code><a class="headerlink" href="#clx.xms.api.BatchDeliveryReport.batch_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identifier of the batch that this report covers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.BatchDeliveryReport.total_message_count">
+<code class="descname">total_message_count</code><a class="headerlink" href="#clx.xms.api.BatchDeliveryReport.total_message_count" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total number of messages sent as part of this batch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.BatchDeliveryReport.statuses">
+<code class="descname">statuses</code><a class="headerlink" href="#clx.xms.api.BatchDeliveryReport.statuses" title="Permalink to this definition">¶</a></dt>
+<dd><p>The batch status buckets. This array describes the aggregated
+status for the batch where each array element contains
+information about messages having a certain delivery status and
+delivery code.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list[BatchDeliveryReportStatus]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.BatchDeliveryReportStatus">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">BatchDeliveryReportStatus</code><a class="reference internal" href="_modules/clx/xms/api.html#BatchDeliveryReportStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.BatchDeliveryReportStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Aggregated statistics for a given batch.</p>
+<p>This represents the delivery statistics for a given statistics
+<em>bucket</em>. See <a class="reference internal" href="#clx.xms.api.BatchDeliveryReport" title="clx.xms.api.BatchDeliveryReport"><code class="xref py py-class docutils literal"><span class="pre">BatchDeliveryReport</span></code></a>.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.BatchDeliveryReportStatus.code">
+<code class="descname">code</code><a class="headerlink" href="#clx.xms.api.BatchDeliveryReportStatus.code" title="Permalink to this definition">¶</a></dt>
+<dd><p>The delivery status code for this recipient bucket.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.BatchDeliveryReportStatus.status">
+<code class="descname">status</code><a class="headerlink" href="#clx.xms.api.BatchDeliveryReportStatus.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>The delivery status for this recipient bucket.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.BatchDeliveryReportStatus.count">
+<code class="descname">count</code><a class="headerlink" href="#clx.xms.api.BatchDeliveryReportStatus.count" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of recipients belonging to this bucket.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.BatchDeliveryReportStatus.recipients">
+<code class="descname">recipients</code><a class="headerlink" href="#clx.xms.api.BatchDeliveryReportStatus.recipients" title="Permalink to this definition">¶</a></dt>
+<dd><p>The recipients having this status.</p>
+<p>Note, this is non-empty only if a <cite>full</cite> delivery report has been
+requested.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.BatchRecipientDeliveryReport">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">BatchRecipientDeliveryReport</code><a class="reference internal" href="_modules/clx/xms/api.html#BatchRecipientDeliveryReport"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.BatchRecipientDeliveryReport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A delivery report for an individual batch recipient.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.BatchRecipientDeliveryReport.batch_id">
+<code class="descname">batch_id</code><a class="headerlink" href="#clx.xms.api.BatchRecipientDeliveryReport.batch_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The batch identifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.BatchRecipientDeliveryReport.recipient">
+<code class="descname">recipient</code><a class="headerlink" href="#clx.xms.api.BatchRecipientDeliveryReport.recipient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The recipient address.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.BatchRecipientDeliveryReport.code">
+<code class="descname">code</code><a class="headerlink" href="#clx.xms.api.BatchRecipientDeliveryReport.code" title="Permalink to this definition">¶</a></dt>
+<dd><p>The delivery code.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.BatchRecipientDeliveryReport.status">
+<code class="descname">status</code><a class="headerlink" href="#clx.xms.api.BatchRecipientDeliveryReport.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>The delivery status.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.BatchRecipientDeliveryReport.status_message">
+<code class="descname">status_message</code><a class="headerlink" href="#clx.xms.api.BatchRecipientDeliveryReport.status_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>The delivery status message. The status message is not always
+available and the attribute is set to <em>None</em> in those cases.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">string or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.BatchRecipientDeliveryReport.operator">
+<code class="descname">operator</code><a class="headerlink" href="#clx.xms.api.BatchRecipientDeliveryReport.operator" title="Permalink to this definition">¶</a></dt>
+<dd><p>The recipient&#8217;s mobile operator. If the operator is not known,
+then this is set to <em>None</em>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">string or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.BatchRecipientDeliveryReport.status_at">
+<code class="descname">status_at</code><a class="headerlink" href="#clx.xms.api.BatchRecipientDeliveryReport.status_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>The time at delivery.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">datetime</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.BatchRecipientDeliveryReport.operator_status_at">
+<code class="descname">operator_status_at</code><a class="headerlink" href="#clx.xms.api.BatchRecipientDeliveryReport.operator_status_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>The time of delivery as reported by operator.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">datetime or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.DeliveryReportType">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">DeliveryReportType</code><a class="reference internal" href="_modules/clx/xms/api.html#DeliveryReportType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.DeliveryReportType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>The types of delivery reports that can be retrieved.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.DeliveryReportType.FULL">
+<code class="descname">FULL</code><em class="property"> = 'full'</em><a class="headerlink" href="#clx.xms.api.DeliveryReportType.FULL" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates a full batch delivery report.</p>
+<p>This includes per-recipient delivery results. For batches with
+many destinations such reports may be very large.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.DeliveryReportType.SUMMARY">
+<code class="descname">SUMMARY</code><em class="property"> = 'summary'</em><a class="headerlink" href="#clx.xms.api.DeliveryReportType.SUMMARY" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates a summary batch delivery report.</p>
+<p>The summary delivery report does not include the per-recipient
+result but rather aggregated statistics about the deliveries.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.DeliveryStatus">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">DeliveryStatus</code><a class="reference internal" href="_modules/clx/xms/api.html#DeliveryStatus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.DeliveryStatus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A collection of known delivery statuses.</p>
+<p>Note, new statuses may be introduced to the XMS API.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.DeliveryStatus.ABORTED">
+<code class="descname">ABORTED</code><em class="property"> = 'Aborted'</em><a class="headerlink" href="#clx.xms.api.DeliveryStatus.ABORTED" title="Permalink to this definition">¶</a></dt>
+<dd><p>Message was aborted before reaching SMSC.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.DeliveryStatus.DELIVERED">
+<code class="descname">DELIVERED</code><em class="property"> = 'Delivered'</em><a class="headerlink" href="#clx.xms.api.DeliveryStatus.DELIVERED" title="Permalink to this definition">¶</a></dt>
+<dd><p>Message has been delivered.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.DeliveryStatus.DISPATCHED">
+<code class="descname">DISPATCHED</code><em class="property"> = 'Dispatched'</em><a class="headerlink" href="#clx.xms.api.DeliveryStatus.DISPATCHED" title="Permalink to this definition">¶</a></dt>
+<dd><p>Message has been dispatched and accepted for delivery by the SMSC.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.DeliveryStatus.EXPIRED">
+<code class="descname">EXPIRED</code><em class="property"> = 'Expired'</em><a class="headerlink" href="#clx.xms.api.DeliveryStatus.EXPIRED" title="Permalink to this definition">¶</a></dt>
+<dd><p>Message expired before delivery.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.DeliveryStatus.FAILED">
+<code class="descname">FAILED</code><em class="property"> = 'Failed'</em><a class="headerlink" href="#clx.xms.api.DeliveryStatus.FAILED" title="Permalink to this definition">¶</a></dt>
+<dd><p>Message failed to be delivered.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.DeliveryStatus.QUEUED">
+<code class="descname">QUEUED</code><em class="property"> = 'Queued'</em><a class="headerlink" href="#clx.xms.api.DeliveryStatus.QUEUED" title="Permalink to this definition">¶</a></dt>
+<dd><p>Message is queued within REST API system and will be dispatched
+according to the rate of the account.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.DeliveryStatus.REJECTED">
+<code class="descname">REJECTED</code><em class="property"> = 'Rejected'</em><a class="headerlink" href="#clx.xms.api.DeliveryStatus.REJECTED" title="Permalink to this definition">¶</a></dt>
+<dd><p>Message was rejected by SMSC.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.DeliveryStatus.UNKNOWN">
+<code class="descname">UNKNOWN</code><em class="property"> = 'Unknown'</em><a class="headerlink" href="#clx.xms.api.DeliveryStatus.UNKNOWN" title="Permalink to this definition">¶</a></dt>
+<dd><p>It is not known if message was delivered or not.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.DryRunPerRecipient">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">DryRunPerRecipient</code><a class="reference internal" href="_modules/clx/xms/api.html#DryRunPerRecipient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.DryRunPerRecipient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Per-recipient dry-run result.</p>
+<p>Object of this class only occur within dry-run results. See
+<a class="reference internal" href="#clx.xms.api.MtBatchDryRunResult" title="clx.xms.api.MtBatchDryRunResult"><code class="xref py py-class docutils literal"><span class="pre">MtBatchDryRunResult</span></code></a>.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.DryRunPerRecipient.recipient">
+<code class="descname">recipient</code><a class="headerlink" href="#clx.xms.api.DryRunPerRecipient.recipient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The recipient.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.DryRunPerRecipient.number_of_parts">
+<code class="descname">number_of_parts</code><a class="headerlink" href="#clx.xms.api.DryRunPerRecipient.number_of_parts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of message parts needed for the recipient.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.DryRunPerRecipient.body">
+<code class="descname">body</code><a class="headerlink" href="#clx.xms.api.DryRunPerRecipient.body" title="Permalink to this definition">¶</a></dt>
+<dd><p>Message body sent to this recipient.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.DryRunPerRecipient.encoding">
+<code class="descname">encoding</code><a class="headerlink" href="#clx.xms.api.DryRunPerRecipient.encoding" title="Permalink to this definition">¶</a></dt>
+<dd><p>Indicates the text encoding used for this recipient.</p>
+<p>This is one of &#8220;text&#8221; or &#8220;unicode&#8221;. See <a class="reference internal" href="#clx.xms.api.DryRunPerRecipient.ENCODING_TEXT" title="clx.xms.api.DryRunPerRecipient.ENCODING_TEXT"><code class="xref py py-const docutils literal"><span class="pre">ENCODING_TEXT</span></code></a>
+and <a class="reference internal" href="#clx.xms.api.DryRunPerRecipient.ENCODING_UNICODE" title="clx.xms.api.DryRunPerRecipient.ENCODING_UNICODE"><code class="xref py py-const docutils literal"><span class="pre">ENCODING_UNICODE</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.DryRunPerRecipient.ENCODING_TEXT">
+<code class="descname">ENCODING_TEXT</code><em class="property"> = 'text'</em><a class="headerlink" href="#clx.xms.api.DryRunPerRecipient.ENCODING_TEXT" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant indicating non-unicode encoding.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.DryRunPerRecipient.ENCODING_UNICODE">
+<code class="descname">ENCODING_UNICODE</code><em class="property"> = 'unicode'</em><a class="headerlink" href="#clx.xms.api.DryRunPerRecipient.ENCODING_UNICODE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Constant indicating unicode encoding.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.Error">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">Error</code><span class="sig-paren">(</span><em>code</em>, <em>text</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/api.html#Error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Describes error responses given by XMS.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>code</strong> (<em>str</em>) &#8211; the error code</li>
+<li><strong>text</strong> (<em>str</em>) &#8211; the human readable error text</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="clx.xms.api.Error.code">
+<code class="descname">code</code><a class="headerlink" href="#clx.xms.api.Error.code" title="Permalink to this definition">¶</a></dt>
+<dd><p>A code that can be used to programmatically recognize the error.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.Error.text">
+<code class="descname">text</code><a class="headerlink" href="#clx.xms.api.Error.text" title="Permalink to this definition">¶</a></dt>
+<dd><p>Human readable description of the error.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.GroupAutoUpdate">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">GroupAutoUpdate</code><span class="sig-paren">(</span><em>recipient</em>, <em>add_first_word=None</em>, <em>add_second_word=None</em>, <em>remove_first_word=None</em>, <em>remove_second_word=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/api.html#GroupAutoUpdate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.GroupAutoUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A description of automatic group updates.</p>
+<p>An automatic update is triggered by a mobile originated message to
+a given number containing special keywords.</p>
+<p>When the given recipient receives a mobile originated SMS
+containing keywords (first and/or second) matching the given
+<code class="docutils literal"><span class="pre">add</span></code> arguments then the sender MSISDN is added to the group.
+Similarly, if the MO is matching the given <code class="docutils literal"><span class="pre">remove</span></code> keyword
+arguments then the MSISDN is removed from the group.</p>
+<p>For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">GroupAutoUpdate</span><span class="p">(</span>
+  <span class="n">recipient</span><span class="o">=</span><span class="s1">&#39;12345&#39;</span><span class="p">,</span>
+  <span class="n">add_first_word</span><span class="o">=</span><span class="s1">&#39;add&#39;</span><span class="p">,</span>
+  <span class="n">remove_first_word</span><span class="o">=</span><span class="s1">&#39;remove&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>would trigger based solely on the first keyword of the MO message.
+On the other hand:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">GroupAutoUpdate</span><span class="p">(</span>
+  <span class="n">recipient</span><span class="o">=</span><span class="s1">&#39;12345&#39;</span><span class="p">,</span>
+  <span class="n">add_first_word</span><span class="o">=</span><span class="s1">&#39;alert&#39;</span><span class="p">,</span>
+  <span class="n">add_second_word</span><span class="o">=</span><span class="s1">&#39;add&#39;</span><span class="p">,</span>
+  <span class="n">remove_first_word</span><span class="o">=</span><span class="s1">&#39;alert&#39;</span><span class="p">,</span>
+  <span class="n">remove_second_word</span><span class="o">=</span><span class="s1">&#39;remove&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>would trigger only when both the first and second keyword are
+given in the MO message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>recipient</strong> (<em>str</em>) &#8211; recipient that triggers this rule</li>
+<li><strong>add_first_word</strong> (<em>str or None</em>) &#8211; first <code class="docutils literal"><span class="pre">add</span></code> keyword, default is <cite>None</cite>.</li>
+<li><strong>add_second_word</strong> (<em>str or None</em>) &#8211; second <code class="docutils literal"><span class="pre">add</span></code> keyword, default is <cite>None</cite>.</li>
+<li><strong>remove_first_word</strong> (<em>str or None</em>) &#8211; first <code class="docutils literal"><span class="pre">remove</span></code> keyword, default is <cite>None</cite>.</li>
+<li><strong>remove_second_word</strong> (<em>str or None</em>) &#8211; second <code class="docutils literal"><span class="pre">remove</span></code> keywords, default is <cite>None</cite>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="clx.xms.api.GroupAutoUpdate.recipient">
+<code class="descname">recipient</code><a class="headerlink" href="#clx.xms.api.GroupAutoUpdate.recipient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The recipient of the mobile originated message. A short code or
+long number.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupAutoUpdate.add_word_pair">
+<code class="descname">add_word_pair</code><a class="headerlink" href="#clx.xms.api.GroupAutoUpdate.add_word_pair" title="Permalink to this definition">¶</a></dt>
+<dd><p>A two-element tuple holding the first and second keyword that
+causes the MO sender to be added to the group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">tuple[str or None, str or None]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupAutoUpdate.remove_word_pair">
+<code class="descname">remove_word_pair</code><a class="headerlink" href="#clx.xms.api.GroupAutoUpdate.remove_word_pair" title="Permalink to this definition">¶</a></dt>
+<dd><p>A two-element tuple holding the first and second keyword that
+causes the MO sender to be removed from the group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">tuple[str or None, str or None]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.GroupCreate">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">GroupCreate</code><a class="reference internal" href="_modules/clx/xms/api.html#GroupCreate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.GroupCreate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A description of the fields necessary to create a group.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.GroupCreate.name">
+<code class="descname">name</code><a class="headerlink" href="#clx.xms.api.GroupCreate.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The group name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupCreate.members">
+<code class="descname">members</code><a class="headerlink" href="#clx.xms.api.GroupCreate.members" title="Permalink to this definition">¶</a></dt>
+<dd><p>A set of MSISDNs that belong to this group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupCreate.child_groups">
+<code class="descname">child_groups</code><a class="headerlink" href="#clx.xms.api.GroupCreate.child_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>A set of groups that in turn belong to this group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupCreate.auto_update">
+<code class="descname">auto_update</code><a class="headerlink" href="#clx.xms.api.GroupCreate.auto_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes how this group should be auto updated.</p>
+<p>If no auto updating should be performed for the group then this
+value is <code class="docutils literal"><span class="pre">None</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">GroupAutoUpdate or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupCreate.tags">
+<code class="descname">tags</code><a class="headerlink" href="#clx.xms.api.GroupCreate.tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>The tags associated to this group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.GroupResult">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">GroupResult</code><a class="reference internal" href="_modules/clx/xms/api.html#GroupResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.GroupResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>This class holds the result of a group fetch operation.</p>
+<p>This may be used either standalone or as an element of a paged
+result.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.GroupResult.group_id">
+<code class="descname">group_id</code><a class="headerlink" href="#clx.xms.api.GroupResult.group_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique group identifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupResult.name">
+<code class="descname">name</code><a class="headerlink" href="#clx.xms.api.GroupResult.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>The group name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupResult.size">
+<code class="descname">size</code><a class="headerlink" href="#clx.xms.api.GroupResult.size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of members of this group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupResult.child_groups">
+<code class="descname">child_groups</code><a class="headerlink" href="#clx.xms.api.GroupResult.child_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>A set of groups that in turn belong to this group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupResult.auto_update">
+<code class="descname">auto_update</code><a class="headerlink" href="#clx.xms.api.GroupResult.auto_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes how this group should be auto updated.</p>
+<p>If no auto updating should be performed for the group then this
+value is <code class="docutils literal"><span class="pre">None</span></code>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">GroupAutoUpdate or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupResult.created_at">
+<code class="descname">created_at</code><a class="headerlink" href="#clx.xms.api.GroupResult.created_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>The time at which this group was created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">datetime</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupResult.modified_at">
+<code class="descname">modified_at</code><a class="headerlink" href="#clx.xms.api.GroupResult.modified_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>The time when this group was last modified.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">datetime</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.GroupUpdate">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">GroupUpdate</code><a class="reference internal" href="_modules/clx/xms/api.html#GroupUpdate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.GroupUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Describes updates that can be performed on a group.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.GroupUpdate.name">
+<code class="descname">name</code><a class="headerlink" href="#clx.xms.api.GroupUpdate.name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the group name.</p>
+<p>If <code class="docutils literal"><span class="pre">None</span></code> then the current value is kept, if <code class="xref py py-const docutils literal"><span class="pre">RESET</span></code>
+then the value is reset to its XMS default, and if set to a
+string the name is updated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">None or str or Reset</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupUpdate.member_insertions">
+<code class="descname">member_insertions</code><a class="headerlink" href="#clx.xms.api.GroupUpdate.member_insertions" title="Permalink to this definition">¶</a></dt>
+<dd><p>The MSISDNs that should be added to this group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupUpdate.member_removals">
+<code class="descname">member_removals</code><a class="headerlink" href="#clx.xms.api.GroupUpdate.member_removals" title="Permalink to this definition">¶</a></dt>
+<dd><p>The MSISDNs that should be removed from this group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupUpdate.child_group_insertions">
+<code class="descname">child_group_insertions</code><a class="headerlink" href="#clx.xms.api.GroupUpdate.child_group_insertions" title="Permalink to this definition">¶</a></dt>
+<dd><p>The child groups that should be added to this group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupUpdate.child_group_removals">
+<code class="descname">child_group_removals</code><a class="headerlink" href="#clx.xms.api.GroupUpdate.child_group_removals" title="Permalink to this definition">¶</a></dt>
+<dd><p>The child groups that should be removed from this group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupUpdate.add_from_group">
+<code class="descname">add_from_group</code><a class="headerlink" href="#clx.xms.api.GroupUpdate.add_from_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identifier of a group whose members should be added to this
+group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupUpdate.remove_from_group">
+<code class="descname">remove_from_group</code><a class="headerlink" href="#clx.xms.api.GroupUpdate.remove_from_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Identifier of a group whose members should be removed from this
+group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.GroupUpdate.auto_update">
+<code class="descname">auto_update</code><a class="headerlink" href="#clx.xms.api.GroupUpdate.auto_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Describes how this group should be auto updated.</p>
+<p>If <code class="docutils literal"><span class="pre">None</span></code> then the current value is kept, if <code class="xref py py-const docutils literal"><span class="pre">RESET</span></code>
+then the value is reset to its XMS default, and if set to a
+<code class="docutils literal"><span class="pre">GroupAutoUpdate</span></code> object the value is updated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">None or GroupAutoUpdate or Reset</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.MoBinarySms">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">MoBinarySms</code><a class="reference internal" href="_modules/clx/xms/api.html#MoBinarySms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.MoBinarySms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#clx.xms.api.MoSms" title="clx.xms.api.MoSms"><code class="xref py py-class docutils literal"><span class="pre">clx.xms.api.MoSms</span></code></a></p>
+<p>An SMS mobile originated message with binary content.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.MoBinarySms.body">
+<code class="descname">body</code><a class="headerlink" href="#clx.xms.api.MoBinarySms.body" title="Permalink to this definition">¶</a></dt>
+<dd><p>The binary message body.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">bytes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MoBinarySms.udh">
+<code class="descname">udh</code><a class="headerlink" href="#clx.xms.api.MoBinarySms.udh" title="Permalink to this definition">¶</a></dt>
+<dd><p>The user data header.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">bytes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.MoSms">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">MoSms</code><a class="reference internal" href="_modules/clx/xms/api.html#MoSms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.MoSms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Base class for SMS mobile originated messages.</p>
+<p>Holds fields that are common to both the textual and binary MO
+classes.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.MoSms.message_id">
+<code class="descname">message_id</code><a class="headerlink" href="#clx.xms.api.MoSms.message_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The message identifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MoSms.recipient">
+<code class="descname">recipient</code><a class="headerlink" href="#clx.xms.api.MoSms.recipient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The message recipient. This is a short code or long number.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MoSms.sender">
+<code class="descname">sender</code><a class="headerlink" href="#clx.xms.api.MoSms.sender" title="Permalink to this definition">¶</a></dt>
+<dd><p>The message sender. This is an MSISDN.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MoSms.operator">
+<code class="descname">operator</code><a class="headerlink" href="#clx.xms.api.MoSms.operator" title="Permalink to this definition">¶</a></dt>
+<dd><p>The MCCMNC of the originating operator, if available.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MoSms.sent_at">
+<code class="descname">sent_at</code><a class="headerlink" href="#clx.xms.api.MoSms.sent_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>The time when this message was sent, if available.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">datetime or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MoSms.received_at">
+<code class="descname">received_at</code><a class="headerlink" href="#clx.xms.api.MoSms.received_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>The time when the messaging system received this message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">datetime</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.MoTextSms">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">MoTextSms</code><a class="reference internal" href="_modules/clx/xms/api.html#MoTextSms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.MoTextSms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#clx.xms.api.MoSms" title="clx.xms.api.MoSms"><code class="xref py py-class docutils literal"><span class="pre">clx.xms.api.MoSms</span></code></a></p>
+<p>An SMS mobile originated message with textual content.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.MoTextSms.body">
+<code class="descname">body</code><a class="headerlink" href="#clx.xms.api.MoTextSms.body" title="Permalink to this definition">¶</a></dt>
+<dd><p>The message body.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MoTextSms.keyword">
+<code class="descname">keyword</code><a class="headerlink" href="#clx.xms.api.MoTextSms.keyword" title="Permalink to this definition">¶</a></dt>
+<dd><p>The message keyword, if available.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.MtBatchBinarySmsCreate">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">MtBatchBinarySmsCreate</code><a class="reference internal" href="_modules/clx/xms/api.html#MtBatchBinarySmsCreate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.MtBatchBinarySmsCreate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#clx.xms.api.MtBatchSmsCreate" title="clx.xms.api.MtBatchSmsCreate"><code class="xref py py-class docutils literal"><span class="pre">clx.xms.api.MtBatchSmsCreate</span></code></a></p>
+<p>Describes a binary batch.</p>
+<p>This class holds all parameters that can be used when creating a
+binary SMS batch.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchBinarySmsCreate.body">
+<code class="descname">body</code><a class="headerlink" href="#clx.xms.api.MtBatchBinarySmsCreate.body" title="Permalink to this definition">¶</a></dt>
+<dd><p>The body of this binary message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">bytes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchBinarySmsCreate.udh">
+<code class="descname">udh</code><a class="headerlink" href="#clx.xms.api.MtBatchBinarySmsCreate.udh" title="Permalink to this definition">¶</a></dt>
+<dd><p>The User Data Header of this binary message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">bytes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.MtBatchBinarySmsResult">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">MtBatchBinarySmsResult</code><a class="reference internal" href="_modules/clx/xms/api.html#MtBatchBinarySmsResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.MtBatchBinarySmsResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#clx.xms.api.MtBatchSmsResult" title="clx.xms.api.MtBatchSmsResult"><code class="xref py py-class docutils literal"><span class="pre">clx.xms.api.MtBatchSmsResult</span></code></a></p>
+<p>A binary SMS batch as returned by XMS.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchBinarySmsResult.body">
+<code class="descname">body</code><a class="headerlink" href="#clx.xms.api.MtBatchBinarySmsResult.body" title="Permalink to this definition">¶</a></dt>
+<dd><p>The body of this binary message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">bytes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchBinarySmsResult.udh">
+<code class="descname">udh</code><a class="headerlink" href="#clx.xms.api.MtBatchBinarySmsResult.udh" title="Permalink to this definition">¶</a></dt>
+<dd><p>The User Data Header of this binary message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">bytes</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.MtBatchBinarySmsUpdate">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">MtBatchBinarySmsUpdate</code><a class="reference internal" href="_modules/clx/xms/api.html#MtBatchBinarySmsUpdate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.MtBatchBinarySmsUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#clx.xms.api.MtBatchSmsUpdate" title="clx.xms.api.MtBatchSmsUpdate"><code class="xref py py-class docutils literal"><span class="pre">clx.xms.api.MtBatchSmsUpdate</span></code></a></p>
+<p>Describes updates to a binary SMS batch.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchBinarySmsUpdate.body">
+<code class="descname">body</code><a class="headerlink" href="#clx.xms.api.MtBatchBinarySmsUpdate.body" title="Permalink to this definition">¶</a></dt>
+<dd><p>The updated binary batch body. If <code class="docutils literal"><span class="pre">None</span></code> then the existing
+body is left as-is.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">bytes or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchBinarySmsUpdate.udh">
+<code class="descname">udh</code><a class="headerlink" href="#clx.xms.api.MtBatchBinarySmsUpdate.udh" title="Permalink to this definition">¶</a></dt>
+<dd><p>The updated binary User Data Header. If <code class="docutils literal"><span class="pre">None</span></code> then the
+existing UDH is left as-is.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">bytes or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.MtBatchDryRunResult">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">MtBatchDryRunResult</code><a class="reference internal" href="_modules/clx/xms/api.html#MtBatchDryRunResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.MtBatchDryRunResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A batch dry run report.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchDryRunResult.number_of_recipients">
+<code class="descname">number_of_recipients</code><a class="headerlink" href="#clx.xms.api.MtBatchDryRunResult.number_of_recipients" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of recipients that would receive the batch message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchDryRunResult.number_of_message">
+<code class="descname">number_of_message</code><a class="headerlink" href="#clx.xms.api.MtBatchDryRunResult.number_of_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>The number of messages that will be sent.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchDryRunResult.per_recipient">
+<code class="descname">per_recipient</code><a class="headerlink" href="#clx.xms.api.MtBatchDryRunResult.per_recipient" title="Permalink to this definition">¶</a></dt>
+<dd><p>The per-recipient dry-run result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list[DryRunPerRecipient]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.MtBatchSms">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">MtBatchSms</code><a class="reference internal" href="_modules/clx/xms/api.html#MtBatchSms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.MtBatchSms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Base class for all SMS batch classes.</p>
+<p>Holds fields that are common to both the create and response
+classes.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchSms.recipients">
+<code class="descname">recipients</code><a class="headerlink" href="#clx.xms.api.MtBatchSms.recipients" title="Permalink to this definition">¶</a></dt>
+<dd><p>One or more MSISDNs indicating the batch recipients.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchSms.sender">
+<code class="descname">sender</code><a class="headerlink" href="#clx.xms.api.MtBatchSms.sender" title="Permalink to this definition">¶</a></dt>
+<dd><p>The batch sender, typically a short code or long number.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchSms.delivery_report">
+<code class="descname">delivery_report</code><a class="headerlink" href="#clx.xms.api.MtBatchSms.delivery_report" title="Permalink to this definition">¶</a></dt>
+<dd><p>The type of delivery report to use for this batch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchSms.send_at">
+<code class="descname">send_at</code><a class="headerlink" href="#clx.xms.api.MtBatchSms.send_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>The time at which this batch should be sent.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">datetime</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchSms.expire_at">
+<code class="descname">expire_at</code><a class="headerlink" href="#clx.xms.api.MtBatchSms.expire_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>The time at which this batch should expire.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">datetime</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchSms.callback_url">
+<code class="descname">callback_url</code><a class="headerlink" href="#clx.xms.api.MtBatchSms.callback_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>The URL to which callbacks should be sent.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.MtBatchSmsCreate">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">MtBatchSmsCreate</code><a class="reference internal" href="_modules/clx/xms/api.html#MtBatchSmsCreate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.MtBatchSmsCreate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#clx.xms.api.MtBatchSms" title="clx.xms.api.MtBatchSms"><code class="xref py py-class docutils literal"><span class="pre">clx.xms.api.MtBatchSms</span></code></a></p>
+<p>Describes parameters available during batch creation.</p>
+<p>We can create two kinds of batches, textual and binary, described
+in the child classes <a class="reference internal" href="#clx.xms.api.MtBatchTextSmsCreate" title="clx.xms.api.MtBatchTextSmsCreate"><code class="xref py py-class docutils literal"><span class="pre">MtBatchTextSmsCreate</span></code></a> and
+<a class="reference internal" href="#clx.xms.api.MtBatchTextSmsCreate" title="clx.xms.api.MtBatchTextSmsCreate"><code class="xref py py-class docutils literal"><span class="pre">MtBatchTextSmsCreate</span></code></a>, respectively.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchSmsCreate.tags">
+<code class="descname">tags</code><a class="headerlink" href="#clx.xms.api.MtBatchSmsCreate.tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>The initial set of tags to give the batch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.MtBatchSmsResult">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">MtBatchSmsResult</code><a class="reference internal" href="_modules/clx/xms/api.html#MtBatchSmsResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.MtBatchSmsResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#clx.xms.api.MtBatchSms" title="clx.xms.api.MtBatchSms"><code class="xref py py-class docutils literal"><span class="pre">clx.xms.api.MtBatchSms</span></code></a></p>
+<p>Contains the common fields of text and binary batches.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchSmsResult.batch_id">
+<code class="descname">batch_id</code><a class="headerlink" href="#clx.xms.api.MtBatchSmsResult.batch_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unique batch identifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchSmsResult.created_at">
+<code class="descname">created_at</code><a class="headerlink" href="#clx.xms.api.MtBatchSmsResult.created_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time when this batch was created.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">datetime</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchSmsResult.modified_at">
+<code class="descname">modified_at</code><a class="headerlink" href="#clx.xms.api.MtBatchSmsResult.modified_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time when this batch was last modified.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">datetime</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchSmsResult.canceled">
+<code class="descname">canceled</code><a class="headerlink" href="#clx.xms.api.MtBatchSmsResult.canceled" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether this batch has been canceled.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">bool</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.MtBatchSmsUpdate">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">MtBatchSmsUpdate</code><a class="reference internal" href="_modules/clx/xms/api.html#MtBatchSmsUpdate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.MtBatchSmsUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Describes updates that can be performed on text and binary SMS
+batches.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchSmsUpdate.recipient_insertions">
+<code class="descname">recipient_insertions</code><a class="headerlink" href="#clx.xms.api.MtBatchSmsUpdate.recipient_insertions" title="Permalink to this definition">¶</a></dt>
+<dd><p>The message destinations to add to the batch. This should have
+zero or more MSISDNs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchSmsUpdate.recipient_removals">
+<code class="descname">recipient_removals</code><a class="headerlink" href="#clx.xms.api.MtBatchSmsUpdate.recipient_removals" title="Permalink to this definition">¶</a></dt>
+<dd><p>The message destinations to remove from the batch. This should
+have zero or more MSISDNs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchSmsUpdate.sender">
+<code class="descname">sender</code><a class="headerlink" href="#clx.xms.api.MtBatchSmsUpdate.sender" title="Permalink to this definition">¶</a></dt>
+<dd><p>The message originator as a long number or short code. If
+<code class="docutils literal"><span class="pre">None</span></code> then the current value is kept, if <code class="xref py py-const docutils literal"><span class="pre">RESET</span></code> then
+the value is reset to its XMS default, and if set to a string
+the sender is updated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str or None or Reset</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchSmsUpdate.delivery_report">
+<code class="descname">delivery_report</code><a class="headerlink" href="#clx.xms.api.MtBatchSmsUpdate.delivery_report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Description of how to update the batch delivery report value. If
+<code class="docutils literal"><span class="pre">None</span></code> then the current value is kept, if <code class="xref py py-const docutils literal"><span class="pre">RESET</span></code> then
+the value is reset to its XMS default, and if set to a string
+the delivery report value is updated.</p>
+<p>See <a class="reference internal" href="#clx.xms.api.ReportType" title="clx.xms.api.ReportType"><code class="xref py py-class docutils literal"><span class="pre">ReportType</span></code></a> for valid report types.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str or None or Reset</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchSmsUpdate.send_at">
+<code class="descname">send_at</code><a class="headerlink" href="#clx.xms.api.MtBatchSmsUpdate.send_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Description of how to update the batch send at value. If
+<code class="docutils literal"><span class="pre">None</span></code> then the current value is kept, if <code class="xref py py-const docutils literal"><span class="pre">RESET</span></code> then
+the value is reset to its XMS default, and if set to a date time
+the send at value is updated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">datetime or None or Reset</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchSmsUpdate.expire_at">
+<code class="descname">expire_at</code><a class="headerlink" href="#clx.xms.api.MtBatchSmsUpdate.expire_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Description of how to update the batch expire at value. If
+<code class="docutils literal"><span class="pre">None</span></code> then the current value is kept, if <code class="xref py py-const docutils literal"><span class="pre">RESET</span></code> then
+the value is reset to its XMS default, and if set to a date time
+the expire at value is updated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">datetime or None or Reset</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchSmsUpdate.callback_url">
+<code class="descname">callback_url</code><a class="headerlink" href="#clx.xms.api.MtBatchSmsUpdate.callback_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Description of how to update the batch callback URL. If <code class="docutils literal"><span class="pre">None</span></code>
+then the current value is kept, if <code class="xref py py-const docutils literal"><span class="pre">RESET</span></code> then the
+value is reset to its XMS default, and if set to a string the
+callback URL value is updated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str or None or Reset</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.MtBatchTextSmsCreate">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">MtBatchTextSmsCreate</code><a class="reference internal" href="_modules/clx/xms/api.html#MtBatchTextSmsCreate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.MtBatchTextSmsCreate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#clx.xms.api.MtBatchSmsCreate" title="clx.xms.api.MtBatchSmsCreate"><code class="xref py py-class docutils literal"><span class="pre">clx.xms.api.MtBatchSmsCreate</span></code></a></p>
+<p>Class whose fields describe a text batch.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchTextSmsCreate.body">
+<code class="descname">body</code><a class="headerlink" href="#clx.xms.api.MtBatchTextSmsCreate.body" title="Permalink to this definition">¶</a></dt>
+<dd><p>The message body or template.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchTextSmsCreate.parameters">
+<code class="descname">parameters</code><a class="headerlink" href="#clx.xms.api.MtBatchTextSmsCreate.parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>The template parameters.</p>
+<p>This property is only relevant is the <a class="reference internal" href="#clx.xms.api.MtBatchTextSmsCreate.body" title="clx.xms.api.MtBatchTextSmsCreate.body"><code class="xref py py-attr docutils literal"><span class="pre">body</span></code></a> property
+is a template. This is expected to be an associative array
+mapping parameter keys to associative arrays themselves mapping
+recipient numbers to substitution strings.</p>
+<p>More concretely we may have for the parameterized message
+&#8220;Hello, ${name}!&#8221; have:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">batch</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s1">&#39;123456789&#39;</span><span class="p">:</span> <span class="s1">&#39;Mary&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;987654321&#39;</span><span class="p">:</span> <span class="s1">&#39;Joe&#39;</span><span class="p">,</span>
+        <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="s1">&#39;valued customer&#39;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>And the recipient with MSISDN &#8220;123456789&#8221; would then receive the
+message &#8220;Hello, Mary!&#8221;.</p>
+<p>Note the use of &#8220;default&#8221; to indicate the substitution for
+recipients not explicitly given. For example, the recipient
+&#8220;555555555&#8221; would receive the message &#8220;Hello, valued customer!&#8221;.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">dict[str, dict[str, str]]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.MtBatchTextSmsResult">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">MtBatchTextSmsResult</code><a class="reference internal" href="_modules/clx/xms/api.html#MtBatchTextSmsResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.MtBatchTextSmsResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#clx.xms.api.MtBatchSmsResult" title="clx.xms.api.MtBatchSmsResult"><code class="xref py py-class docutils literal"><span class="pre">clx.xms.api.MtBatchSmsResult</span></code></a></p>
+<p>A textual batch as returned by the XMS endpoint.</p>
+<p>This differs from the batch creation definition by the addition
+of, for example, the batch identifier and the creation time.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchTextSmsResult.body">
+<code class="descname">body</code><a class="headerlink" href="#clx.xms.api.MtBatchTextSmsResult.body" title="Permalink to this definition">¶</a></dt>
+<dd><p>The message body or template. See
+<a class="reference internal" href="#clx.xms.api.MtBatchTextSmsCreate.parameters" title="clx.xms.api.MtBatchTextSmsCreate.parameters"><code class="xref py py-attr docutils literal"><span class="pre">MtBatchTextSmsCreate.parameters</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchTextSmsResult.parameters">
+<code class="descname">parameters</code><a class="headerlink" href="#clx.xms.api.MtBatchTextSmsResult.parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>The template parameters.</p>
+<p>type <em>dict[str, dict[str, str]]</em></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.MtBatchTextSmsUpdate">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">MtBatchTextSmsUpdate</code><a class="reference internal" href="_modules/clx/xms/api.html#MtBatchTextSmsUpdate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.MtBatchTextSmsUpdate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#clx.xms.api.MtBatchSmsUpdate" title="clx.xms.api.MtBatchSmsUpdate"><code class="xref py py-class docutils literal"><span class="pre">clx.xms.api.MtBatchSmsUpdate</span></code></a></p>
+<p>Class that the update operations that can be performed on a text
+batch.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchTextSmsUpdate.body">
+<code class="descname">body</code><a class="headerlink" href="#clx.xms.api.MtBatchTextSmsUpdate.body" title="Permalink to this definition">¶</a></dt>
+<dd><p>The updated batch message body. If <code class="docutils literal"><span class="pre">None</span></code> then the current
+batch message is kept.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str or None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.MtBatchTextSmsUpdate.parameters">
+<code class="descname">parameters</code><a class="headerlink" href="#clx.xms.api.MtBatchTextSmsUpdate.parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Description of how to update the batch parameters. If <code class="docutils literal"><span class="pre">None</span></code>
+then the current value is kept, if <code class="xref py py-const docutils literal"><span class="pre">RESET</span></code> then the
+value is reset to its XMS default, and if set to a dictionary
+the parameters value is updated.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">dict or None or Reset</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.Page">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">Page</code><a class="reference internal" href="_modules/clx/xms/api.html#Page"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.Page" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A page of elements.</p>
+<p>The element type depends on the type of page that has been
+retrieved. Typically it is one of <code class="xref py py-class docutils literal"><span class="pre">MtSmsBatchResponse</span></code> or
+<code class="xref py py-class docutils literal"><span class="pre">GroupResponse</span></code>.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.Page.page">
+<code class="descname">page</code><a class="headerlink" href="#clx.xms.api.Page.page" title="Permalink to this definition">¶</a></dt>
+<dd><p>The page number, starting from zero.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt>
+<code class="descname">page</code></dt>
+<dd><p>The number of elements on this page.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.Page.total_size">
+<code class="descname">total_size</code><a class="headerlink" href="#clx.xms.api.Page.total_size" title="Permalink to this definition">¶</a></dt>
+<dd><p>The total number of elements across all fetched pages.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.Page.content">
+<code class="descname">content</code><a class="headerlink" href="#clx.xms.api.Page.content" title="Permalink to this definition">¶</a></dt>
+<dd><p>The page elements.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">list[obj]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.Pages">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">Pages</code><span class="sig-paren">(</span><em>worker</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/api.html#Pages"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.Pages" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A paged result.</p>
+<p>It is possible to, for example, fetch individual pages or iterate
+over all pages.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>worker</strong> &#8211; worker function that fetches pages</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="clx.xms.api.Pages.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>page</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/api.html#Pages.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.Pages.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Downloads a specific page.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>page</strong> (<em>int</em>) &#8211; number of the page to fetch</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a page</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#clx.xms.api.Page" title="clx.xms.api.Page">Page</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.PagesIterator">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">PagesIterator</code><span class="sig-paren">(</span><em>pages</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/api.html#PagesIterator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.PagesIterator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>An iterator over a paged result.</p>
+<p>The key is the page number and the value corresponds to the
+content of the pages.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>pages</strong> (<a class="reference internal" href="#clx.xms.api.Pages" title="clx.xms.api.Pages"><em>Pages</em></a>) &#8211; the pages that we are iterating over</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="clx.xms.api.PagesIterator.next">
+<code class="descname">next</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/api.html#PagesIterator.next"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.PagesIterator.next" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="data">
+<dt id="clx.xms.api.RESET">
+<code class="descclassname">clx.xms.api.</code><code class="descname">RESET</code><em class="property"> = &lt;clx.xms.api.Reset object&gt;</em><a class="headerlink" href="#clx.xms.api.RESET" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object used to indicate that a XMS field should be reset to its
+default value.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.ReportType">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">ReportType</code><a class="reference internal" href="_modules/clx/xms/api.html#ReportType"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.ReportType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A collection of known delivery report types.</p>
+<p>These values are known to be valid in
+<code class="xref py py-attr docutils literal"><span class="pre">MtSmsBatch.delivery_report</span></code>.</p>
+<dl class="attribute">
+<dt id="clx.xms.api.ReportType.FULL">
+<code class="descname">FULL</code><em class="property"> = 'full'</em><a class="headerlink" href="#clx.xms.api.ReportType.FULL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.ReportType.NONE">
+<code class="descname">NONE</code><em class="property"> = 'none'</em><a class="headerlink" href="#clx.xms.api.ReportType.NONE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.ReportType.PER_RECIPIENT">
+<code class="descname">PER_RECIPIENT</code><em class="property"> = 'per_recipient'</em><a class="headerlink" href="#clx.xms.api.ReportType.PER_RECIPIENT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.api.ReportType.SUMMARY">
+<code class="descname">SUMMARY</code><em class="property"> = 'summary'</em><a class="headerlink" href="#clx.xms.api.ReportType.SUMMARY" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="clx.xms.api.Reset">
+<em class="property">class </em><code class="descclassname">clx.xms.api.</code><code class="descname">Reset</code><a class="reference internal" href="_modules/clx/xms/api.html#Reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.api.Reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>A class whose instances indicate that a value should be reset.</p>
+<p>This is used when updating previously created XMS objects. Note,
+it is typically not necessary to created new objects of this type,
+instead use the constant <code class="xref py py-const docutils literal"><span class="pre">RESET</span></code>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-clx.xms.client">
+<span id="clx-xms-client-module"></span><h2>clx.xms.client module<a class="headerlink" href="#module-clx.xms.client" title="Permalink to this headline">¶</a></h2>
+<p>XMS Client module</p>
+<dl class="class">
+<dt id="clx.xms.client.Client">
+<em class="property">class </em><code class="descclassname">clx.xms.client.</code><code class="descname">Client</code><span class="sig-paren">(</span><em>service_plan_id</em>, <em>token</em>, <em>endpoint='https://api.clxcommunications.com/xms'</em>, <em>timeout=30.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">object</span></code></p>
+<p>Client used to communicate with the XMS server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>service_plan_id</strong> (<em>str</em>) &#8211; service plan identifier</li>
+<li><strong>token</strong> (<em>str</em>) &#8211; authentication token</li>
+<li><strong>endpoint</strong> (<em>str</em>) &#8211; URL to XMS endpoint</li>
+<li><strong>timeout</strong> (<em>float</em>) &#8211; Connection and read timeout, in seconds</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>This class will use the <a class="reference external" href="http://python-requests.org/">Requests</a> library to communicate with XMS.
+It is intended as a long lived object and can handle multiple
+requests.</p>
+<p>For example, to send a simple parameterized text batch to three
+recipients we may use code such as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">client</span> <span class="o">=</span> <span class="n">clx</span><span class="o">.</span><span class="n">xms</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="s1">&#39;{my-service-plan-id}&#39;</span><span class="p">,</span> <span class="s1">&#39;{my-token}&#39;</span><span class="p">)</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">batch_params</span> <span class="o">=</span> <span class="n">clx</span><span class="o">.</span><span class="n">xms</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">MtBatchTextSmsCreate</span><span class="p">()</span>
+    <span class="n">batch_params</span><span class="o">.</span><span class="n">sender</span> <span class="o">=</span> <span class="s1">&#39;12345&#39;</span>
+    <span class="n">batch_params</span><span class="o">.</span><span class="n">recipients</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;987654321&#39;</span><span class="p">,</span> <span class="s1">&#39;123456789&#39;</span><span class="p">,</span> <span class="s1">&#39;567894321&#39;</span><span class="p">]</span>
+    <span class="n">batch_params</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="s1">&#39;Hello, ${name}!&#39;</span>
+    <span class="n">batch_params</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s1">&#39;987654321&#39;</span><span class="p">:</span> <span class="s1">&#39;Mary&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;123456789&#39;</span><span class="p">:</span> <span class="s1">&#39;Joe&#39;</span><span class="p">,</span>
+                <span class="s1">&#39;default&#39;</span><span class="p">:</span> <span class="s1">&#39;valued customer&#39;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+    <span class="n">batch</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">create_text_batch</span><span class="p">(</span><span class="n">batch_params</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;The batch was given ID </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">batch</span><span class="o">.</span><span class="n">batch_id</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Error creating batch: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">ex</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>and to fetch a batch we may use the code (with <code class="docutils literal"><span class="pre">client</span></code> being
+the same variable as above):</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="k">try</span><span class="p">:</span>
+    <span class="n">batch</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">fetch_batch</span><span class="p">(</span><span class="s1">&#39;{a batch identifier}&#39;</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;The batch was sent from </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">batch</span><span class="o">.</span><span class="n">sender</span><span class="p">())</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">ex</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="s1">&#39;Error fetching batch: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">str</span><span class="p">(</span><span class="n">ex</span><span class="p">))</span>
+</pre></div>
+</div>
+<dl class="attribute">
+<dt id="clx.xms.client.Client.DEFAULT_ENDPOINT">
+<code class="descname">DEFAULT_ENDPOINT</code><em class="property"> = 'https://api.clxcommunications.com/xms'</em><a class="headerlink" href="#clx.xms.client.Client.DEFAULT_ENDPOINT" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default XMS endpoint URL. This is the endpoint that will be
+used unless a custom one is specified in the <a class="reference internal" href="#clx.xms.client.Client" title="clx.xms.client.Client"><code class="xref py py-class docutils literal"><span class="pre">Client</span></code></a>
+constructor.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.client.Client.DEFAULT_TIMEOUT">
+<code class="descname">DEFAULT_TIMEOUT</code><em class="property"> = 30.0</em><a class="headerlink" href="#clx.xms.client.Client.DEFAULT_TIMEOUT" title="Permalink to this definition">¶</a></dt>
+<dd><p>The default timeout value in seconds. This is used unless a custom
+timeout value is specified in <a class="reference internal" href="#clx.xms.client.Client.timeout" title="clx.xms.client.Client.timeout"><code class="xref py py-attr docutils literal"><span class="pre">timeout</span></code></a>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.cancel_batch">
+<code class="descname">cancel_batch</code><span class="sig-paren">(</span><em>batch_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.cancel_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.cancel_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cancels the batch with the given batch identifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>batch_id</strong> (<em>str</em>) &#8211; the batch identifier</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">nothing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.create_batch">
+<code class="descname">create_batch</code><span class="sig-paren">(</span><em>batch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.create_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.create_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the given batch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>batch</strong> (<em>MtBatchTextSmsCreate or MtBatchBinarySmsCreate</em>) &#8211; the text or binary batch to create</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the batch result</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">MtBatchTextSmsResult or MtBatchBinarySmsResult</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.create_batch_dry_run">
+<code class="descname">create_batch_dry_run</code><span class="sig-paren">(</span><em>batch</em>, <em>num_recipients=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.create_batch_dry_run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.create_batch_dry_run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simulates sending the given batch.</p>
+<p>The method takes an optional argument for instructing XMS to
+respond with per-recipient statistics, if non-null then this
+number of recipients will be returned in the result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>batch</strong> (<a class="reference internal" href="#clx.xms.api.MtBatchSmsCreate" title="clx.xms.api.MtBatchSmsCreate"><em>MtBatchSmsCreate</em></a>) &#8211; the batch to simulate</li>
+<li><strong>num_recipients</strong> (<em>int or None</em>) &#8211; number of recipients to show in per-recipient result</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">result of dry-run</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#clx.xms.api.MtBatchDryRunResult" title="clx.xms.api.MtBatchDryRunResult">MtBatchDryRunResult</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.create_binary_message">
+<code class="descname">create_binary_message</code><span class="sig-paren">(</span><em>sender</em>, <em>recipient</em>, <em>udh</em>, <em>body</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.create_binary_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.create_binary_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a text message to a single recipient.</p>
+<p>This is a convenience method that creates a text batch having
+a single recipient.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sender</strong> (<em>str</em>) &#8211; the message sender</li>
+<li><strong>recipient</strong> (<em>str</em>) &#8211; the message recipient</li>
+<li><strong>udh</strong> (<em>binary</em>) &#8211; the message User Data Header</li>
+<li><strong>body</strong> (<em>binary</em>) &#8211; the message binary body</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the created batch</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#clx.xms.api.MtBatchBinarySmsResult" title="clx.xms.api.MtBatchBinarySmsResult">MtBatchBinarySmsResult</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.create_group">
+<code class="descname">create_group</code><span class="sig-paren">(</span><em>group</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.create_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.create_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates the given group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group</strong> (<a class="reference internal" href="#clx.xms.api.GroupCreate" title="clx.xms.api.GroupCreate"><em>GroupCreate</em></a>) &#8211; group description</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the created group</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#clx.xms.api.GroupResult" title="clx.xms.api.GroupResult">GroupResult</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.create_text_message">
+<code class="descname">create_text_message</code><span class="sig-paren">(</span><em>sender</em>, <em>recipient</em>, <em>body</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.create_text_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.create_text_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates a text message to a single recipient.</p>
+<p>This is a convenience method that creates a text batch having
+a single recipient.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>sender</strong> (<em>str</em>) &#8211; the message sender</li>
+<li><strong>recipient</strong> (<em>str</em>) &#8211; the message recipient</li>
+<li><strong>body</strong> (<em>str</em>) &#8211; the message body</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the created batch</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#clx.xms.api.MtBatchTextSmsResult" title="clx.xms.api.MtBatchTextSmsResult">MtBatchTextSmsResult</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.delete_group">
+<code class="descname">delete_group</code><span class="sig-paren">(</span><em>group_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.delete_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.delete_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Deletes the group with the given group identifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group_id</strong> (<em>str</em>) &#8211; the group identifier</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Nothing</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.client.Client.endpoint">
+<code class="descname">endpoint</code><a class="headerlink" href="#clx.xms.client.Client.endpoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>The XMS endpoint used by this client.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.fetch_batch">
+<code class="descname">fetch_batch</code><span class="sig-paren">(</span><em>batch_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.fetch_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.fetch_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches the batch with the given batch identifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>batch_id</strong> (<em>str</em>) &#8211; batch identifier</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the corresponding batch</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#clx.xms.api.MtBatchSmsResult" title="clx.xms.api.MtBatchSmsResult">MtBatchSmsResult</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.fetch_batch_tags">
+<code class="descname">fetch_batch_tags</code><span class="sig-paren">(</span><em>batch_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.fetch_batch_tags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.fetch_batch_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches the tags associated with the given batch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>batch_id</strong> (<em>str</em>) &#8211; the batch identifier</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a set of tags</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.fetch_batches">
+<code class="descname">fetch_batches</code><span class="sig-paren">(</span><em>page_size=None</em>, <em>senders=None</em>, <em>tags=None</em>, <em>start_date=None</em>, <em>end_date=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.fetch_batches"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.fetch_batches" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the batches matching the given filter.</p>
+<p>Note, calling this method does not actually cause any network
+traffic. Listing batches in XMS may return the result over
+multiple pages and this call therefore returns an object of
+the type <a class="reference internal" href="#clx.xms.api.Pages" title="clx.xms.api.Pages"><code class="xref py py-class docutils literal"><span class="pre">Pages</span></code></a>, which will fetch result pages as
+needed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>page_size</strong> (<em>int</em>) &#8211; Maximum number of batches to retrieve per page.</li>
+<li><strong>senders</strong> (<em>set[str] or None</em>) &#8211; Fetch only batches having one of these senders.</li>
+<li><strong>tags</strong> (<em>set[str] or None</em>) &#8211; Fetch only batches having one or more of these tags.</li>
+<li><strong>start_date</strong> (<em>date or None</em>) &#8211; Fetch only batches sent at or after this date.</li>
+<li><strong>end_date</strong> (<em>date or None</em>) &#8211; Fetch only batches sent before this date.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the result pages</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#clx.xms.api.Pages" title="clx.xms.api.Pages">Pages</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.fetch_delivery_report">
+<code class="descname">fetch_delivery_report</code><span class="sig-paren">(</span><em>batch_id</em>, <em>kind=None</em>, <em>status=None</em>, <em>code=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.fetch_delivery_report"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.fetch_delivery_report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches a delivery report for a batch.</p>
+<p>The report type can be one of <code class="docutils literal"><span class="pre">None</span></code>, &#8220;full&#8221;, or &#8220;summary&#8221;.
+When &#8220;full&#8221; the report includes the individual recipients.
+When <code class="docutils literal"><span class="pre">None</span></code> then the XMS default value is used.</p>
+<p>The report can be further limited by status and code. For
+example, to retrieve a summary report limited to messages
+having delivery status &#8220;Delivered&#8221; or &#8220;Failed&#8221; and codes &#8220;0&#8221;,
+&#8220;11&#8221;, or &#8220;400&#8221;, one could call:</p>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">client</span><span class="o">.</span><span class="n">fetch_delivery_report</span><span class="p">(</span>
+    <span class="s1">&#39;MyBatchId&#39;</span><span class="p">,</span>
+    <span class="s1">&#39;summary&#39;</span><span class="p">,</span>
+    <span class="p">{</span><span class="s1">&#39;Delivered&#39;</span><span class="p">,</span> <span class="s1">&#39;Failed&#39;</span><span class="p">},</span>
+    <span class="p">{</span><span class="mi">0</span><span class="p">,</span> <span class="mi">11</span><span class="p">,</span> <span class="mi">400</span><span class="p">});</span>
+</pre></div>
+</div>
+<p>If the non-identifier parameters are left unspecified then the
+XMS defaults are used. In particular, all statuses and codes
+are included in the report.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>batch_id</strong> (<em>str</em>) &#8211; identifier of the batch</li>
+<li><strong>kind</strong> (<em>str or None</em>) &#8211; delivery report type</li>
+<li><strong>status</strong> (<em>set[str]</em>) &#8211; statuses to fetch</li>
+<li><strong>code</strong> (<em>set[int]</em>) &#8211; codes to fetch</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the batch delivery report</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#clx.xms.api.BatchDeliveryReport" title="clx.xms.api.BatchDeliveryReport">BatchDeliveryReport</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.fetch_group">
+<code class="descname">fetch_group</code><span class="sig-paren">(</span><em>group_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.fetch_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.fetch_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches the group with the given group identifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group_id</strong> (<em>str</em>) &#8211; group identifier</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the corresponding group</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.fetch_group_members">
+<code class="descname">fetch_group_members</code><span class="sig-paren">(</span><em>group_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.fetch_group_members"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.fetch_group_members" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches the that belong to the given group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group_id</strong> (<em>str</em>) &#8211; the group identifier</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a set of MSISDNs</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.fetch_group_tags">
+<code class="descname">fetch_group_tags</code><span class="sig-paren">(</span><em>group_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.fetch_group_tags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.fetch_group_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches the tags associated with the given group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group_id</strong> (<em>str</em>) &#8211; the group identifier</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a set of tags</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.fetch_groups">
+<code class="descname">fetch_groups</code><span class="sig-paren">(</span><em>page_size=None</em>, <em>tags=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.fetch_groups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.fetch_groups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch the groups matching the given filter.</p>
+<p>Note, calling this method does not actually cause any network
+traffic. Listing groups in XMS may return the result over
+multiple pages and this call therefore returns an object of
+the type <a class="reference internal" href="#clx.xms.api.Pages" title="clx.xms.api.Pages"><code class="xref py py-class docutils literal"><span class="pre">Pages</span></code></a>, which will fetch result pages as
+needed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>page_size</strong> (<em>int or None</em>) &#8211; Maximum number of groups to retrieve per page.</li>
+<li><strong>tags</strong> (<em>set[str] or None</em>) &#8211; Fetch only groups having or or more of these tags.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the result pages</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#clx.xms.api.Pages" title="clx.xms.api.Pages">Pages</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.fetch_inbound">
+<code class="descname">fetch_inbound</code><span class="sig-paren">(</span><em>inbound_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.fetch_inbound"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.fetch_inbound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches the inbound message with the given identifier.</p>
+<p>The returned message is either textual or binary.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>inbound_id</strong> (<em>str</em>) &#8211; message identifier</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the fetched message</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">MoTextSms or MoBinarySms</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.fetch_inbounds">
+<code class="descname">fetch_inbounds</code><span class="sig-paren">(</span><em>page_size=None</em>, <em>recipients=None</em>, <em>start_date=None</em>, <em>end_date=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.fetch_inbounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.fetch_inbounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetch inbound messages matching the given filter.</p>
+<p>Note, calling this method does not actually cause any network
+traffic. Listing inbound messages in XMS may return the result
+over multiple pages and this call therefore returns an object
+of the type <a class="reference internal" href="#clx.xms.api.Pages" title="clx.xms.api.Pages"><code class="xref py py-class docutils literal"><span class="pre">Pages</span></code></a>, which will fetch result pages as
+needed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>page_size</strong> (<em>int or None</em>) &#8211; The maximum number of messages to retrieve per page.</li>
+<li><strong>recipients</strong> (<em>set[str] or None</em>) &#8211; Fetch only messages having one of these recipients.</li>
+<li><strong>start_date</strong> (<em>date or None</em>) &#8211; Fetch only messages received at or after this date.</li>
+<li><strong>end_date</strong> (<em>date or None</em>) &#8211; Fetch only messages received before this date.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the result pages</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#clx.xms.api.Pages" title="clx.xms.api.Pages">Pages</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.fetch_recipient_delivery_report">
+<code class="descname">fetch_recipient_delivery_report</code><span class="sig-paren">(</span><em>batch_id</em>, <em>recipient</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.fetch_recipient_delivery_report"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.fetch_recipient_delivery_report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fetches a delivery report for a specific batch recipient.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>batch_id</strong> (<em>str</em>) &#8211; the batch identifier</li>
+<li><strong>recipient</strong> (<em>str</em>) &#8211; the batch recipient</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the delivery report</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#clx.xms.api.BatchRecipientDeliveryReport" title="clx.xms.api.BatchRecipientDeliveryReport">BatchRecipientDeliveryReport</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.replace_batch">
+<code class="descname">replace_batch</code><span class="sig-paren">(</span><em>batch_id</em>, <em>batch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.replace_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.replace_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces the batch with the given ID with the given batch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>batch_id</strong> (<em>str</em>) &#8211; identifier of the batch</li>
+<li><strong>batch</strong> (<em>MtBatchTextSmsCreate or MtBatchBinarySmsCreate</em>) &#8211; the replacement batch</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the resulting batch</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#clx.xms.api.MtBatchTextSmsResult" title="clx.xms.api.MtBatchTextSmsResult">MtBatchTextSmsResult</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.replace_batch_tags">
+<code class="descname">replace_batch_tags</code><span class="sig-paren">(</span><em>batch_id</em>, <em>tags</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.replace_batch_tags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.replace_batch_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces the tags of the given batch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>batch_id</strong> (<em>str</em>) &#8211; identifier of the batch</li>
+<li><strong>tags</strong> (<em>set[str]</em>) &#8211; the new set of batch tags</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the new batch tags</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">set[str]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.replace_group">
+<code class="descname">replace_group</code><span class="sig-paren">(</span><em>group_id</em>, <em>group</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.replace_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.replace_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces the group with the given group identifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>group_id</strong> (<em>str</em>) &#8211; identifier of the group</li>
+<li><strong>group</strong> (<a class="reference internal" href="#clx.xms.api.GroupCreate" title="clx.xms.api.GroupCreate"><em>GroupCreate</em></a>) &#8211; new group description</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the group after replacement</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#clx.xms.api.GroupResult" title="clx.xms.api.GroupResult">GroupResult</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.replace_group_tags">
+<code class="descname">replace_group_tags</code><span class="sig-paren">(</span><em>group_id</em>, <em>tags</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.replace_group_tags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.replace_group_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Replaces the tags of the given group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>group_id</strong> (<em>str</em>) &#8211; identifier of the group</li>
+<li><strong>tags</strong> (<em>set[str]</em>) &#8211; the new set of group tags</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the new group tags</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">set[str]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.client.Client.service_plan_id">
+<code class="descname">service_plan_id</code><a class="headerlink" href="#clx.xms.client.Client.service_plan_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The service plan identifier used for this client.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.client.Client.timeout">
+<code class="descname">timeout</code><a class="headerlink" href="#clx.xms.client.Client.timeout" title="Permalink to this definition">¶</a></dt>
+<dd><p>The timeout value used for this client. In seconds.
+The connection and read timeout, in seconds, used in
+communication with XMS. The default is specified by the constant
+<a class="reference internal" href="#clx.xms.client.Client.DEFAULT_TIMEOUT" title="clx.xms.client.Client.DEFAULT_TIMEOUT"><code class="xref py py-const docutils literal"><span class="pre">DEFAULT_TIMEOUT</span></code></a>.</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.client.Client.token">
+<code class="descname">token</code><a class="headerlink" href="#clx.xms.client.Client.token" title="Permalink to this definition">¶</a></dt>
+<dd><p>The authentication token used for this client.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.update_batch">
+<code class="descname">update_batch</code><span class="sig-paren">(</span><em>batch_id</em>, <em>batch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.update_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.update_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the text batch with the given identifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>batch_id</strong> (<em>str</em>) &#8211; identifier of the batch</li>
+<li><strong>batch</strong> (<em>MtBatchTextSmsUpdate or MtBatchBinarySmsUpdate</em>) &#8211; the update description</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the updated batch</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#clx.xms.api.MtBatchTextSmsResult" title="clx.xms.api.MtBatchTextSmsResult">MtBatchTextSmsResult</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.update_batch_tags">
+<code class="descname">update_batch_tags</code><span class="sig-paren">(</span><em>batch_id</em>, <em>tags_to_add</em>, <em>tags_to_remove</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.update_batch_tags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.update_batch_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the tags of the given batch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>batch_id</strong> (<em>str</em>) &#8211; batch identifier</li>
+<li><strong>tags_to_add</strong> (<em>set[str]</em>) &#8211; tags to add to batch</li>
+<li><strong>tags_to_remove</strong> (<em>set[str]</em>) &#8211; tags to remove from batch</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the updated batch tags</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">set[str]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.update_group">
+<code class="descname">update_group</code><span class="sig-paren">(</span><em>group_id</em>, <em>group</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.update_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.update_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the group with the given identifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>group_id</strong> (<em>str</em>) &#8211; identifier of the group</li>
+<li><strong>group</strong> (<a class="reference internal" href="#clx.xms.api.GroupUpdate" title="clx.xms.api.GroupUpdate"><em>GroupUpdate</em></a>) &#8211; the update description</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the updated batch</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#clx.xms.api.GroupResult" title="clx.xms.api.GroupResult">GroupResult</a></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="clx.xms.client.Client.update_group_tags">
+<code class="descname">update_group_tags</code><span class="sig-paren">(</span><em>group_id</em>, <em>tags_to_add</em>, <em>tags_to_remove</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/client.html#Client.update_group_tags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.client.Client.update_group_tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Updates the tags of the given group.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>group_id</strong> (<em>str</em>) &#8211; group identifier</li>
+<li><strong>tags_to_add</strong> (<em>set[str]</em>) &#8211; tags to add to group</li>
+<li><strong>tags_to_remove</strong> (<em>set[str]</em>) &#8211; tags to remove from group</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">the updated group tags</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">set[str]</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-clx.xms.deserialize">
+<span id="clx-xms-deserialize-module"></span><h2>clx.xms.deserialize module<a class="headerlink" href="#module-clx.xms.deserialize" title="Permalink to this headline">¶</a></h2>
+<p>JSON deserializer for API classes.</p>
+<p>Note, this module is mainly intended for internal use and the API may
+change in the future</p>
+<dl class="function">
+<dt id="clx.xms.deserialize.batch_delivery_report">
+<code class="descclassname">clx.xms.deserialize.</code><code class="descname">batch_delivery_report</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/deserialize.html#batch_delivery_report"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.deserialize.batch_delivery_report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a JSON blob describing a batch delivery report.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>response</strong> (<em>Response</em>) &#8211; An XMS response carrying a JSON body</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the parsed batch delivery report</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#clx.xms.api.BatchDeliveryReport" title="clx.xms.api.BatchDeliveryReport">BatchDeliveryReport</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>UnexpectedResponseException</strong> &#8211; if the JSON contained an
+unexpected message type</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clx.xms.deserialize.batch_dry_run_result">
+<code class="descclassname">clx.xms.deserialize.</code><code class="descname">batch_dry_run_result</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/deserialize.html#batch_dry_run_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.deserialize.batch_dry_run_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a JSON formatted string describing a dry-run result.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>response</strong> (<em>Response</em>) &#8211; the response object to interpret</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the parsed result</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#clx.xms.api.MtBatchDryRunResult" title="clx.xms.api.MtBatchDryRunResult">MtBatchDryRunResult</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clx.xms.deserialize.batch_recipient_delivery_report">
+<code class="descclassname">clx.xms.deserialize.</code><code class="descname">batch_recipient_delivery_report</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/deserialize.html#batch_recipient_delivery_report"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.deserialize.batch_recipient_delivery_report" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a batch recipient delivery report from the given JSON text.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>response</strong> (<em>Response</em>) &#8211; an XMS response</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a delivery report</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#clx.xms.api.BatchRecipientDeliveryReport" title="clx.xms.api.BatchRecipientDeliveryReport">BatchRecipientDeliveryReport</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>UnexpectedResponseException</strong> &#8211; if the JSON contained an
+unexpected message type</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clx.xms.deserialize.batch_result">
+<code class="descclassname">clx.xms.deserialize.</code><code class="descname">batch_result</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/deserialize.html#batch_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.deserialize.batch_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a request response containing a batch result.</p>
+<p>If the <code class="docutils literal"><span class="pre">type</span></code> field has the value <code class="docutils literal"><span class="pre">mt_text</span></code> then an
+<code class="xref py py-class docutils literal"><span class="pre">MtBatchSmsTextCreate</span></code> object is returned, if the value is
+<code class="docutils literal"><span class="pre">mt_binary</span></code> then an <code class="xref py py-class docutils literal"><span class="pre">MtBatchTextSmsCreate</span></code> object is
+returned, otherwise an exception is thrown.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>response</strong> (<em>Response</em>) &#8211; the response object to interpret</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the parsed result</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">MtBatchTextSmsResult or MtBatchBinarySmsResult</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>UnexpectedResponseException</strong> &#8211; if the JSON contained
+an unexpected message type</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clx.xms.deserialize.batches_page">
+<code class="descclassname">clx.xms.deserialize.</code><code class="descname">batches_page</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/deserialize.html#batches_page"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.deserialize.batches_page" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a JSON blob describing a page of batches.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>response</strong> (<em>Response</em>) &#8211; the response object to interpret</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the parsed page</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#clx.xms.api.Page" title="clx.xms.api.Page">Page</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>UnexpectedResponseException</strong> &#8211; if the JSON contained an
+unexpected message type</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clx.xms.deserialize.error">
+<code class="descclassname">clx.xms.deserialize.</code><code class="descname">error</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/deserialize.html#error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.deserialize.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a JSON blob containing an error response.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>response</strong> (<em>Response</em>) &#8211; an XMS response</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the decoded error</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#clx.xms.api.Error" title="clx.xms.api.Error">Error</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clx.xms.deserialize.group_members">
+<code class="descclassname">clx.xms.deserialize.</code><code class="descname">group_members</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/deserialize.html#group_members"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.deserialize.group_members" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a JSON blob containing a set of group members.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>response</strong> (<em>Response</em>) &#8211; an XMS response</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a set of MSISDNs</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clx.xms.deserialize.group_result">
+<code class="descclassname">clx.xms.deserialize.</code><code class="descname">group_result</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/deserialize.html#group_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.deserialize.group_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses a group response from the given JSON text.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>response</strong> (<em>Response</em>) &#8211; an XMS response</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the deserialized group response</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#clx.xms.api.GroupResult" title="clx.xms.api.GroupResult">GroupResult</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clx.xms.deserialize.groups_page">
+<code class="descclassname">clx.xms.deserialize.</code><code class="descname">groups_page</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/deserialize.html#groups_page"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.deserialize.groups_page" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses a page of groups from the given JSON text.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>response</strong> (<em>Response</em>) &#8211; an XMS response</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the created page of groups</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#clx.xms.api.Page" title="clx.xms.api.Page">Page</a></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clx.xms.deserialize.inbounds_page">
+<code class="descclassname">clx.xms.deserialize.</code><code class="descname">inbounds_page</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/deserialize.html#inbounds_page"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.deserialize.inbounds_page" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a JSON blob describing a page of MO messages.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>response</strong> (<em>Response</em>) &#8211; an XMS response</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the parsed page</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#clx.xms.api.Page" title="clx.xms.api.Page">Page</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>UnexpectedResponseException</strong> &#8211; if the JSON contained an
+unexpected message type</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clx.xms.deserialize.mo_sms">
+<code class="descclassname">clx.xms.deserialize.</code><code class="descname">mo_sms</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/deserialize.html#mo_sms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.deserialize.mo_sms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads an XMS response containing an MO message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>response</strong> (<em>Response</em>) &#8211; an XMS response</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the MO message found in the response</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference internal" href="#clx.xms.api.MoSms" title="clx.xms.api.MoSms">MoSms</a></td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><strong>UnexpectedResponseException</strong> &#8211; if the JSON contained an
+unexpected message type</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clx.xms.deserialize.tags">
+<code class="descclassname">clx.xms.deserialize.</code><code class="descname">tags</code><span class="sig-paren">(</span><em>response</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/deserialize.html#tags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.deserialize.tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads a JSON blob containing a list of tags.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>response</strong> (<em>Response</em>) &#8211; an XMS response</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a set of tags</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">set[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-clx.xms.exceptions">
+<span id="clx-xms-exceptions-module"></span><h2>clx.xms.exceptions module<a class="headerlink" href="#module-clx.xms.exceptions" title="Permalink to this headline">¶</a></h2>
+<p>Collection of exceptions raised by the XMS SDK.</p>
+<p>The exceptions raised by the API all inherit from the base class
+<a class="reference internal" href="#clx.xms.exceptions.ApiException" title="clx.xms.exceptions.ApiException"><code class="xref py py-class docutils literal"><span class="pre">ApiException</span></code></a>.</p>
+<dl class="exception">
+<dt id="clx.xms.exceptions.ApiException">
+<em class="property">exception </em><code class="descclassname">clx.xms.exceptions.</code><code class="descname">ApiException</code><a class="reference internal" href="_modules/clx/xms/exceptions.html#ApiException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.exceptions.ApiException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal"><span class="pre">exceptions.Exception</span></code></p>
+<p>Base class for exceptions thrown within the XMS SDK</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="clx.xms.exceptions.ErrorResponseException">
+<em class="property">exception </em><code class="descclassname">clx.xms.exceptions.</code><code class="descname">ErrorResponseException</code><span class="sig-paren">(</span><em>message</em>, <em>code</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/exceptions.html#ErrorResponseException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.exceptions.ErrorResponseException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#clx.xms.exceptions.ApiException" title="clx.xms.exceptions.ApiException"><code class="xref py py-class docutils literal"><span class="pre">clx.xms.exceptions.ApiException</span></code></a></p>
+<p>Exception used when XMS responded with an error message.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>message</strong> (<em>str</em>) &#8211; the human readable error message</li>
+<li><strong>code</strong> (<em>str</em>) &#8211; the machine readable error code</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="clx.xms.exceptions.ErrorResponseException.error_code">
+<code class="descname">error_code</code><a class="headerlink" href="#clx.xms.exceptions.ErrorResponseException.error_code" title="Permalink to this definition">¶</a></dt>
+<dd><p>The machine readable error code.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="clx.xms.exceptions.NotFoundException">
+<em class="property">exception </em><code class="descclassname">clx.xms.exceptions.</code><code class="descname">NotFoundException</code><span class="sig-paren">(</span><em>url</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/exceptions.html#NotFoundException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.exceptions.NotFoundException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#clx.xms.exceptions.ApiException" title="clx.xms.exceptions.ApiException"><code class="xref py py-class docutils literal"><span class="pre">clx.xms.exceptions.ApiException</span></code></a></p>
+<p>Exception indicating that a requested resources did not exist in
+XMS.</p>
+<p>This exception is thrown, for example, when attempting to retrieve
+a batch with an invalid batch identifier.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>url</strong> (<em>str</em>) &#8211; URL to the missing resource.</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="clx.xms.exceptions.NotFoundException.url">
+<code class="descname">url</code><a class="headerlink" href="#clx.xms.exceptions.NotFoundException.url" title="Permalink to this definition">¶</a></dt>
+<dd><p>The failing URL.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="clx.xms.exceptions.UnauthorizedException">
+<em class="property">exception </em><code class="descclassname">clx.xms.exceptions.</code><code class="descname">UnauthorizedException</code><span class="sig-paren">(</span><em>service_plan_id</em>, <em>token</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/exceptions.html#UnauthorizedException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.exceptions.UnauthorizedException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#clx.xms.exceptions.ApiException" title="clx.xms.exceptions.ApiException"><code class="xref py py-class docutils literal"><span class="pre">clx.xms.exceptions.ApiException</span></code></a></p>
+<p>Exception indicating that XMS did not accept the service plan ID
+and authentication token.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>service_plan_id</strong> (<em>str</em>) &#8211; the service plan identifier</li>
+<li><strong>token</strong> (<em>str</em>) &#8211; the authentication token</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="clx.xms.exceptions.UnauthorizedException.service_plan_id">
+<code class="descname">service_plan_id</code><a class="headerlink" href="#clx.xms.exceptions.UnauthorizedException.service_plan_id" title="Permalink to this definition">¶</a></dt>
+<dd><p>The service plan identifier that did not pass authentication.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="clx.xms.exceptions.UnauthorizedException.token">
+<code class="descname">token</code><a class="headerlink" href="#clx.xms.exceptions.UnauthorizedException.token" title="Permalink to this definition">¶</a></dt>
+<dd><p>The authentication token that was not accepted.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="clx.xms.exceptions.UnexpectedResponseException">
+<em class="property">exception </em><code class="descclassname">clx.xms.exceptions.</code><code class="descname">UnexpectedResponseException</code><span class="sig-paren">(</span><em>message</em>, <em>http_body</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/exceptions.html#UnexpectedResponseException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.exceptions.UnexpectedResponseException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#clx.xms.exceptions.ApiException" title="clx.xms.exceptions.ApiException"><code class="xref py py-class docutils literal"><span class="pre">clx.xms.exceptions.ApiException</span></code></a></p>
+<p>Raised when XMS gave an unexpected response</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>message</strong> (<em>str</em>) &#8211; useful message explaining the problem</li>
+<li><strong>http_body</strong> (<em>str</em>) &#8211; the unexpected HTTP body</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="clx.xms.exceptions.UnexpectedResponseException.http_body">
+<code class="descname">http_body</code><a class="headerlink" href="#clx.xms.exceptions.UnexpectedResponseException.http_body" title="Permalink to this definition">¶</a></dt>
+<dd><p>The unexpected HTTP body.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-clx.xms.serialize">
+<span id="clx-xms-serialize-module"></span><h2>clx.xms.serialize module<a class="headerlink" href="#module-clx.xms.serialize" title="Permalink to this headline">¶</a></h2>
+<p>JSON serializes for XMS API object classes.</p>
+<p>Note, this module is mainly intended for internal use and the API may
+change in the future</p>
+<dl class="function">
+<dt id="clx.xms.serialize.binary_batch">
+<code class="descclassname">clx.xms.serialize.</code><code class="descname">binary_batch</code><span class="sig-paren">(</span><em>batch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/serialize.html#binary_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.serialize.binary_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes the given binary batch into JSON.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>batch</strong> (<a class="reference internal" href="#clx.xms.api.MtBatchBinarySmsCreate" title="clx.xms.api.MtBatchBinarySmsCreate"><em>MtBatchBinarySmsCreate</em></a>) &#8211; the batch to serialize</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary suitable for JSON serialization</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clx.xms.serialize.binary_batch_update">
+<code class="descclassname">clx.xms.serialize.</code><code class="descname">binary_batch_update</code><span class="sig-paren">(</span><em>batch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/serialize.html#binary_batch_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.serialize.binary_batch_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes the given binary batch update into JSON.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>batch</strong> (<a class="reference internal" href="#clx.xms.api.MtBatchBinarySmsUpdate" title="clx.xms.api.MtBatchBinarySmsUpdate"><em>MtBatchBinarySmsUpdate</em></a>) &#8211; the batch update to serialize</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary suitable for JSON serialization</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clx.xms.serialize.group_create">
+<code class="descclassname">clx.xms.serialize.</code><code class="descname">group_create</code><span class="sig-paren">(</span><em>group</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/serialize.html#group_create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.serialize.group_create" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes the given group create object to JSON.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>group</strong> (<a class="reference internal" href="#clx.xms.api.GroupCreate" title="clx.xms.api.GroupCreate"><em>GroupCreate</em></a>) &#8211; the group to serialize</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary suitable for JSON serialization</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clx.xms.serialize.group_update">
+<code class="descclassname">clx.xms.serialize.</code><code class="descname">group_update</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/serialize.html#group_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.serialize.group_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes the given group update object to JSON.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>obj</strong> (<a class="reference internal" href="#clx.xms.api.GroupUpdate" title="clx.xms.api.GroupUpdate"><em>GroupUpdate</em></a>) &#8211; the group update to serialize</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a dictionary suitable for JSON serialization</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clx.xms.serialize.tags">
+<code class="descclassname">clx.xms.serialize.</code><code class="descname">tags</code><span class="sig-paren">(</span><em>tag_coll</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/serialize.html#tags"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.serialize.tags" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes the given tags to a JSON string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>tag_coll</strong> (<em>set[str]</em>) &#8211; a set of tags</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a dictionary suitable for JSON serialization</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clx.xms.serialize.tags_update">
+<code class="descclassname">clx.xms.serialize.</code><code class="descname">tags_update</code><span class="sig-paren">(</span><em>tags_to_add</em>, <em>tags_to_remove</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/serialize.html#tags_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.serialize.tags_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes the given tag updates to a JSON string.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>tags_to_add</strong> (<em>set[str]</em>) &#8211; list of tags</li>
+<li><strong>tags_to_remove</strong> (<em>str[str]</em>) &#8211; list of tags</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a dictionary suitable for JSON serialization</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">dict</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clx.xms.serialize.text_batch">
+<code class="descclassname">clx.xms.serialize.</code><code class="descname">text_batch</code><span class="sig-paren">(</span><em>batch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/serialize.html#text_batch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.serialize.text_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes the given text batch into JSON.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>batch</strong> (<a class="reference internal" href="#clx.xms.api.MtBatchTextSmsCreate" title="clx.xms.api.MtBatchTextSmsCreate"><em>MtBatchTextSmsCreate</em></a>) &#8211; the batch to serialize</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary suitable for JSON serialization</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="clx.xms.serialize.text_batch_update">
+<code class="descclassname">clx.xms.serialize.</code><code class="descname">text_batch_update</code><span class="sig-paren">(</span><em>batch</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/clx/xms/serialize.html#text_batch_update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#clx.xms.serialize.text_batch_update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Serializes the given text batch update into JSON.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>batch</strong> (<a class="reference internal" href="#clx.xms.api.MtBatchTextSmsUpdate" title="clx.xms.api.MtBatchTextSmsUpdate"><em>MtBatchTextSmsUpdate</em></a>) &#8211; the batch update to serialize</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">dictionary suitable for JSON serialization</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-clx.xms">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-clx.xms" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">clx.xms</span></code> package.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">clx.xms package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-clx.xms.api">clx.xms.api module</a></li>
+<li><a class="reference internal" href="#module-clx.xms.client">clx.xms.client module</a></li>
+<li><a class="reference internal" href="#module-clx.xms.deserialize">clx.xms.deserialize module</a></li>
+<li><a class="reference internal" href="#module-clx.xms.exceptions">clx.xms.exceptions module</a></li>
+<li><a class="reference internal" href="#module-clx.xms.serialize">clx.xms.serialize module</a></li>
+<li><a class="reference internal" href="#module-clx.xms">Module contents</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">clx</a><ul>
+  <li><a href="clx.html">clx package</a><ul>
+      <li>Previous: <a href="clx.html" title="previous chapter">clx package</a></li>
+      <li>Next: <a href="changelog.html" title="next chapter">Change Log</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/clx.xms.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, CLX Communication.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+      |
+      <a href="_sources/clx.xms.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

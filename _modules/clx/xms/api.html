@@ -1,0 +1,1261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>clx.xms.api &mdash; REST API SDK for SMS 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="REST API SDK for SMS 1.0.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for clx.xms.api</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="c1"># pylint: disable=too-many-instance-attributes</span>
+
+<span class="sd">&quot;&quot;&quot;The classes in this module represent objects sent and received from</span>
+<span class="sd">the XMS REST API.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+
+<div class="viewcode-block" id="ReportType"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.ReportType">[docs]</a><span class="k">class</span> <span class="nc">ReportType</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A collection of known delivery report types.</span>
+
+<span class="sd">    These values are known to be valid in</span>
+<span class="sd">    :py:attr:`MtSmsBatch.delivery_report`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">NONE</span> <span class="o">=</span> <span class="s1">&#39;none&#39;</span>
+    <span class="n">SUMMARY</span> <span class="o">=</span> <span class="s1">&#39;summary&#39;</span>
+    <span class="n">FULL</span> <span class="o">=</span> <span class="s1">&#39;full&#39;</span>
+    <span class="n">PER_RECIPIENT</span> <span class="o">=</span> <span class="s1">&#39;per_recipient&#39;</span></div>
+
+
+<div class="viewcode-block" id="DeliveryStatus"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.DeliveryStatus">[docs]</a><span class="k">class</span> <span class="nc">DeliveryStatus</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A collection of known delivery statuses.</span>
+
+<span class="sd">    Note, new statuses may be introduced to the XMS API.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">QUEUED</span> <span class="o">=</span> <span class="s2">&quot;Queued&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Message is queued within REST API system and will be dispatched</span>
+<span class="sd">    according to the rate of the account.&quot;&quot;&quot;</span>
+
+    <span class="n">DISPATCHED</span> <span class="o">=</span> <span class="s2">&quot;Dispatched&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Message has been dispatched and accepted for delivery by the SMSC.&quot;&quot;&quot;</span>
+
+    <span class="n">ABORTED</span> <span class="o">=</span> <span class="s2">&quot;Aborted&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Message was aborted before reaching SMSC.&quot;&quot;&quot;</span>
+
+    <span class="n">REJECTED</span> <span class="o">=</span> <span class="s2">&quot;Rejected&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Message was rejected by SMSC.&quot;&quot;&quot;</span>
+
+    <span class="n">DELIVERED</span> <span class="o">=</span> <span class="s2">&quot;Delivered&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Message has been delivered.&quot;&quot;&quot;</span>
+
+    <span class="n">FAILED</span> <span class="o">=</span> <span class="s2">&quot;Failed&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Message failed to be delivered.&quot;&quot;&quot;</span>
+
+    <span class="n">EXPIRED</span> <span class="o">=</span> <span class="s2">&quot;Expired&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Message expired before delivery.&quot;&quot;&quot;</span>
+
+    <span class="n">UNKNOWN</span> <span class="o">=</span> <span class="s2">&quot;Unknown&quot;</span>
+    <span class="sd">&quot;&quot;&quot;It is not known if message was delivered or not.&quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="DeliveryReportType"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.DeliveryReportType">[docs]</a><span class="k">class</span> <span class="nc">DeliveryReportType</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The types of delivery reports that can be retrieved.&quot;&quot;&quot;</span>
+
+    <span class="n">SUMMARY</span> <span class="o">=</span> <span class="s2">&quot;summary&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Indicates a summary batch delivery report.</span>
+
+<span class="sd">    The summary delivery report does not include the per-recipient</span>
+<span class="sd">    result but rather aggregated statistics about the deliveries.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">FULL</span> <span class="o">=</span> <span class="s2">&quot;full&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Indicates a full batch delivery report.</span>
+
+<span class="sd">    This includes per-recipient delivery results. For batches with</span>
+<span class="sd">    many destinations such reports may be very large.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span></div>
+
+
+<div class="viewcode-block" id="Reset"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.Reset">[docs]</a><span class="k">class</span> <span class="nc">Reset</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A class whose instances indicate that a value should be reset.</span>
+
+<span class="sd">    This is used when updating previously created XMS objects. Note,</span>
+<span class="sd">    it is typically not necessary to created new objects of this type,</span>
+<span class="sd">    instead use the constant :const:`.RESET`.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span></div>
+
+<span class="n">RESET</span> <span class="o">=</span> <span class="n">Reset</span><span class="p">()</span>
+<span class="sd">&quot;&quot;&quot;Object used to indicate that a XMS field should be reset to its</span>
+<span class="sd">default value.&quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="MtBatchSms"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.MtBatchSms">[docs]</a><span class="k">class</span> <span class="nc">MtBatchSms</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for all SMS batch classes.</span>
+
+<span class="sd">    Holds fields that are common to both the create and response</span>
+<span class="sd">    classes.</span>
+
+<span class="sd">    .. attribute:: recipients</span>
+
+<span class="sd">      One or more MSISDNs indicating the batch recipients.</span>
+
+<span class="sd">      :type: set[str]</span>
+
+<span class="sd">    .. attribute:: sender</span>
+
+<span class="sd">      The batch sender, typically a short code or long number.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: delivery_report</span>
+
+<span class="sd">      The type of delivery report to use for this batch.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: send_at</span>
+
+<span class="sd">      The time at which this batch should be sent.</span>
+
+<span class="sd">      :type: datetime</span>
+
+<span class="sd">    .. attribute:: expire_at</span>
+
+<span class="sd">      The time at which this batch should expire.</span>
+
+<span class="sd">      :type: datetime</span>
+
+<span class="sd">    .. attribute:: callback_url</span>
+
+<span class="sd">      The URL to which callbacks should be sent.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recipients</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sender</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delivery_report</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_at</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expire_at</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">callback_url</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+
+<div class="viewcode-block" id="MtBatchSmsCreate"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.MtBatchSmsCreate">[docs]</a><span class="k">class</span> <span class="nc">MtBatchSmsCreate</span><span class="p">(</span><span class="n">MtBatchSms</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Describes parameters available during batch creation.</span>
+
+<span class="sd">    We can create two kinds of batches, textual and binary, described</span>
+<span class="sd">    in the child classes :py:class:`MtBatchTextSmsCreate` and</span>
+<span class="sd">    :py:class:`MtBatchTextSmsCreate`, respectively.</span>
+
+<span class="sd">    .. attribute:: tags</span>
+
+<span class="sd">      The initial set of tags to give the batch.</span>
+
+<span class="sd">      :type: set[str]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">MtBatchSms</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="MtBatchTextSmsCreate"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.MtBatchTextSmsCreate">[docs]</a><span class="k">class</span> <span class="nc">MtBatchTextSmsCreate</span><span class="p">(</span><span class="n">MtBatchSmsCreate</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class whose fields describe a text batch.</span>
+
+<span class="sd">    .. attribute:: body</span>
+
+<span class="sd">      The message body or template.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: parameters</span>
+
+<span class="sd">      The template parameters.</span>
+
+<span class="sd">      This property is only relevant is the :py:attr:`body` property</span>
+<span class="sd">      is a template. This is expected to be an associative array</span>
+<span class="sd">      mapping parameter keys to associative arrays themselves mapping</span>
+<span class="sd">      recipient numbers to substitution strings.</span>
+
+<span class="sd">      More concretely we may have for the parameterized message</span>
+<span class="sd">      &quot;Hello, ${name}!&quot; have::</span>
+
+<span class="sd">        batch.parameters = {</span>
+<span class="sd">            &#39;name&#39;: {</span>
+<span class="sd">                &#39;123456789&#39;: &#39;Mary&#39;,</span>
+<span class="sd">                &#39;987654321&#39;: &#39;Joe&#39;,</span>
+<span class="sd">                &#39;default&#39;: &#39;valued customer&#39;</span>
+<span class="sd">            }</span>
+<span class="sd">        }</span>
+
+<span class="sd">      And the recipient with MSISDN &quot;123456789&quot; would then receive the</span>
+<span class="sd">      message &quot;Hello, Mary!&quot;.</span>
+
+<span class="sd">      Note the use of &quot;default&quot; to indicate the substitution for</span>
+<span class="sd">      recipients not explicitly given. For example, the recipient</span>
+<span class="sd">      &quot;555555555&quot; would receive the message &quot;Hello, valued customer!&quot;.</span>
+
+<span class="sd">      :type: dict[str, dict[str, str]]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">MtBatchSmsCreate</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+
+<div class="viewcode-block" id="MtBatchBinarySmsCreate"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.MtBatchBinarySmsCreate">[docs]</a><span class="k">class</span> <span class="nc">MtBatchBinarySmsCreate</span><span class="p">(</span><span class="n">MtBatchSmsCreate</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Describes a binary batch.</span>
+
+<span class="sd">    This class holds all parameters that can be used when creating a</span>
+<span class="sd">    binary SMS batch.</span>
+
+<span class="sd">    .. attribute:: body</span>
+
+<span class="sd">      The body of this binary message.</span>
+
+<span class="sd">      :type: bytes</span>
+
+<span class="sd">    .. attribute:: udh</span>
+
+<span class="sd">      The User Data Header of this binary message.</span>
+
+<span class="sd">      :type: bytes</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">MtBatchSmsCreate</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">udh</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+
+<div class="viewcode-block" id="MtBatchSmsUpdate"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.MtBatchSmsUpdate">[docs]</a><span class="k">class</span> <span class="nc">MtBatchSmsUpdate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Describes updates that can be performed on text and binary SMS</span>
+<span class="sd">    batches.</span>
+
+<span class="sd">    .. attribute:: recipient_insertions</span>
+
+<span class="sd">      The message destinations to add to the batch. This should have</span>
+<span class="sd">      zero or more MSISDNs.</span>
+
+<span class="sd">      :type: set[str]</span>
+
+<span class="sd">    .. attribute:: recipient_removals</span>
+
+<span class="sd">      The message destinations to remove from the batch. This should</span>
+<span class="sd">      have zero or more MSISDNs.</span>
+
+<span class="sd">      :type: set[str]</span>
+
+<span class="sd">    .. attribute:: sender</span>
+
+<span class="sd">      The message originator as a long number or short code. If</span>
+<span class="sd">      ``None`` then the current value is kept, if :const:`.RESET` then</span>
+<span class="sd">      the value is reset to its XMS default, and if set to a string</span>
+<span class="sd">      the sender is updated.</span>
+
+<span class="sd">      :type: str or None or Reset</span>
+
+<span class="sd">    .. attribute:: delivery_report</span>
+
+<span class="sd">      Description of how to update the batch delivery report value. If</span>
+<span class="sd">      ``None`` then the current value is kept, if :const:`.RESET` then</span>
+<span class="sd">      the value is reset to its XMS default, and if set to a string</span>
+<span class="sd">      the delivery report value is updated.</span>
+
+<span class="sd">      See :class:`ReportType` for valid report types.</span>
+
+<span class="sd">      :type: str or None or Reset</span>
+
+<span class="sd">    .. attribute:: send_at</span>
+
+<span class="sd">      Description of how to update the batch send at value. If</span>
+<span class="sd">      ``None`` then the current value is kept, if :const:`.RESET` then</span>
+<span class="sd">      the value is reset to its XMS default, and if set to a date time</span>
+<span class="sd">      the send at value is updated.</span>
+
+<span class="sd">      :type: datetime or None or Reset</span>
+
+<span class="sd">    .. attribute:: expire_at</span>
+
+<span class="sd">      Description of how to update the batch expire at value. If</span>
+<span class="sd">      ``None`` then the current value is kept, if :const:`.RESET` then</span>
+<span class="sd">      the value is reset to its XMS default, and if set to a date time</span>
+<span class="sd">      the expire at value is updated.</span>
+
+<span class="sd">      :type: datetime or None or Reset</span>
+
+<span class="sd">    .. attribute:: callback_url</span>
+
+<span class="sd">      Description of how to update the batch callback URL. If ``None``</span>
+<span class="sd">      then the current value is kept, if :const:`.RESET` then the</span>
+<span class="sd">      value is reset to its XMS default, and if set to a string the</span>
+<span class="sd">      callback URL value is updated.</span>
+
+<span class="sd">      :type: str or None or Reset</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recipient_insertions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recipient_removals</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sender</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">delivery_report</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">send_at</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">expire_at</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">callback_url</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+
+<div class="viewcode-block" id="MtBatchTextSmsUpdate"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.MtBatchTextSmsUpdate">[docs]</a><span class="k">class</span> <span class="nc">MtBatchTextSmsUpdate</span><span class="p">(</span><span class="n">MtBatchSmsUpdate</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Class that the update operations that can be performed on a text</span>
+<span class="sd">    batch.</span>
+
+<span class="sd">    .. attribute:: body</span>
+
+<span class="sd">      The updated batch message body. If ``None`` then the current</span>
+<span class="sd">      batch message is kept.</span>
+
+<span class="sd">      :type: str or None</span>
+
+<span class="sd">    .. attribute:: parameters</span>
+
+<span class="sd">      Description of how to update the batch parameters. If ``None``</span>
+<span class="sd">      then the current value is kept, if :const:`.RESET` then the</span>
+<span class="sd">      value is reset to its XMS default, and if set to a dictionary</span>
+<span class="sd">      the parameters value is updated.</span>
+
+<span class="sd">      :type: dict or None or Reset</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">MtBatchSmsUpdate</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+
+<div class="viewcode-block" id="MtBatchBinarySmsUpdate"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.MtBatchBinarySmsUpdate">[docs]</a><span class="k">class</span> <span class="nc">MtBatchBinarySmsUpdate</span><span class="p">(</span><span class="n">MtBatchSmsUpdate</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Describes updates to a binary SMS batch.</span>
+
+<span class="sd">    .. attribute:: body</span>
+
+<span class="sd">      The updated binary batch body. If ``None`` then the existing</span>
+<span class="sd">      body is left as-is.</span>
+
+<span class="sd">      :type: bytes or None</span>
+
+<span class="sd">    .. attribute:: udh</span>
+
+<span class="sd">      The updated binary User Data Header. If ``None`` then the</span>
+<span class="sd">      existing UDH is left as-is.</span>
+
+<span class="sd">      :type: bytes or None</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">MtBatchSmsUpdate</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">udh</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+
+<div class="viewcode-block" id="MtBatchSmsResult"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.MtBatchSmsResult">[docs]</a><span class="k">class</span> <span class="nc">MtBatchSmsResult</span><span class="p">(</span><span class="n">MtBatchSms</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Contains the common fields of text and binary batches.</span>
+
+<span class="sd">    .. attribute:: batch_id</span>
+
+<span class="sd">      The unique batch identifier.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: created_at</span>
+
+<span class="sd">      Time when this batch was created.</span>
+
+<span class="sd">      :type: datetime</span>
+
+<span class="sd">    .. attribute:: modified_at</span>
+
+<span class="sd">      Time when this batch was last modified.</span>
+
+<span class="sd">      :type: datetime</span>
+
+<span class="sd">    .. attribute:: canceled</span>
+
+<span class="sd">      Whether this batch has been canceled.</span>
+
+<span class="sd">      :type: bool</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">MtBatchSms</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_id</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">created_at</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modified_at</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">canceled</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+
+<div class="viewcode-block" id="MtBatchTextSmsResult"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.MtBatchTextSmsResult">[docs]</a><span class="k">class</span> <span class="nc">MtBatchTextSmsResult</span><span class="p">(</span><span class="n">MtBatchSmsResult</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A textual batch as returned by the XMS endpoint.</span>
+
+<span class="sd">    This differs from the batch creation definition by the addition</span>
+<span class="sd">    of, for example, the batch identifier and the creation time.</span>
+
+<span class="sd">    .. attribute:: body</span>
+
+<span class="sd">      The message body or template. See</span>
+<span class="sd">      :py:attr:`MtBatchTextSmsCreate.parameters`.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: parameters</span>
+
+<span class="sd">      The template parameters.</span>
+
+<span class="sd">      type *dict[str, dict[str, str]]*</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">MtBatchSmsResult</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+
+<div class="viewcode-block" id="MtBatchBinarySmsResult"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.MtBatchBinarySmsResult">[docs]</a><span class="k">class</span> <span class="nc">MtBatchBinarySmsResult</span><span class="p">(</span><span class="n">MtBatchSmsResult</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A binary SMS batch as returned by XMS.</span>
+
+<span class="sd">    .. attribute:: body</span>
+
+<span class="sd">      The body of this binary message.</span>
+
+<span class="sd">      :type: bytes</span>
+
+<span class="sd">    .. attribute:: udh</span>
+
+<span class="sd">      The User Data Header of this binary message.</span>
+
+<span class="sd">      :type: bytes</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">MtBatchSmsResult</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">udh</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+
+<div class="viewcode-block" id="BatchDeliveryReport"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.BatchDeliveryReport">[docs]</a><span class="k">class</span> <span class="nc">BatchDeliveryReport</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Batch delivery report.</span>
+
+<span class="sd">    A batch delivery report is divided into a number of *buckets* and</span>
+<span class="sd">    each such bucket contain statistics about batch messages having a</span>
+<span class="sd">    specific delivery status. The :py:attr:`statuses` property</span>
+<span class="sd">    contains the various buckets.</span>
+
+<span class="sd">    .. attribute:: batch_id</span>
+
+<span class="sd">      Identifier of the batch that this report covers.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: total_message_count</span>
+
+<span class="sd">      The total number of messages sent as part of this batch.</span>
+
+<span class="sd">      :type: int</span>
+
+<span class="sd">    .. attribute:: statuses</span>
+
+<span class="sd">      The batch status buckets. This array describes the aggregated</span>
+<span class="sd">      status for the batch where each array element contains</span>
+<span class="sd">      information about messages having a certain delivery status and</span>
+<span class="sd">      delivery code.</span>
+
+<span class="sd">      :type: list[BatchDeliveryReportStatus]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_id</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_message_count</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">statuses</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+
+<div class="viewcode-block" id="BatchDeliveryReportStatus"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.BatchDeliveryReportStatus">[docs]</a><span class="k">class</span> <span class="nc">BatchDeliveryReportStatus</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Aggregated statistics for a given batch.</span>
+
+<span class="sd">    This represents the delivery statistics for a given statistics</span>
+<span class="sd">    *bucket*. See :py:class:`BatchDeliveryReport`.</span>
+
+<span class="sd">    .. attribute:: code</span>
+
+<span class="sd">      The delivery status code for this recipient bucket.</span>
+
+<span class="sd">      :type: int</span>
+
+<span class="sd">    .. attribute:: status</span>
+
+<span class="sd">      The delivery status for this recipient bucket.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: count</span>
+
+<span class="sd">      The number of recipients belonging to this bucket.</span>
+
+<span class="sd">      :type: int</span>
+
+<span class="sd">    .. attribute:: recipients</span>
+
+<span class="sd">      The recipients having this status.</span>
+
+<span class="sd">      Note, this is non-empty only if a `full` delivery report has been</span>
+<span class="sd">      requested.</span>
+
+<span class="sd">      :type: set[str]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">count</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recipients</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="BatchRecipientDeliveryReport"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.BatchRecipientDeliveryReport">[docs]</a><span class="k">class</span> <span class="nc">BatchRecipientDeliveryReport</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;A delivery report for an individual batch recipient.</span>
+
+<span class="sd">    .. attribute:: batch_id</span>
+
+<span class="sd">      The batch identifier.</span>
+
+<span class="sd">      :type: string</span>
+
+<span class="sd">    .. attribute:: recipient</span>
+
+<span class="sd">      The recipient address.</span>
+
+<span class="sd">      :type: string</span>
+
+<span class="sd">    .. attribute:: code</span>
+
+<span class="sd">      The delivery code.</span>
+
+<span class="sd">      :type: int</span>
+
+<span class="sd">    .. attribute:: status</span>
+
+<span class="sd">      The delivery status.</span>
+
+<span class="sd">      :type: int</span>
+
+<span class="sd">    .. attribute:: status_message</span>
+
+<span class="sd">      The delivery status message. The status message is not always</span>
+<span class="sd">      available and the attribute is set to *None* in those cases.</span>
+
+<span class="sd">      :type: string or None</span>
+
+<span class="sd">    .. attribute:: operator</span>
+
+<span class="sd">      The recipient&#39;s mobile operator. If the operator is not known,</span>
+<span class="sd">      then this is set to *None*.</span>
+
+<span class="sd">      :type: string or None</span>
+
+<span class="sd">    .. attribute:: status_at</span>
+
+<span class="sd">      The time at delivery.</span>
+
+<span class="sd">      :type: datetime</span>
+
+<span class="sd">    .. attribute:: operator_status_at</span>
+
+<span class="sd">      The time of delivery as reported by operator.</span>
+
+<span class="sd">      :type: datetime or None</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_id</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recipient</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_message</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">status_at</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator_status_at</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+<div class="viewcode-block" id="Error"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.Error">[docs]</a><span class="k">class</span> <span class="nc">Error</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Describes error responses given by XMS.</span>
+
+<span class="sd">    :param str code: the error code</span>
+<span class="sd">    :param str text: the human readable error text</span>
+
+<span class="sd">    .. attribute:: code</span>
+
+<span class="sd">      A code that can be used to programmatically recognize the error.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: text</span>
+
+<span class="sd">      Human readable description of the error.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">code</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">code</span> <span class="o">=</span> <span class="n">code</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="n">text</span></div>
+
+<div class="viewcode-block" id="MtBatchDryRunResult"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.MtBatchDryRunResult">[docs]</a><span class="k">class</span> <span class="nc">MtBatchDryRunResult</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A batch dry run report.</span>
+
+<span class="sd">    .. attribute:: number_of_recipients</span>
+
+<span class="sd">      The number of recipients that would receive the batch message.</span>
+
+<span class="sd">      :type: int</span>
+
+<span class="sd">    .. attribute:: number_of_message</span>
+
+<span class="sd">      The number of messages that will be sent.</span>
+
+<span class="sd">      :type: int</span>
+
+<span class="sd">    .. attribute:: per_recipient</span>
+
+<span class="sd">      The per-recipient dry-run result.</span>
+
+<span class="sd">      :type: list[DryRunPerRecipient]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_recipients</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_messages</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">per_recipient</span> <span class="o">=</span> <span class="p">[]</span></div>
+
+<div class="viewcode-block" id="DryRunPerRecipient"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.DryRunPerRecipient">[docs]</a><span class="k">class</span> <span class="nc">DryRunPerRecipient</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Per-recipient dry-run result.</span>
+
+<span class="sd">    Object of this class only occur within dry-run results. See</span>
+<span class="sd">    :class:`MtBatchDryRunResult`.</span>
+
+<span class="sd">    .. attribute:: recipient</span>
+
+<span class="sd">      The recipient.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: number_of_parts</span>
+
+<span class="sd">      Number of message parts needed for the recipient.</span>
+
+<span class="sd">      :type: int</span>
+
+<span class="sd">    .. attribute:: body</span>
+
+<span class="sd">      Message body sent to this recipient.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: encoding</span>
+
+<span class="sd">      Indicates the text encoding used for this recipient.</span>
+
+<span class="sd">      This is one of &quot;text&quot; or &quot;unicode&quot;. See :const:`ENCODING_TEXT`</span>
+<span class="sd">      and :const:`ENCODING_UNICODE`.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">ENCODING_TEXT</span> <span class="o">=</span> <span class="s2">&quot;text&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Constant indicating non-unicode encoding.&quot;&quot;&quot;</span>
+
+    <span class="n">ENCODING_UNICODE</span> <span class="o">=</span> <span class="s2">&quot;unicode&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Constant indicating unicode encoding.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recipient</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">number_of_parts</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encoding</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+
+<div class="viewcode-block" id="GroupAutoUpdate"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.GroupAutoUpdate">[docs]</a><span class="k">class</span> <span class="nc">GroupAutoUpdate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A description of automatic group updates.</span>
+
+<span class="sd">    An automatic update is triggered by a mobile originated message to</span>
+<span class="sd">    a given number containing special keywords.</span>
+
+<span class="sd">    When the given recipient receives a mobile originated SMS</span>
+<span class="sd">    containing keywords (first and/or second) matching the given</span>
+<span class="sd">    ``add`` arguments then the sender MSISDN is added to the group.</span>
+<span class="sd">    Similarly, if the MO is matching the given ``remove`` keyword</span>
+<span class="sd">    arguments then the MSISDN is removed from the group.</span>
+
+<span class="sd">    For example::</span>
+
+<span class="sd">      GroupAutoUpdate(</span>
+<span class="sd">        recipient=&#39;12345&#39;,</span>
+<span class="sd">        add_first_word=&#39;add&#39;,</span>
+<span class="sd">        remove_first_word=&#39;remove&#39;)</span>
+
+<span class="sd">    would trigger based solely on the first keyword of the MO message.</span>
+<span class="sd">    On the other hand::</span>
+
+<span class="sd">      GroupAutoUpdate(</span>
+<span class="sd">        recipient=&#39;12345&#39;,</span>
+<span class="sd">        add_first_word=&#39;alert&#39;,</span>
+<span class="sd">        add_second_word=&#39;add&#39;,</span>
+<span class="sd">        remove_first_word=&#39;alert&#39;,</span>
+<span class="sd">        remove_second_word=&#39;remove&#39;)</span>
+
+<span class="sd">    would trigger only when both the first and second keyword are</span>
+<span class="sd">    given in the MO message.</span>
+
+<span class="sd">    :param str recipient: recipient that triggers this rule</span>
+
+<span class="sd">    :param add_first_word: first ``add`` keyword, default is `None`.</span>
+<span class="sd">    :type add_first_word: str or None</span>
+
+<span class="sd">    :param add_second_word: second ``add`` keyword, default is `None`.</span>
+<span class="sd">    :type add_second_word: str or None</span>
+
+<span class="sd">    :param remove_first_word: first ``remove`` keyword, default is `None`.</span>
+<span class="sd">    :type remove_first_word: str or None</span>
+
+<span class="sd">    :param remove_second_word: second ``remove`` keywords, default is `None`.</span>
+<span class="sd">    :type remove_second_word: str or None</span>
+
+<span class="sd">    .. attribute:: recipient</span>
+
+<span class="sd">      The recipient of the mobile originated message. A short code or</span>
+<span class="sd">      long number.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: add_word_pair</span>
+
+<span class="sd">      A two-element tuple holding the first and second keyword that</span>
+<span class="sd">      causes the MO sender to be added to the group.</span>
+
+<span class="sd">      :type: tuple[str or None, str or None]</span>
+
+<span class="sd">    .. attribute:: remove_word_pair</span>
+
+<span class="sd">      A two-element tuple holding the first and second keyword that</span>
+<span class="sd">      causes the MO sender to be removed from the group.</span>
+
+<span class="sd">      :type: tuple[str or None, str or None]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">recipient</span><span class="p">,</span>
+                 <span class="n">add_first_word</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">add_second_word</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">remove_first_word</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">remove_second_word</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recipient</span> <span class="o">=</span> <span class="n">recipient</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_word_pair</span> <span class="o">=</span> <span class="p">(</span><span class="n">add_first_word</span><span class="p">,</span> <span class="n">add_second_word</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remove_word_pair</span> <span class="o">=</span> <span class="p">(</span><span class="n">remove_first_word</span><span class="p">,</span> <span class="n">remove_second_word</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="GroupCreate"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.GroupCreate">[docs]</a><span class="k">class</span> <span class="nc">GroupCreate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A description of the fields necessary to create a group.</span>
+
+<span class="sd">    .. attribute:: name</span>
+
+<span class="sd">      The group name.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: members</span>
+
+<span class="sd">      A set of MSISDNs that belong to this group.</span>
+
+<span class="sd">      :type: set[str]</span>
+
+<span class="sd">    .. attribute:: child_groups</span>
+
+<span class="sd">      A set of groups that in turn belong to this group.</span>
+
+<span class="sd">      :type: set[str]</span>
+
+<span class="sd">    .. attribute:: auto_update</span>
+
+<span class="sd">      Describes how this group should be auto updated.</span>
+
+<span class="sd">      If no auto updating should be performed for the group then this</span>
+<span class="sd">      value is ``None``.</span>
+
+<span class="sd">      :type: GroupAutoUpdate or None</span>
+
+<span class="sd">    .. attribute:: tags</span>
+
+<span class="sd">      The tags associated to this group.</span>
+
+<span class="sd">      :type: set[str]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">members</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">child_groups</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">auto_update</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tags</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="GroupResult"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.GroupResult">[docs]</a><span class="k">class</span> <span class="nc">GroupResult</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This class holds the result of a group fetch operation.</span>
+
+<span class="sd">    This may be used either standalone or as an element of a paged</span>
+<span class="sd">    result.</span>
+
+<span class="sd">    .. attribute:: group_id</span>
+
+<span class="sd">      The unique group identifier.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: name</span>
+
+<span class="sd">      The group name.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: size</span>
+
+<span class="sd">      The number of members of this group.</span>
+
+<span class="sd">      :type: int</span>
+
+<span class="sd">    .. attribute:: child_groups</span>
+
+<span class="sd">      A set of groups that in turn belong to this group.</span>
+
+<span class="sd">      :type: set[str]</span>
+
+<span class="sd">    .. attribute:: auto_update</span>
+
+<span class="sd">      Describes how this group should be auto updated.</span>
+
+<span class="sd">      If no auto updating should be performed for the group then this</span>
+<span class="sd">      value is ``None``.</span>
+
+<span class="sd">      :type: GroupAutoUpdate or None</span>
+
+<span class="sd">    .. attribute:: created_at</span>
+
+<span class="sd">      The time at which this group was created.</span>
+
+<span class="sd">      :type: datetime</span>
+
+<span class="sd">    .. attribute:: modified_at</span>
+
+<span class="sd">      The time when this group was last modified.</span>
+
+<span class="sd">      :type: datetime</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">group_id</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">child_groups</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">auto_update</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">created_at</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modified_at</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+
+<div class="viewcode-block" id="GroupUpdate"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.GroupUpdate">[docs]</a><span class="k">class</span> <span class="nc">GroupUpdate</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Describes updates that can be performed on a group.</span>
+
+<span class="sd">    .. attribute:: name</span>
+
+<span class="sd">      Updates the group name.</span>
+
+<span class="sd">      If ``None`` then the current value is kept, if :const:`.RESET`</span>
+<span class="sd">      then the value is reset to its XMS default, and if set to a</span>
+<span class="sd">      string the name is updated.</span>
+
+<span class="sd">      :type: None or str or Reset</span>
+
+<span class="sd">    .. attribute:: member_insertions</span>
+
+<span class="sd">      The MSISDNs that should be added to this group.</span>
+
+<span class="sd">      :type: set[str]</span>
+
+<span class="sd">    .. attribute:: member_removals</span>
+
+<span class="sd">      The MSISDNs that should be removed from this group.</span>
+
+<span class="sd">      :type: set[str]</span>
+
+<span class="sd">    .. attribute:: child_group_insertions</span>
+
+<span class="sd">      The child groups that should be added to this group.</span>
+
+<span class="sd">      :type: set[str]</span>
+
+<span class="sd">    .. attribute:: child_group_removals</span>
+
+<span class="sd">      The child groups that should be removed from this group.</span>
+
+<span class="sd">      :type: set[str]</span>
+
+<span class="sd">    .. attribute:: add_from_group</span>
+
+<span class="sd">      Identifier of a group whose members should be added to this</span>
+<span class="sd">      group.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: remove_from_group</span>
+
+<span class="sd">      Identifier of a group whose members should be removed from this</span>
+<span class="sd">      group.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: auto_update</span>
+
+<span class="sd">      Describes how this group should be auto updated.</span>
+
+<span class="sd">      If ``None`` then the current value is kept, if :const:`.RESET`</span>
+<span class="sd">      then the value is reset to its XMS default, and if set to a</span>
+<span class="sd">      ``GroupAutoUpdate`` object the value is updated.</span>
+
+<span class="sd">      :type: None or GroupAutoUpdate or Reset</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">member_insertions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">member_removals</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">child_group_insertions</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">child_group_removals</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_from_group</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">remove_from_group</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">auto_update</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+
+<div class="viewcode-block" id="MoSms"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.MoSms">[docs]</a><span class="k">class</span> <span class="nc">MoSms</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for SMS mobile originated messages.</span>
+
+<span class="sd">    Holds fields that are common to both the textual and binary MO</span>
+<span class="sd">    classes.</span>
+
+<span class="sd">    .. attribute:: message_id</span>
+
+<span class="sd">      The message identifier.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: recipient</span>
+
+<span class="sd">      The message recipient. This is a short code or long number.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: sender</span>
+
+<span class="sd">      The message sender. This is an MSISDN.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: operator</span>
+
+<span class="sd">      The MCCMNC of the originating operator, if available.</span>
+
+<span class="sd">      :type: str or None</span>
+
+<span class="sd">    .. attribute:: sent_at</span>
+
+<span class="sd">      The time when this message was sent, if available.</span>
+
+<span class="sd">      :type: datetime or None</span>
+
+<span class="sd">    .. attribute:: received_at</span>
+
+<span class="sd">      The time when the messaging system received this message.</span>
+
+<span class="sd">      :type: datetime</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">message_id</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">recipient</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sender</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">operator</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sent_at</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">received_at</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+
+<div class="viewcode-block" id="MoTextSms"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.MoTextSms">[docs]</a><span class="k">class</span> <span class="nc">MoTextSms</span><span class="p">(</span><span class="n">MoSms</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An SMS mobile originated message with textual content.</span>
+
+<span class="sd">    .. attribute:: body</span>
+
+<span class="sd">      The message body.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: keyword</span>
+
+<span class="sd">      The message keyword, if available.</span>
+
+<span class="sd">      :type: str or None</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">MoSms</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keyword</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+<div class="viewcode-block" id="MoBinarySms"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.MoBinarySms">[docs]</a><span class="k">class</span> <span class="nc">MoBinarySms</span><span class="p">(</span><span class="n">MoSms</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An SMS mobile originated message with binary content.</span>
+
+<span class="sd">    .. attribute:: body</span>
+
+<span class="sd">      The binary message body.</span>
+
+<span class="sd">      :type: bytes</span>
+
+<span class="sd">    .. attribute:: udh</span>
+
+<span class="sd">      The user data header.</span>
+
+<span class="sd">      :type: bytes</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">MoSms</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">body</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">udh</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+
+<div class="viewcode-block" id="Page"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.Page">[docs]</a><span class="k">class</span> <span class="nc">Page</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A page of elements.</span>
+
+<span class="sd">    The element type depends on the type of page that has been</span>
+<span class="sd">    retrieved. Typically it is one of :class:`MtSmsBatchResponse` or</span>
+<span class="sd">    :class:`GroupResponse`.</span>
+
+<span class="sd">    .. attribute:: page</span>
+
+<span class="sd">      The page number, starting from zero.</span>
+
+<span class="sd">      :type: int</span>
+
+<span class="sd">    .. attribute:: page</span>
+
+<span class="sd">      The number of elements on this page.</span>
+
+<span class="sd">      :type: int</span>
+
+<span class="sd">    .. attribute:: total_size</span>
+
+<span class="sd">      The total number of elements across all fetched pages.</span>
+
+<span class="sd">      :type: int</span>
+
+<span class="sd">    .. attribute:: content</span>
+
+<span class="sd">      The page elements.</span>
+
+<span class="sd">      :type: list[obj]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">page</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">size</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">total_size</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">content</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns an iterator over the content of this page.</span>
+
+<span class="sd">        For example, if the page is the result of a batch listing then</span>
+<span class="sd">        this iterator will yield batch results.</span>
+
+<span class="sd">        :returns: the page iterator</span>
+<span class="sd">        :rtype: iterator</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Pages"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.Pages">[docs]</a><span class="k">class</span> <span class="nc">Pages</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;A paged result.</span>
+
+<span class="sd">    It is possible to, for example, fetch individual pages or iterate</span>
+<span class="sd">    over all pages.</span>
+
+<span class="sd">    :param worker: worker function that fetches pages</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_worker</span> <span class="o">=</span> <span class="n">worker</span>
+
+<div class="viewcode-block" id="Pages.get"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.Pages.get">[docs]</a>    <span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">page</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Downloads a specific page.</span>
+
+<span class="sd">        :param int page: number of the page to fetch</span>
+<span class="sd">        :return: a page</span>
+<span class="sd">        :rtype: Page</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_worker</span><span class="p">(</span><span class="n">page</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Iterator across all pages.&quot;&quot;&quot;</span>
+
+        <span class="k">return</span> <span class="n">PagesIterator</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PagesIterator"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.PagesIterator">[docs]</a><span class="k">class</span> <span class="nc">PagesIterator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An iterator over a paged result.</span>
+
+<span class="sd">    The key is the page number and the value corresponds to the</span>
+<span class="sd">    content of the pages.</span>
+
+<span class="sd">    :param Pages pages: the pages that we are iterating over</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pages</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pages</span> <span class="o">=</span> <span class="n">pages</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cur_page</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="o">=</span> <span class="mi">0</span>
+
+<div class="viewcode-block" id="PagesIterator.next"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.api.PagesIterator.next">[docs]</a>    <span class="k">def</span> <span class="nf">next</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__next__</span><span class="p">()</span></div>
+
+    <span class="k">def</span> <span class="nf">__next__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Steps this iterator to the next page.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur_page</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur_page</span><span class="o">.</span><span class="n">page</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_cur_page</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pages</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_position</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_position</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># If we fetched an empty page then the iteration is over.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur_page</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">StopIteration</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cur_page</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, CLX Communication.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

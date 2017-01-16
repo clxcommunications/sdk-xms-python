@@ -1,0 +1,390 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>clx.xms.serialize &mdash; REST API SDK for SMS 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="REST API SDK for SMS 1.0.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for clx.xms.serialize</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;JSON serializes for XMS API object classes.</span>
+
+<span class="sd">Note, this module is mainly intended for internal use and the API may</span>
+<span class="sd">change in the future</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+
+<span class="kn">import</span> <span class="nn">binascii</span>
+<span class="kn">from</span> <span class="nn">clx.xms.api</span> <span class="kn">import</span> <span class="n">RESET</span>
+
+<span class="k">def</span> <span class="nf">_write_datetime</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Helper that validates a date time object.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">value</span><span class="o">.</span><span class="n">utcoffset</span><span class="p">()</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Expected datetime with time zone&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+
+<span class="k">def</span> <span class="nf">_write_base64</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">binascii</span><span class="o">.</span><span class="n">b2a_base64</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_write_hex</span><span class="p">(</span><span class="n">value</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">binascii</span><span class="o">.</span><span class="n">hexlify</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">_create_batch_helper</span><span class="p">(</span><span class="n">batch</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Helper that prepares the fields of a batch for JSON serialization.</span>
+
+<span class="sd">    :param MtBatchSmsCreate batch: the batch to serialize</span>
+<span class="sd">    :return: dictionary for JSON serialization</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;from&#39;</span><span class="p">:</span> <span class="n">batch</span><span class="o">.</span><span class="n">sender</span><span class="p">,</span>
+        <span class="s1">&#39;to&#39;</span><span class="p">:</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">recipients</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">delivery_report</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;delivery_report&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">delivery_report</span>
+
+    <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">send_at</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;send_at&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_write_datetime</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">send_at</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">expire_at</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;expire_at&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_write_datetime</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">expire_at</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">callback_url</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;callback_url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">callback_url</span>
+
+    <span class="k">return</span> <span class="n">fields</span>
+
+<div class="viewcode-block" id="text_batch"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.serialize.text_batch">[docs]</a><span class="k">def</span> <span class="nf">text_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Serializes the given text batch into JSON.</span>
+
+<span class="sd">    :param MtBatchTextSmsCreate batch: the batch to serialize</span>
+<span class="sd">    :return: dictionary suitable for JSON serialization</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="n">_create_batch_helper</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+    <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;mt_text&#39;</span>
+    <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">body</span>
+
+    <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;parameters&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">parameters</span>
+
+    <span class="k">return</span> <span class="n">fields</span></div>
+
+<div class="viewcode-block" id="binary_batch"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.serialize.binary_batch">[docs]</a><span class="k">def</span> <span class="nf">binary_batch</span><span class="p">(</span><span class="n">batch</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Serializes the given binary batch into JSON.</span>
+
+<span class="sd">    :param MtBatchBinarySmsCreate batch: the batch to serialize</span>
+<span class="sd">    :return: dictionary suitable for JSON serialization</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="n">_create_batch_helper</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+    <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;mt_binary&#39;</span>
+    <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_write_base64</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+    <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;udh&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_write_hex</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">udh</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fields</span></div>
+
+<span class="k">def</span> <span class="nf">_batch_update_helper</span><span class="p">(</span><span class="n">batch</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Helper that prepares the given batch for serialization.</span>
+
+<span class="sd">    :param MtBatchSmsUpdate batch: the batch to serialize</span>
+<span class="sd">    :return: dictionary suitable for JSON serialization</span>
+<span class="sd">    :rtype: dict</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">recipient_insertions</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;to_add&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">recipient_insertions</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">recipient_removals</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;to_remove&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">recipient_removals</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">sender</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;from&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">sender</span>
+
+    <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">delivery_report</span> <span class="o">==</span> <span class="n">RESET</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;delivery_report&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">elif</span> <span class="n">batch</span><span class="o">.</span><span class="n">delivery_report</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;delivery_report&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">delivery_report</span>
+
+    <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">send_at</span> <span class="o">==</span> <span class="n">RESET</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;send_at&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">elif</span> <span class="n">batch</span><span class="o">.</span><span class="n">send_at</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;send_at&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_write_datetime</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">send_at</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">expire_at</span> <span class="o">==</span> <span class="n">RESET</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;expire_at&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">elif</span> <span class="n">batch</span><span class="o">.</span><span class="n">expire_at</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;expire_at&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_write_datetime</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">expire_at</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">callback_url</span> <span class="o">==</span> <span class="n">RESET</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;callback_url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">elif</span> <span class="n">batch</span><span class="o">.</span><span class="n">callback_url</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;callback_url&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">callback_url</span>
+
+    <span class="k">return</span> <span class="n">fields</span>
+
+<div class="viewcode-block" id="text_batch_update"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.serialize.text_batch_update">[docs]</a><span class="k">def</span> <span class="nf">text_batch_update</span><span class="p">(</span><span class="n">batch</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Serializes the given text batch update into JSON.</span>
+
+<span class="sd">    :param MtBatchTextSmsUpdate batch: the batch update to serialize</span>
+<span class="sd">    :return: dictionary suitable for JSON serialization</span>
+<span class="sd">    :rtype: dict</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="n">_batch_update_helper</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+    <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;mt_text&#39;</span>
+
+    <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">body</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">body</span>
+
+    <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">parameters</span> <span class="o">==</span> <span class="n">RESET</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;parameters&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">elif</span> <span class="n">batch</span><span class="o">.</span><span class="n">parameters</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;parameters&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">batch</span><span class="o">.</span><span class="n">parameters</span>
+
+    <span class="k">return</span> <span class="n">fields</span></div>
+
+<div class="viewcode-block" id="binary_batch_update"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.serialize.binary_batch_update">[docs]</a><span class="k">def</span> <span class="nf">binary_batch_update</span><span class="p">(</span><span class="n">batch</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Serializes the given binary batch update into JSON.</span>
+
+<span class="sd">    :param MtBatchBinarySmsUpdate batch: the batch update to serialize</span>
+<span class="sd">    :return: dictionary suitable for JSON serialization</span>
+<span class="sd">    :rtype: dict</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="n">_batch_update_helper</span><span class="p">(</span><span class="n">batch</span><span class="p">)</span>
+
+    <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;mt_binary&#39;</span>
+
+    <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">body</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;body&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_write_base64</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">body</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">batch</span><span class="o">.</span><span class="n">udh</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;udh&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_write_hex</span><span class="p">(</span><span class="n">batch</span><span class="o">.</span><span class="n">udh</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fields</span></div>
+
+<span class="k">def</span> <span class="nf">_group_auto_update_helper</span><span class="p">(</span><span class="n">auto_update</span><span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Helper that prepares the given group auto update for JSON</span>
+<span class="sd">    serialization.</span>
+
+<span class="sd">    :param GroupAutoUpdate auto_update: the auto update to serialize</span>
+<span class="sd">    :return: dictionary suitable for JSON serialization</span>
+<span class="sd">    :rtype: dict</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s1">&#39;to&#39;</span><span class="p">:</span> <span class="n">auto_update</span><span class="o">.</span><span class="n">recipient</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="n">auto_update</span><span class="o">.</span><span class="n">add_word_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;add&#39;</span><span class="p">,</span> <span class="p">{})[</span><span class="s1">&#39;first_word&#39;</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="n">auto_update</span><span class="o">.</span><span class="n">add_word_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">auto_update</span><span class="o">.</span><span class="n">add_word_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;add&#39;</span><span class="p">,</span> <span class="p">{})[</span><span class="s1">&#39;second_word&#39;</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="n">auto_update</span><span class="o">.</span><span class="n">add_word_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">auto_update</span><span class="o">.</span><span class="n">remove_word_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;remove&#39;</span><span class="p">,</span> <span class="p">{})[</span><span class="s1">&#39;first_word&#39;</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="n">auto_update</span><span class="o">.</span><span class="n">remove_word_pair</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="n">auto_update</span><span class="o">.</span><span class="n">remove_word_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">fields</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s1">&#39;remove&#39;</span><span class="p">,</span> <span class="p">{})[</span><span class="s1">&#39;second_word&#39;</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="n">auto_update</span><span class="o">.</span><span class="n">remove_word_pair</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">fields</span>
+
+<div class="viewcode-block" id="group_create"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.serialize.group_create">[docs]</a><span class="k">def</span> <span class="nf">group_create</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Serializes the given group create object to JSON.</span>
+
+<span class="sd">    :param GroupCreate group: the group to serialize</span>
+<span class="sd">    :return: dictionary suitable for JSON serialization</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">if</span> <span class="n">group</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">group</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">if</span> <span class="n">group</span><span class="o">.</span><span class="n">members</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;members&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">members</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">group</span><span class="o">.</span><span class="n">child_groups</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;child_groups&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">child_groups</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">group</span><span class="o">.</span><span class="n">auto_update</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;auto_update&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_group_auto_update_helper</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">auto_update</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">group</span><span class="o">.</span><span class="n">tags</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">group</span><span class="o">.</span><span class="n">tags</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fields</span></div>
+
+<div class="viewcode-block" id="group_update"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.serialize.group_update">[docs]</a><span class="k">def</span> <span class="nf">group_update</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Serializes the given group update object to JSON.</span>
+
+<span class="sd">    :param GroupUpdate obj: the group update to serialize</span>
+<span class="sd">    :return: a dictionary suitable for JSON serialization</span>
+<span class="sd">    :rtype: dict</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">RESET</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">elif</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">member_insertions</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;add&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">member_insertions</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">member_removals</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;remove&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">member_removals</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">child_group_insertions</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;child_groups_add&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">child_group_insertions</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">child_group_removals</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;child_groups_remove&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">child_group_removals</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">add_from_group</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;add_from_group&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">add_from_group</span>
+
+    <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">remove_from_group</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;remove_from_group&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">remove_from_group</span>
+
+    <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">auto_update</span> <span class="o">==</span> <span class="n">RESET</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;auto_update&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="k">elif</span> <span class="n">obj</span><span class="o">.</span><span class="n">auto_update</span><span class="p">:</span>
+        <span class="n">fields</span><span class="p">[</span><span class="s1">&#39;auto_update&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_group_auto_update_helper</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">auto_update</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">fields</span></div>
+
+<div class="viewcode-block" id="tags"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.serialize.tags">[docs]</a><span class="k">def</span> <span class="nf">tags</span><span class="p">(</span><span class="n">tag_coll</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Serializes the given tags to a JSON string.</span>
+
+<span class="sd">    :param set[str] tag_coll: a set of tags</span>
+<span class="sd">    :return: a dictionary suitable for JSON serialization</span>
+<span class="sd">    :rtype: dict</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;tags&#39;</span><span class="p">:</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">tag_coll</span><span class="p">)}</span></div>
+
+<div class="viewcode-block" id="tags_update"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.serialize.tags_update">[docs]</a><span class="k">def</span> <span class="nf">tags_update</span><span class="p">(</span><span class="n">tags_to_add</span><span class="p">,</span> <span class="n">tags_to_remove</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Serializes the given tag updates to a JSON string.</span>
+
+<span class="sd">    :param set[str] tags_to_add: list of tags</span>
+<span class="sd">    :param str[str] tags_to_remove: list of tags</span>
+<span class="sd">    :return: a dictionary suitable for JSON serialization</span>
+<span class="sd">    :rtype: dict</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s1">&#39;add&#39;</span><span class="p">:</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">tags_to_add</span><span class="p">),</span>
+        <span class="s1">&#39;remove&#39;</span><span class="p">:</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">tags_to_remove</span><span class="p">)</span>
+    <span class="p">}</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, CLX Communication.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

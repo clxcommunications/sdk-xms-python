@@ -1,0 +1,191 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>clx.xms.exceptions &mdash; REST API SDK for SMS 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="REST API SDK for SMS 1.0.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for clx.xms.exceptions</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<span class="sd">&quot;&quot;&quot;Collection of exceptions raised by the XMS SDK.</span>
+
+<span class="sd">The exceptions raised by the API all inherit from the base class</span>
+<span class="sd">:class:`ApiException`.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span><span class="p">,</span> <span class="n">division</span><span class="p">,</span> <span class="n">print_function</span>
+
+<div class="viewcode-block" id="ApiException"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.exceptions.ApiException">[docs]</a><span class="k">class</span> <span class="nc">ApiException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for exceptions thrown within the XMS SDK&quot;&quot;&quot;</span></div>
+
+<div class="viewcode-block" id="UnexpectedResponseException"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.exceptions.UnexpectedResponseException">[docs]</a><span class="k">class</span> <span class="nc">UnexpectedResponseException</span><span class="p">(</span><span class="n">ApiException</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Raised when XMS gave an unexpected response</span>
+
+<span class="sd">    :param message: useful message explaining the problem</span>
+<span class="sd">    :type message: str</span>
+
+<span class="sd">    :param http_body: the unexpected HTTP body</span>
+<span class="sd">    :type http_body: str</span>
+
+<span class="sd">    .. attribute:: http_body</span>
+
+<span class="sd">      The unexpected HTTP body.</span>
+
+<span class="sd">      :type: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">http_body</span><span class="p">):</span>
+        <span class="n">ApiException</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">http_body</span> <span class="o">=</span> <span class="n">http_body</span></div>
+
+<div class="viewcode-block" id="ErrorResponseException"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.exceptions.ErrorResponseException">[docs]</a><span class="k">class</span> <span class="nc">ErrorResponseException</span><span class="p">(</span><span class="n">ApiException</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception used when XMS responded with an error message.</span>
+
+<span class="sd">    :param message: the human readable error message</span>
+<span class="sd">    :type message: str</span>
+
+<span class="sd">    :param code: the machine readable error code</span>
+<span class="sd">    :type code: str</span>
+
+<span class="sd">    .. attribute:: error_code</span>
+
+<span class="sd">      The machine readable error code.</span>
+
+<span class="sd">      :type: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">code</span><span class="p">):</span>
+        <span class="n">ApiException</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">error_code</span> <span class="o">=</span> <span class="n">code</span></div>
+
+<div class="viewcode-block" id="NotFoundException"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.exceptions.NotFoundException">[docs]</a><span class="k">class</span> <span class="nc">NotFoundException</span><span class="p">(</span><span class="n">ApiException</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception indicating that a requested resources did not exist in</span>
+<span class="sd">    XMS.</span>
+
+<span class="sd">    This exception is thrown, for example, when attempting to retrieve</span>
+<span class="sd">    a batch with an invalid batch identifier.</span>
+
+<span class="sd">    :param url: URL to the missing resource.</span>
+<span class="sd">    :type url: str</span>
+
+<span class="sd">    .. attribute:: url</span>
+
+<span class="sd">      The failing URL.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">):</span>
+        <span class="n">ApiException</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;No resource found at &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span> <span class="o">%</span> <span class="n">url</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">url</span> <span class="o">=</span> <span class="n">url</span></div>
+
+<div class="viewcode-block" id="UnauthorizedException"><a class="viewcode-back" href="../../../clx.xms.html#clx.xms.exceptions.UnauthorizedException">[docs]</a><span class="k">class</span> <span class="nc">UnauthorizedException</span><span class="p">(</span><span class="n">ApiException</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Exception indicating that XMS did not accept the service plan ID</span>
+<span class="sd">    and authentication token.</span>
+
+<span class="sd">    :param service_plan_id: the service plan identifier</span>
+<span class="sd">    :type service_plan_id: str</span>
+<span class="sd">    :param token: the authentication token</span>
+<span class="sd">    :type token: str</span>
+
+<span class="sd">    .. attribute:: service_plan_id</span>
+
+<span class="sd">      The service plan identifier that did not pass authentication.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    .. attribute:: token</span>
+
+<span class="sd">      The authentication token that was not accepted.</span>
+
+<span class="sd">      :type: str</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">service_plan_id</span><span class="p">,</span> <span class="n">token</span><span class="p">):</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="s1">&#39;Authentication failed with service plan &quot;</span><span class="si">%s</span><span class="s1">&quot;&#39;</span>
+        <span class="n">ApiException</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fmt</span> <span class="o">%</span> <span class="n">service_plan_id</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">service_plan_id</span> <span class="o">=</span> <span class="n">service_plan_id</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token</span> <span class="o">=</span> <span class="n">token</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2017, CLX Communication.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.6</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.7</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
