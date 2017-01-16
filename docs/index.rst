@@ -12,7 +12,7 @@ Contents:
    :maxdepth: 2
 
    tutorial
-   clx
+   modules
 
 
 Indices and tables
