@@ -36,6 +36,14 @@ clx.xms.exceptions module
     :undoc-members:
     :show-inheritance:
 
+clx.xms.serialize module
+------------------------
+
+.. automodule:: clx.xms.serialize
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------
