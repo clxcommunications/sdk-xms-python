@@ -120,12 +120,12 @@ accomplished using::
   batch_params.sender = '12345'
   batch_params.recipients = {'987654321'}
   batch_params.body = 'Hello, World!'
-  result = client.create_text_batch(batch_params)
+  result = client.create_batch(batch_params)
 
 You will notice a few things with this code. We are using a ``client``
 variable that corresponds to an XMS client that we assume has been
 previously created. We are calling the
-:meth:`~clx.xms.client.Client.create_text_batch` method on the client
+:meth:`~clx.xms.client.Client.create_batch` method on the client
 with a single argument that describes the batch we wish to create.
 
 Describing the batch is done using an :class:`.MtBatchTextSmsCreate`
@@ -155,7 +155,7 @@ scheduled send time::
       'default': 'valued customer'
   }
   batch_params.send_at(datetime(2016, 12, 20, 10, 0, 0, 0, UTC))
-  batch = client.create_text_batch(batch_params)
+  batch = client.create_batch(batch_params)
 
 Fetching batches
 ----------------
