@@ -39,7 +39,7 @@ setup(
 
     license=ABOUT['__license__'],
 
-    keywords='',
+    keywords='messaging mobile sms',
 
     classifiers=[
         'Development Status :: 1 - Planning',
