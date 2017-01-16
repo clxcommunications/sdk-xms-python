@@ -20,6 +20,10 @@ from clx.xms import deserialize, serialize, api
 class Client(object):
     """Client used to communicate with the XMS server.
 
+    :param str service_plan_id: service plan identifier.
+    :param str token: authentication token
+    :param str endpoint: URL to XMS endpoint
+
     This class will use the Requests_ library to communicate with XMS.
     It is intended as a long lived object and can handle multiple
     requests.
@@ -70,11 +74,6 @@ class Client(object):
     _LOGGER = logging.getLogger('clx.xms.client')
 
     def __init__(self, service_plan_id, token, endpoint=DEFAULT_ENDPOINT):
-        """
-        :param str service_plan_id: service plan identifier.
-        :param str token: authentication token
-        :param str endpoint: URL to XMS endpoint
-        """
 
         self._session = requests.Session()
         self._service_plan_id = service_plan_id
