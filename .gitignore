@@ -1,5 +1,8 @@
 *.pyc
 /.coverage
+/.dir-locals.el
 /.eggs
+/build
+/cover
 /docs/_build
 /sdk_xms.egg-info
