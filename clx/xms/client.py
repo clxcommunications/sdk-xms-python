@@ -661,7 +661,7 @@ class Client(object):
 
         :param str inbound_id: message identifier
         :returns: the fetched message
-        :rtype: :class:`.MoTextSms` or :class:`.MoBinarySms`
+        :rtype: MoTextSms or MoBinarySms
 
         """
 
