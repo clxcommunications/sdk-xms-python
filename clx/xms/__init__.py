@@ -4,4 +4,5 @@
 
 """
 
+from clx.xms.exceptions import *
 from clx.xms.client import Client
