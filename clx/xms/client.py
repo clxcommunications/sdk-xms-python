@@ -90,6 +90,33 @@ class Client(object):
         self._timeout = timeout
 
     @property
+    def service_plan_id(self):
+        """The service plan identifier used for this client.
+
+        :type: str
+
+        """
+        return self._service_plan_id
+
+    @property
+    def token(self):
+        """The authentication token used for this client.
+
+        :type: str
+
+        """
+        return self._token
+
+    @property
+    def endpoint(self):
+        """The XMS endpoint used by this client.
+
+        :type: str
+
+        """
+        return self._endpoint
+
+    @property
     def timeout(self):
         """The timeout value used for this client. In seconds.
       The connection and read timeout, in seconds, used in

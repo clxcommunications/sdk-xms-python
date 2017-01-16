@@ -25,6 +25,13 @@ def test_invalid_url():
     c = client.Client('foo', 'bar', "/this is an invalid URL")
     c.fetch_batch('BATCHID')
 
+def test_client_properties():
+    c = client.Client('foo', 'bar', 'http://customurl/', 53.0)
+    assert_equal('foo', c.service_plan_id)
+    assert_equal('bar', c.token)
+    assert_equal('http://customurl/', c.endpoint)
+    assert_equal(53.0, c.timeout)
+
 @requests_mock.Mocker()
 class ClientTest(TestCase):
     BASE_URL = 'http://baz:1234/xms'
