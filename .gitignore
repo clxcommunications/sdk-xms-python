@@ -3,6 +3,7 @@
 /.dir-locals.el
 /.eggs
 /build
+/clx_sdk_xms.egg-info
 /cover
+/dist
 /docs/_build
-/sdk_xms.egg-info
