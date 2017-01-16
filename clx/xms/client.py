@@ -45,7 +45,7 @@ class Client(object):
           batch = client.create_text_batch(batch_params)
           print('The batch was given ID %s' % batch.batch_id)
       except Exception as ex:
-          print('Error creating batch: %s' % ex.getMessage())
+          print('Error creating batch: %s' % str(ex))
 
     and to fetch a batch we may use the code (with ``client`` being
     the same variable as above)::
@@ -54,7 +54,7 @@ class Client(object):
           batch = client.fetch_batch('{a batch identifier}')
           print('The batch was sent from %s' % batch.sender())
       except Exception as ex:
-          print('Error fetching batch: %s' % ex.getMessage())
+          print('Error fetching batch: %s' % str(ex))
 
     .. _Requests: http://python-requests.org/
 
