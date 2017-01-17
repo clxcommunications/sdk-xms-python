@@ -22,4 +22,7 @@ The following steps are necessary to perform a release of the SDK:
 
 7. Push it all to GitHub.
 
-8. Build and upload the dist files to PyPI.
+8. Package the library, e.g. using ``python setup.py sdist bdist_wheel``.
+
+8. Sign and upload the dist files to PyPI, e.g. using
+   ``twine upload -s dist/*``.
