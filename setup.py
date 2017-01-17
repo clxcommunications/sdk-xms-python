@@ -42,7 +42,7 @@ setup(
     keywords='messaging mobile sms',
 
     classifiers=[
-        'Development Status :: 1 - Planning',
+        'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Intended Audience :: Telecommunications Industry',
         'License :: OSI Approved :: Apache Software License',
