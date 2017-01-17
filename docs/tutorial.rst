@@ -67,7 +67,7 @@ one major exception. The REST API uses the terms *to* and *from* to
 indicate a message originator and message destination, respectively.
 In the Python API these are instead denoted *recipient* and *sender*.
 The cause of this name change is to have less confusing and more
-idiomatic Python method names.
+idiomatic Python method and property names.
 
 Connection management
 ---------------------
