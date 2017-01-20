@@ -132,7 +132,9 @@ class Client(object):
         return {
             'Accept': 'application/json',
             'Authorization': 'Bearer ' + self._token,
-            'XMS-SDK-Version': clx.xms.__about__.__version__
+            'User-Agent': "sdk-xms-python/%s; %s" %
+                          (clx.xms.__about__.__version__,
+                           requests.utils.default_user_agent())
         }
 
     def _url(self, sub_path):
