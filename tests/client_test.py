@@ -104,6 +104,83 @@ class ClientTest(TestCase):
         except exceptions.UnexpectedResponseException as ex:
             assert_equal('{}', ex.http_body)
 
+    def test_create_text_message(self, m):
+        response_body = """
+        {
+          "type" : "mt_text",
+          "body" : "hello",
+          "id" : "5Z8QsIRsk86f-jHB",
+          "to" : [ "987654321" ],
+          "from" : "1234",
+          "expire_at" : "2016-12-17T08:15:29.969Z",
+          "created_at" : "2016-12-14T08:15:29.969Z",
+          "modified_at" : "2016-12-14T08:15:29.969Z",
+          "canceled" : false
+        }
+        """
+
+        m.post(
+            self.BASE_URL + '/v1/foo/batches',
+            status_code=201,
+            headers={'content-type': 'application/json'},
+            text=response_body)
+
+        result = self._client.create_text_message(
+            sender='1234',
+            recipient='987654321',
+            body='hello')
+
+        assert_is_instance(result, api.MtBatchTextSmsResult)
+        assert_equal('5Z8QsIRsk86f-jHB', result.batch_id)
+
+        expected_request_body = {
+            'type': 'mt_text',
+            'body': 'hello',
+            'from': '1234',
+            'to': ['987654321']
+        }
+
+        assert_equal(expected_request_body, m.request_history[0].json())
+
+    def test_create_binary_message(self, m):
+        response_body = {
+            'type': 'mt_binary',
+            'udh': 'fffefd',
+            'body': 'AAECAw==',
+            'id': '5Z8QsIRsk86f-jHB',
+            'to': ['123456789'],
+            'from': '12345',
+            'expire_at': '2016-12-17T08:15:29.969Z',
+            'created_at': '2016-12-14T08:15:29.969Z',
+            'modified_at': '2016-12-14T08:15:29.969Z',
+            'canceled': False
+        }
+
+        m.post(
+            self.BASE_URL + '/v1/foo/batches',
+            status_code=201,
+            headers={'content-type': 'application/json'},
+            json=response_body)
+
+        result = self._client.create_binary_message(
+            sender='1234',
+            recipient='987654321',
+            udh=b'\xf0\x0f',
+            body=b'\x00')
+
+        assert_is_instance(result, api.MtBatchBinarySmsResult)
+        assert_equal('5Z8QsIRsk86f-jHB', result.batch_id)
+
+        expected_request_body = {
+            'type': 'mt_binary',
+            'udh': 'f00f',
+            'body': 'AA==\n',
+            'to': ['987654321'],
+            'from': '1234'
+        }
+
+        assert_equal(expected_request_body, m.request_history[0].json())
+
     def test_create_text_batch(self, m):
         response_body = """
         {

@@ -157,6 +157,29 @@ scheduled send time::
   batch_params.send_at = datetime(2016, 12, 20, 10, 0, 0, 0, UTC)
   batch = client.create_batch(batch_params)
 
+On the other hand, for the common case where we need to send a text or
+binary message to a single recipient there are
+:meth:`~clx.xms.client.Client.create_text_message` and
+:meth:`~clx.xms.client.Client.create_binary_message` which do not
+require an API object. For example::
+
+  client.create_text_message(
+      sender='1234',
+      recipient='987654321',
+      body='hello')
+
+and::
+
+  client.create_binary_message(
+      sender='1234',
+      recipient='987654321',
+      udh=b'\xf0\x0f',
+      body=b'\x00')
+
+Internally these create batches with a single recipient and they
+return values of types :class:`.MtBatchTextSmsResult` and
+:class:`.MtBatchBinarySmsResult`, respectively.
+
 Fetching batches
 ----------------
 

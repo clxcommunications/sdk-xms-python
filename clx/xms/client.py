@@ -237,6 +237,48 @@ class Client(object):
             url, json=fields, headers=self._headers(), timeout=self._timeout)
         return self._check_response(resp)
 
+    def create_text_message(self, sender, recipient, body):
+        """Creates a text message to a single recipient.
+
+        This is a convenience method that creates a text batch having
+        a single recipient.
+
+        :param str sender: the message sender
+        :param str recipient: the message recipient
+        :param str body: the message body
+        :returns: the created batch
+        :rtype: MtBatchTextSmsResult
+
+        """
+
+        batch = api.MtBatchTextSmsCreate()
+        batch.sender = sender
+        batch.recipients = {recipient}
+        batch.body = body
+        return self.create_batch(batch)
+
+    def create_binary_message(self, sender, recipient, udh, body):
+        """Creates a text message to a single recipient.
+
+        This is a convenience method that creates a text batch having
+        a single recipient.
+
+        :param str sender: the message sender
+        :param str recipient: the message recipient
+        :param binary udh: the message User Data Header
+        :param binary body: the message binary body
+        :returns: the created batch
+        :rtype: MtBatchBinarySmsResult
+
+        """
+
+        batch = api.MtBatchBinarySmsCreate()
+        batch.sender = sender
+        batch.recipients = {recipient}
+        batch.udh = udh
+        batch.body = body
+        return self.create_batch(batch)
+
     def create_batch(self, batch):
         """Creates the given batch.
 
