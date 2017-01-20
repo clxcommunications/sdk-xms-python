@@ -198,8 +198,8 @@ class Client(object):
         Client._LOGGER.debug('Request{%s} Response(code %d){%s}',
                              resp.request.body, resp.status_code, resp.text)
 
-        # If "200 OK" or "201 Created".
-        if resp.status_code == 200 or resp.status_code == 201:
+        # If "200 OK" or "201 Created". We'll here assume any 2XX code is OK.
+        if resp.status_code >= 200 and resp.status_code < 300:
             return resp
         # If "400 Bad Request" or "403 Forbidden".
         elif resp.status_code == 400 or resp.status_code == 403:
