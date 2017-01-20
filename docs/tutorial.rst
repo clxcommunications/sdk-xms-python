@@ -154,7 +154,7 @@ scheduled send time::
       '123456789': 'Joe',
       'default': 'valued customer'
   }
-  batch_params.send_at(datetime(2016, 12, 20, 10, 0, 0, 0, UTC))
+  batch_params.send_at = datetime(2016, 12, 20, 10, 0, 0, 0, UTC)
   batch = client.create_batch(batch_params)
 
 Fetching batches
