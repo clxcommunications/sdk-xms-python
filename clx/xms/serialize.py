@@ -36,7 +36,7 @@ def _create_batch_helper(batch):
 
     fields = {
         'from': batch.sender,
-        'to': batch.recipients
+        'to': sorted(batch.recipients)
     }
 
     if batch.delivery_report:
@@ -49,7 +49,7 @@ def _create_batch_helper(batch):
         fields['expire_at'] = _write_datetime(batch.expire_at)
 
     if batch.tags:
-        fields['tags'] = batch.tags
+        fields['tags'] = sorted(batch.tags)
 
     if batch.callback_url:
         fields['callback_url'] = batch.callback_url
@@ -102,10 +102,10 @@ def _batch_update_helper(batch):
     fields = {}
 
     if batch.recipient_insertions:
-        fields['to_add'] = batch.recipient_insertions
+        fields['to_add'] = sorted(batch.recipient_insertions)
 
     if batch.recipient_removals:
-        fields['to_remove'] = batch.recipient_removals
+        fields['to_remove'] = sorted(batch.recipient_removals)
 
     if batch.sender:
         fields['from'] = batch.sender
@@ -223,16 +223,16 @@ def group_create(group):
         fields['name'] = group.name
 
     if group.members:
-        fields['members'] = group.members
+        fields['members'] = sorted(group.members)
 
     if group.child_groups:
-        fields['child_groups'] = group.child_groups
+        fields['child_groups'] = sorted(group.child_groups)
 
     if group.auto_update:
         fields['auto_update'] = _group_auto_update_helper(group.auto_update)
 
     if group.tags:
-        fields['tags'] = group.tags
+        fields['tags'] = sorted(group.tags)
 
     return fields
 
@@ -253,16 +253,16 @@ def group_update(obj):
         fields['name'] = obj.name
 
     if obj.member_insertions:
-        fields['add'] = obj.member_insertions
+        fields['add'] = sorted(obj.member_insertions)
 
     if obj.member_removals:
-        fields['remove'] = obj.member_removals
+        fields['remove'] = sorted(obj.member_removals)
 
     if obj.child_group_insertions:
-        fields['child_groups_add'] = obj.child_group_insertions
+        fields['child_groups_add'] = sorted(obj.child_group_insertions)
 
     if obj.child_group_removals:
-        fields['child_groups_remove'] = obj.child_group_removals
+        fields['child_groups_remove'] = sorted(obj.child_group_removals)
 
     if obj.add_from_group:
         fields['add_from_group'] = obj.add_from_group
@@ -286,7 +286,7 @@ def tags(tag_coll):
 
     """
 
-    return {'tags': tag_coll}
+    return {'tags': sorted(tag_coll)}
 
 def tags_update(tags_to_add, tags_to_remove):
     """Serializes the given tag updates to a JSON string.
@@ -298,4 +298,7 @@ def tags_update(tags_to_add, tags_to_remove):
 
     """
 
-    return {'add': tags_to_add, 'remove': tags_to_remove}
+    return {
+        'add': sorted(tags_to_add),
+        'remove': sorted(tags_to_remove)
+    }

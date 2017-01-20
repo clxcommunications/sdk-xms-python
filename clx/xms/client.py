@@ -352,10 +352,10 @@ class Client(object):
                 params['page_size'] = page_size
 
             if senders:
-                params['from'] = ','.join(senders)
+                params['from'] = ','.join(sorted(senders))
 
             if tags:
-                params['tags'] = ','.join(tags)
+                params['tags'] = ','.join(sorted(tags))
 
             if start_date:
                 params['start_date'] = start_date.isoformat()
@@ -403,8 +403,8 @@ class Client(object):
         """Fetches the tags associated with the given batch.
 
         :param str batch_id: the batch identifier
-        :returns: a list of tags
-        :rtype: list[str]
+        :returns: a set of tags
+        :rtype: set[str]
 
         """
 
@@ -415,9 +415,9 @@ class Client(object):
         """Replaces the tags of the given batch.
 
         :param str batch_id: identifier of the batch
-        :param list[str] tags: the new set of batch tags
+        :param set[str] tags: the new set of batch tags
         :returns: the new batch tags
-        :rtype: list[str]
+        :rtype: set[str]
 
         """
 
@@ -429,10 +429,10 @@ class Client(object):
         """Updates the tags of the given batch.
 
         :param str batch_id: batch identifier
-        :param list[str] tags_to_add: tags to add to batch
-        :param list[str] tags_to_remove: tags to remove from batch
+        :param set[str] tags_to_add: tags to add to batch
+        :param set[str] tags_to_remove: tags to remove from batch
         :returns: the updated batch tags
-        :rtype: list[str]
+        :rtype: set[str]
 
         """
 
@@ -479,10 +479,10 @@ class Client(object):
             params['type'] = kind
 
         if status:
-            params['status'] = ','.join(status)
+            params['status'] = ','.join(sorted(status))
 
         if code:
-            params['code'] = ','.join([str(i) for i in code])
+            params['code'] = ','.join([str(i) for i in sorted(code)])
 
         path = '/delivery_report'
 
@@ -594,7 +594,7 @@ class Client(object):
                 params['page_size'] = page_size
 
             if tags:
-                params['tags'] = ','.join(tags)
+                params['tags'] = ','.join(sorted(tags))
 
             query = urlencode(params)
             result = self._get(self._url('/groups?' + query))
@@ -618,8 +618,8 @@ class Client(object):
         """Fetches the tags associated with the given group.
 
         :param str group_id: the group identifier
-        :returns: a list of tags
-        :rtype: list[str]
+        :returns: a set of tags
+        :rtype: set[str]
 
         """
 
@@ -630,9 +630,9 @@ class Client(object):
         """Replaces the tags of the given group.
 
         :param str group_id: identifier of the group
-        :param list[str] tags: the new set of group tags
+        :param set[str] tags: the new set of group tags
         :returns: the new group tags
-        :rtype: list[str]
+        :rtype: set[str]
 
         """
 
@@ -644,10 +644,10 @@ class Client(object):
         """Updates the tags of the given group.
 
         :param str group_id: group identifier
-        :param list[str] tags_to_add: tags to add to group
-        :param list[str] tags_to_remove: tags to remove from group
+        :param set[str] tags_to_add: tags to add to group
+        :param set[str] tags_to_remove: tags to remove from group
         :returns: the updated group tags
-        :rtype: list[str]
+        :rtype: set[str]
 
         """
 
@@ -709,7 +709,7 @@ class Client(object):
                 params['page_size'] = page_size
 
             if recipients:
-                params['to'] = ','.join(recipients)
+                params['to'] = ','.join(sorted(recipients))
 
             if start_date:
                 params['start_date'] = start_date.isoformat()

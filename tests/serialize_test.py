@@ -12,7 +12,7 @@ from iso8601 import UTC
 def test_date_without_timezone():
     batch = api.MtBatchTextSmsCreate()
     batch.sender = '12345'
-    batch.recipients = ['123456789']
+    batch.recipients = {'123456789'}
     batch.body = 'hello'
     batch.send_at = datetime(2016, 12, 1, 11, 3, 13, 192000)
 
@@ -24,7 +24,7 @@ def test_date_without_timezone():
 def test_batch_create_text():
     batch = api.MtBatchTextSmsCreate()
     batch.sender = '12345'
-    batch.recipients = ['987654321', '123456789']
+    batch.recipients = {'987654321', '123456789'}
     batch.body = 'Hello, ${name}!'
     batch.parameters['name'] = {
         '987654321': 'Mary',
@@ -44,10 +44,7 @@ def test_batch_create_text():
         'send_at': '2016-12-01T11:03:13.192000+00:00',
         'expire_at': '2016-12-04T11:03:13.192000+00:00',
         'from': '12345',
-        'to': [
-            '987654321',
-            '123456789'
-        ],
+        'to': ['123456789', '987654321'],
         'parameters': {
             'name': {
                 '987654321': 'Mary',
@@ -64,12 +61,12 @@ def test_batch_create_text():
 def test_batch_create_binary():
     batch = api.MtBatchBinarySmsCreate()
     batch.sender = '12345'
-    batch.recipients = ['987654321', '123456789']
+    batch.recipients = {'987654321', '123456789'}
     batch.body = b'\x00\x01\x02\x03'
     batch.udh = b'\xff\xfe\xfd'
     batch.delivery_report = api.ReportType.SUMMARY
     batch.expire_at = datetime(2016, 12, 17, 8, 15, 29, 969000, UTC)
-    batch.tags = ['tag1', 'таг2']
+    batch.tags = {'tag1', 'таг2'}
 
     actual = serialize.binary_batch(batch)
 
@@ -79,10 +76,7 @@ def test_batch_create_binary():
         'expire_at': '2016-12-17T08:15:29.969000+00:00',
         'from': '12345',
         'tags': ['tag1', 'таг2'],
-        'to': [
-            '987654321',
-            '123456789'
-        ],
+        'to': ['123456789', '987654321'],
         'type': 'mt_binary',
         'udh': 'fffefd'
     }
@@ -92,8 +86,8 @@ def test_batch_create_binary():
 def test_batch_update_text_set_all():
     batch = api.MtBatchTextSmsUpdate()
     batch.sender = '12345'
-    batch.recipient_insertions = ['987654321', '123456789']
-    batch.recipient_removals = ['555555555']
+    batch.recipient_insertions = {'987654321', '123456789'}
+    batch.recipient_removals = {'555555555'}
     batch.body = 'Hello, ${name}!'
     batch.parameters = {
         'name': {
@@ -116,13 +110,8 @@ def test_batch_update_text_set_all():
         'send_at': '2016-12-01T11:03:13.192000+00:00',
         'expire_at': '2016-12-04T11:03:13.192000+00:00',
         'from': '12345',
-        'to_add': [
-            '987654321',
-            '123456789'
-        ],
-        'to_remove': [
-            '555555555'
-        ],
+        'to_add': ['123456789', '987654321'],
+        'to_remove': ['555555555'],
         'parameters': {
             'name': {
                 '987654321': 'Mary',
@@ -167,8 +156,8 @@ def test_batch_update_text_resets():
 def test_batch_update_binary_set_all():
     batch = api.MtBatchBinarySmsUpdate()
     batch.sender = '12345'
-    batch.recipient_insertions = ['987654321', '123456789']
-    batch.recipient_removals = ['555555555']
+    batch.recipient_insertions = {'987654321', '123456789'}
+    batch.recipient_removals = {'555555555'}
     batch.body = b'\x00\x01\x02\x03'
     batch.udh = b'\xff\xfe\xfd'
     batch.delivery_report = api.ReportType.PER_RECIPIENT
@@ -186,13 +175,8 @@ def test_batch_update_binary_set_all():
         'send_at': '2016-12-01T11:03:13.192000+00:00',
         'expire_at': '2016-12-04T11:03:13.192000+00:00',
         'from': '12345',
-        'to_add': [
-            '987654321',
-            '123456789'
-        ],
-        'to_remove': [
-            '555555555'
-        ],
+        'to_add': ['123456789', '987654321'],
+        'to_remove': ['555555555'],
         'callback_url': 'http://localhost/callback'
     }
 
@@ -228,15 +212,15 @@ def test_batch_update_binary_resets():
 def test_group_create():
     group = api.GroupCreate()
     group.name = 'test name'
-    group.members = ['123456789', '987654321']
-    group.child_groups = ['group1', 'group2']
+    group.members = {'123456789', '987654321'}
+    group.child_groups = {'group1', 'group2'}
     group.auto_update = api.GroupAutoUpdate(
         recipient='12345',
         add_first_word='ADD',
         add_second_word='plz',
         remove_first_word='REMOVE',
         remove_second_word='ME')
-    group.tags = ['tag1', 'tag2']
+    group.tags = {'tag1', 'tag2'}
 
     actual = serialize.group_create(group)
 
@@ -263,10 +247,10 @@ def test_group_create():
 def test_group_update_everything():
     group_update = api.GroupUpdate()
     group_update.name = 'new name'
-    group_update.member_insertions = ['123456789']
-    group_update.member_removals = ['987654321', '4242424242']
-    group_update.child_group_insertions = ['groupId1', 'groupId2']
-    group_update.child_group_removals = ['groupId3']
+    group_update.member_insertions = {'123456789'}
+    group_update.member_removals = {'987654321', '4242424242'}
+    group_update.child_group_insertions = {'groupId1', 'groupId2'}
+    group_update.child_group_removals = {'groupId3'}
     group_update.add_from_group = 'group1'
     group_update.remove_from_group = 'group2'
     group_update.auto_update = api.GroupAutoUpdate(
@@ -281,7 +265,7 @@ def test_group_update_everything():
     expected = {
         'name': 'new name',
         'add': ['123456789'],
-        'remove': ['987654321', '4242424242'],
+        'remove': ['4242424242', '987654321'],
         'child_groups_add': ['groupId1', 'groupId2'],
         'child_groups_remove': ['groupId3'],
         'add_from_group': 'group1',
@@ -318,13 +302,13 @@ def test_group_update_resets():
     assert_equal(expected, actual)
 
 def test_tags():
-    actual = serialize.tags(['tag1', 'tag2'])
+    actual = serialize.tags({'tag1', 'tag2'})
     expected = {'tags': ['tag1', 'tag2']}
 
     assert_equal(expected, actual)
 
 def test_tags_update():
-    actual = serialize.tags_update(['tag_1', 'tag_2'], ['tag'])
+    actual = serialize.tags_update({'tag_1', 'tag_2'}, {'tag'})
     expected = {'add': ['tag_1', 'tag_2'], 'remove': ['tag']}
 
     assert_equal(expected, actual)

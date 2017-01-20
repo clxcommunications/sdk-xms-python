@@ -127,7 +127,7 @@ class ClientTest(TestCase):
 
         batch = api.MtBatchTextSmsCreate()
         batch.body = 'hello'
-        batch.recipients = ['987654321', '123456789']
+        batch.recipients = {'987654321', '123456789'}
         batch.sender = '12345'
 
         result = self._client.create_batch(batch)
@@ -139,7 +139,7 @@ class ClientTest(TestCase):
             'type': 'mt_text',
             'body': 'hello',
             'from': '12345',
-            'to': ['987654321', '123456789']
+            'to': ['123456789', '987654321']
         }
 
         assert_equal(expected_request_body, m.request_history[0].json())
@@ -167,7 +167,7 @@ class ClientTest(TestCase):
         batch = api.MtBatchBinarySmsCreate()
         batch.body = b'\x00\x01\x02\x03'
         batch.udh = b'\xff\xfe\xfd'
-        batch.recipients = ['987654321', '123456789']
+        batch.recipients = {'987654321', '123456789'}
         batch.sender = '12345'
 
         result = self._client.create_batch(batch)
@@ -179,7 +179,7 @@ class ClientTest(TestCase):
             'type': 'mt_binary',
             'udh': 'fffefd',
             'body': 'AAECAw==\n',
-            'to': ['987654321', '123456789'],
+            'to': ['123456789', '987654321'],
             'from': '12345'
         }
 
@@ -200,7 +200,7 @@ class ClientTest(TestCase):
         batch = api.MtBatchBinarySmsCreate()
         batch.body = b'\x00\x01\x02\x03'
         batch.udh = b'\xff\xfe\xfd'
-        batch.recipients = ['987654321']
+        batch.recipients = {'987654321'}
         batch.sender = '12345'
 
         result = self._client.create_batch_dry_run(batch)
@@ -247,7 +247,7 @@ class ClientTest(TestCase):
 
         batch = api.MtBatchTextSmsCreate()
         batch.body = 'Hello'
-        batch.recipients = ['987654321', '555555555']
+        batch.recipients = {'987654321', '555555555'}
         batch.sender = '12345'
 
         result = self._client.create_batch_dry_run(batch, 20)
@@ -257,7 +257,7 @@ class ClientTest(TestCase):
         expected_request_body = {
             'type': 'mt_text',
             'body': 'Hello',
-            'to': ['987654321', '555555555'],
+            'to': ['555555555', '987654321'],
             'from': '12345'
         }
 
@@ -288,7 +288,7 @@ class ClientTest(TestCase):
 
         batch = api.MtBatchTextSmsCreate()
         batch.body = 'hello'
-        batch.recipients = ['987654321', '123456789']
+        batch.recipients = {'987654321', '123456789'}
         batch.sender = '12345'
 
         result = self._client.replace_batch('BatchID', batch)
@@ -296,10 +296,10 @@ class ClientTest(TestCase):
         assert_equal('5Z8QsIRsk86f-jHB', result.batch_id)
 
         expected_request_body = {
-            "type": "mt_text",
-            "body": "hello",
-            "from": "12345",
-            "to": ["987654321", "123456789"]
+            'type': 'mt_text',
+            'body': 'hello',
+            'from': '12345',
+            'to': ['123456789', '987654321']
         }
 
         assert_equal(expected_request_body, m.request_history[0].json())
@@ -327,7 +327,7 @@ class ClientTest(TestCase):
         batch = api.MtBatchBinarySmsCreate()
         batch.body = b'\x00\x01\x02\x03'
         batch.udh = b'\xff\xfe\xfd'
-        batch.recipients = ['987654321', '123456789']
+        batch.recipients = {'987654321', '123456789'}
         batch.sender = '12345'
 
         result = self._client.replace_batch('5Z8QsIRsk86f-jHB', batch)
@@ -338,7 +338,7 @@ class ClientTest(TestCase):
             "type": "mt_binary",
             "udh": "fffefd",
             "body": "AAECAw==\n",
-            "to": ["987654321", "123456789"],
+            "to": ["123456789", "987654321"],
             "from": "12345"
         }
 
@@ -571,8 +571,8 @@ class ClientTest(TestCase):
 
         pages = self._client.fetch_batches(
             page_size=10,
-            senders=['12345', '98765'],
-            tags=['tag1', 'tag2'],
+            senders={'12345', '98765'},
+            tags={'tag1', 'tag2'},
             start_date=date(2016, 12, 1),
             end_date=date(2016, 12, 2))
 
@@ -613,11 +613,11 @@ class ClientTest(TestCase):
             self.BASE_URL + '/v1/foo/batches/batchid/tags',
             status_code=200,
             headers={'content-type': 'application/json'},
-            json={"tags": ["tag"]})
+            json={'tags': ['tag2', 'tag1']})
 
-        tags = self._client.replace_batch_tags('batchid', ['tag'])
+        tags = self._client.replace_batch_tags('batchid', {'tag1', 'tag2'})
 
-        assert_equal({'tag'}, tags)
+        assert_equal({'tag1', 'tag2'}, tags)
 
     def test_fetch_delivery_report(self, m):
         response_body = {
@@ -650,9 +650,9 @@ class ClientTest(TestCase):
 
         result = self._client.fetch_delivery_report(
             '3SD49KIOW8lL1Z5E',
-            api.DeliveryReportType.FULL,
-            ['Delivered', 'Failed'],
-            [0, 11, 400]
+            kind=api.DeliveryReportType.FULL,
+            status={'Delivered', 'Failed'},
+            code={0, 11, 400}
         )
 
         assert_equal('3SD49KIOW8lL1Z5E', result.batch_id)
@@ -702,7 +702,7 @@ class ClientTest(TestCase):
         }
 
         group = api.GroupCreate()
-        group.members = ['123456789', '987654321']
+        group.members = {'123456789', '987654321'}
         group.name = 'my group'
 
         m.post(
@@ -742,7 +742,7 @@ class ClientTest(TestCase):
         }
 
         group = api.GroupCreate()
-        group.members = ['123456789', '987654321']
+        group.members = {'123456789', '987654321'}
 
         m.post(
             self.BASE_URL + '/v1/foo/groups',
@@ -779,7 +779,7 @@ class ClientTest(TestCase):
         }
 
         group = api.GroupCreate()
-        group.members = ['123456789', '987654321']
+        group.members = {'123456789', '987654321'}
 
         m.post(
             self.BASE_URL + '/v1/foo/groups',
@@ -815,7 +815,7 @@ class ClientTest(TestCase):
             json=response_body)
 
         group = api.GroupCreate()
-        group.members = ['555555555']
+        group.members = {'555555555'}
 
         result = self._client.replace_group('4cldmgEdAcBfcHW3', group)
 
@@ -924,7 +924,7 @@ class ClientTest(TestCase):
             headers={'content-type': 'application/json'},
             json=response_body2)
 
-        pages = self._client.fetch_groups(page_size=10, tags=['tag1', 'tag2'])
+        pages = self._client.fetch_groups(page_size=10, tags={'tag1', 'tag2'})
 
         page = pages.get(0)
         assert_is_instance(page, api.Page)
@@ -968,7 +968,7 @@ class ClientTest(TestCase):
             headers={'content-type': 'application/json'},
             json={"tags": []})
 
-        tags = self._client.replace_group_tags('GroupId', [])
+        tags = self._client.replace_group_tags('GroupId', {})
 
         assert_equal(set(), tags)
         assert_equal({"tags":[]}, m.request_history[0].json())
@@ -978,11 +978,11 @@ class ClientTest(TestCase):
             self.BASE_URL + '/v1/foo/batches/batchid/tags',
             status_code=200,
             headers={'content-type': 'application/json'},
-            json={"tags": ["tag"]})
+            json={'tags': ['tag', 'at']})
 
-        tags = self._client.update_batch_tags('batchid', ['at'], ['rt'])
+        tags = self._client.update_batch_tags('batchid', {'at'}, {'rt'})
 
-        assert_equal({'tag'}, tags)
+        assert_equal({'tag', 'at'}, tags)
 
         assert_equal(
             {"add":["at"], "remove":["rt"]},
@@ -995,7 +995,7 @@ class ClientTest(TestCase):
             headers={'content-type': 'application/json'},
             json={"tags": ["a", "b"]})
 
-        tags = self._client.update_group_tags('GroupId', [], ['foo'])
+        tags = self._client.update_group_tags('GroupId', {}, {'foo'})
 
         assert_equal({'a', 'b'}, tags)
         assert_equal(
@@ -1093,7 +1093,7 @@ class ClientTest(TestCase):
 
         pages = self._client.fetch_inbounds(
             page_size=12,
-            recipients=['23456', '8654'],
+            recipients={'23456', '8654'},
             start_date=date(2016, 12, 11),
             end_date=date(2016, 12, 12))
 
